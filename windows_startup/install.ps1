@@ -24,8 +24,9 @@ if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\
   Write-Host "  Already complete, skipping"
 }
 Else {
-  Write-Host "  Creating symlink for uncap_script in STARTUP folder"
+  Write-Host "  Creating symlink for uncap_script in STARTUP folders"
   New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\uncap_script.bat" -Target "$HOME\dotfiles\windows_startup\uncap_script.bat"
+  # New-Item -ItemType SymbolicLink -Path "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp" -Target "$HOME\dotfiles\windows_startup\uncap_script.bat"
   Write-Host "  Executing Uncap script in STARTUP folder"
   Start-Process "$HOME\dotfiles\windows_startup\uncap_script.bat"
 }
@@ -67,7 +68,7 @@ Else
 }
 
 Write-Host "Installing x64 neovim, ripgrep, winget, windows terminal, hwinfo, minikube" -ForegroundColor Green
-choco upgrade neovim ripgrep winget microsoft-windows-terminal hwinfo minikube -y
+choco upgrade neovim ripgrep winget microsoft-windows-terminal hwinfo minikube fzf -y
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
 
@@ -92,6 +93,8 @@ Else
   New-Item -Path "$HOME" -Name "tmp" -ItemType "directory"
   Write-Host "  Creating init.vim file referencing .vimrc"
   New-Item -ItemType File -Path "$env:LOCALAPPDATA\nvim\init.vim" -Force -Value "source ~/.vimrc"
+  Write-Host "  Creating symlink for nerdtree bookmarks in $HOME"
+  New-Item -ItemType SymbolicLink -Path "$HOME\.NERDTreeBookmarks" -Target "$HOME\dotfiles\.NERDTreeBookmarks"
 }
 
 # Write-Host "Enable/ Install Hyper-V (Virtualisation)" -ForegroundColor Green
