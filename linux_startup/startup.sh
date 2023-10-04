@@ -1,19 +1,37 @@
+#!/bin/bash
+
 #Need to add the cran link to etc/../sources.list for ubuntu bionic (if still using linux mint Tara), looks like deb https...
-sudo apt-get update -y && \
-sudo apt-get upgrade -y && \
-sudo apt-get install --assume-yes xclip tmux git r-base vim-gtk3 pandoc pandoc-citeproc cmake build-essential fonts-powerline && \
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim && \
-echo "install.packages(c('rmarkdown', 'reticulate', 'tinytex'), repos='http://cran.rstudio.com/'); tinytex::install_tinytex()" | sudo R --vanilla && \
-cd /tmp && \
-curl -O https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh && \
-bash Anaconda3-2020.11-Linux-x86_64.sh -b && \
-sudo chown -R harry ~/anaconda3 && \
-sudo chown -R harry ~/.vim && \
-sudo chown -R harry ~/.TinyTex && \
+if true; then
+	sudo apt-get update -y && \
+	sudo apt-get upgrade -y && \
+	sudo apt-get install --assume-yes xclip tmux git r-base vim-gtk3 pandoc pandoc-citeproc cmake build-essential fonts-powerline && \
+	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim && \
+	echo "install.packages(c('rmarkdown', 'reticulate', 'tinytex'), repos='http://cran.rstudio.com/'); tinytex::install_tinytex()" | sudo R --vanilla && \
+	cd /tmp && \
+	curl -O https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh && \
+	bash Anaconda3-2020.11-Linux-x86_64.sh -b && \
+	sudo chown -R hcollins ~/anaconda3 && \
+	sudo chown -R hcollins ~/.vim
+else
+	echo "skipping part of code"
+fi
+rm ~/.bashrc
+ln -s ~/dotfiles/.bashrc ~/.bashrc
+ln -s ~/dotfiles/.vimrc ~/.vimrc
+# sudo chown -R hcollins ~/.TinyTex && \
+mkdir ~/tmp
 source ~/.bashrc && \
 vim +PluginInstall +qall && \
 python ~/.vim/bundle/YouCompleteMe/install.py
 echo 'set completion-ignore-case On' | sudo tee -a /etc/inputrc
+
+cd ~ && \
+git config --global user.email "hcollins345@gmail.com"
+git config --global user.name "hcollins345"
+conda install -c conda-forge powerline-status 
+
+# for jupyter notebook -- conda install notebook
+# for vimpyter -- conda install -c conda-forge notedown
 
 # ==========Vimrc and YCM=======
 # go to .vimrc in ~ and ran :PluginInstall

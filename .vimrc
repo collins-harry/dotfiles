@@ -18,15 +18,14 @@
 "   endif
 "   return 0
 " endfunction
-let IsWSL=0
-let IsLinux=0
-let IsWin=1
+source ~/dotfiles/.os_config_vim
 "}}}
 " ===== HOT FIXES {{{
 " fix always starting in REPLACE mode in WSL in Windows after upgrading vim
 if IsWSL
   set t_u7=
   set t_ut=
+  set rtp+=~/.vim/bundle/Vundle.vim
 endif
 if IsWin
   set shellslash
@@ -598,6 +597,11 @@ if IsWin
   " set backupdir=~/.vim/backup//
   " set directory=~/.vim/swap//
   " set undodir=~/.vim/undo//
+endif
+if IsWSL || IsLinux
+  set directory=~/tmp//
+  set backupdir=~/tmp//
+  set undodir=~/tmp//
 endif
 
 " I removed r and L from the guioptions to remove left and right scrollbars
