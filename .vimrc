@@ -371,13 +371,16 @@ command! DiffOrig let g:diffline = line('.') | vert new | set bt=nofile | r # | 
 nnoremap <Leader>do :DiffOrig<cr>
 nnoremap <leader>dc :q<cr>:diffoff<cr>:exe "norm! ".g:diffline."G"<cr>
 
-if IsWin || IsWSL
+if IsWin
   command UI silent exec "!start explorer ."
   command CMD silent exec "!start cmd ."
+elseif IsWSL
+  command UI silent exec "!start explorer.exe ."
+  command CMD silent exec "!start cmd.exe ."
 endif
 "" Edit configuration files
 " https://stackoverflow.com/a/52156757/13734567
-nnoremap <leader>ev :e $MYVIMRC<CR>
+nnoremap <leader>ev :e ~/dotfiles/.vimrc<CR>
 " current file's filetype configuration
 nnoremap <leader>ef :e ~/.vim/after/ftplugin/<C-R>=&filetype<CR>.vim<CR>
 
