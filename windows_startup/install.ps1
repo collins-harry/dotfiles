@@ -75,6 +75,7 @@ Update-SessionEnvironment
 Write-Host "Installing vs-code" -ForegroundColor Green
 winget install -e --id Microsoft.VisualStudioCode --accept-source-agreements --accept-package-agreements
 winget install -e --id Microsoft.SQLServerManagementStudio 
+winget install -e --id Microsoft.AzureCLI
 
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
@@ -96,6 +97,19 @@ Else
   Write-Host "  Creating symlink for nerdtree bookmarks in $HOME"
   New-Item -ItemType SymbolicLink -Path "$HOME\.NERDTreeBookmarks" -Target "$HOME\dotfiles\.NERDTreeBookmarks"
 }
+
+Write-Host "Add windows terminal symlink" -ForegroundColor Green
+if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState")
+{
+  Write-Host "  Creating symlink for terminal settings"
+  New-Item -ItemType SymbolicLink -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Target "$HOME\dotfiles\windows_startup\settings.json" -Force
+}
+else
+{
+  Write-Host "  Windows Terminal not installed or not from choco" -ForegroundColor Red
+}
+
+
 
 # Write-Host "Enable/ Install Hyper-V (Virtualisation)" -ForegroundColor Green
 # DISM /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
