@@ -2,7 +2,7 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 # ==============WORK   ===============
-source .work.bashrc
+source ~/dotfiles/.work.bashrc
 
 # ==============TWENTE ===============
 export CLUSTER="s1664050@korenvliet.ewi.utwente.nl"
