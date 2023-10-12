@@ -217,6 +217,23 @@ let g:airline_theme='simple'
 "highlight clear signcolumn
 
 " }}}
+"===== Font {{{
+if IsLinux "If linux
+  set guifont=DroidSansMono\ Nerd\ Font\ 12
+elseif has("gui_win32") " Windows Gvim
+  set guifont=Consolas:h11:cANSI
+endif
+
+if IsWin
+  let s:fontsize = 10
+  function! AdjustFontSize(amount)
+    let s:fontsize = s:fontsize+a:amount
+    :execute "GuiFont! Consolas:h" . s:fontsize
+  endfunction
+  noremap <C-ScrollWheelUp> :call AdjustFontSize(1)<CR>
+  noremap <C-ScrollWheelDown> :call AdjustFontSize(-1)<CR>
+endif
+"}}}
 "===== Plugin Configs {{{
 let g:user_emmet_mode='a'    "enable all function in all mode.
 "vim fugitive
@@ -389,12 +406,6 @@ nmap <leader>w :w!<cr>
 command Time pu=strftime('%c')
 
 map <silent> <leader><cr> :set hls!<cr>
-" font type
-if IsLinux "If linux
-  set guifont=DroidSansMono\ Nerd\ Font\ 12
-elseif has("gui_win32") " Windows Gvim
-  set guifont=Consolas:h11:cANSI
-endif
 
 " change cwd to current directory
 nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
@@ -617,6 +628,7 @@ au GUIEnter * simalt ~x " Open GVIM in fullscreen (at least on windows)
  let &t_SR = "\<Esc>[3 q" "replace mode, 3 is blinking underline, 4 is non-blinking
  let &t_SI = "\<Esc>[5 q" "insert mode  5 is blinking line
 " set diffopt+=iwhite
+
 " set diffexpr=""
 set wildmode=longest,list,full " Enable Autocompletion
 set showcmd   " Show (partial) command in status line.
@@ -684,13 +696,6 @@ au FileType xml setlocal foldmethod=syntax
 autocmd FileType autohotkey setlocal commentstring=;
 "}}}
 "===== Functions {{{
-let s:fontsize = 10
-function! AdjustFontSize(amount)
-  let s:fontsize = s:fontsize+a:amount
-  :execute "GuiFont! Consolas:h" . s:fontsize
-endfunction
-noremap <C-ScrollWheelUp> :call AdjustFontSize(1)<CR>
-noremap <C-ScrollWheelDown> :call AdjustFontSize(-1)<CR>
 
 function! DoPrettyXML()
   " save the filetype so we can restore it later

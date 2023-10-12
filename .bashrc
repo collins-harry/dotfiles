@@ -1,7 +1,13 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
-# ==============WINDOWS===============
+# ==============WORK   ===============
+source .work.bashrc
+
+# ==============TWENTE ===============
+export CLUSTER="s1664050@korenvliet.ewi.utwente.nl"
+
+# ==============WSL    ===============
 # required for tmux copy pasting
 
 # alias python='winpty python.exe'
@@ -10,30 +16,53 @@ if grep -qE "(Microsoft|WSL)" /proc/version &>/dev/null; then
     export DISPLAY=:0
     PATH=$PATH:~/.local/bin
     export PATH=~/anaconda3/bin:$PATH
-    export EDITOR="vim"
 fi
-# ==============ENDWINDOWS===============
+
 # ==============ALIASES===============
 alias r=ranger
-alias v=vim
+alias v=nvim
 alias bat=batcat
 alias calc='libreoffice --calc'
 alias scim=sc-im
-# ==============ENDALIASES===============
+alias k=kubectl
+alias eb="nvim ~/.bashrc && source ~/.bashrc"
+alias sb="source ~/.bashrc"
+
+#===============CONFIG ===============
+export EDITOR="nvim"
 set -o vi
 shopt -s autocd
-export PATH="~/apps/android-studio/bin:$PATH"
-# export TERM="xterm-256color"
-# alias tmux="env TERM=xterm-256color tmux"
-export CLUSTER="s1664050@korenvliet.ewi.utwente.nl"
-
-# Base16 Shell
-# BASE16_SHELL="$HOME/.config/base16-shell/"
-# [ -n "$PS1" ] && \
-#     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-#         eval "$("$BASE16_SHELL/profile_helper.sh")"
-
 export GREP_COLORS='ms=01;31:mc=01;31:sl=:cx=:fn=38;5;81:ln=32:bn=32:se=36'
+
+#===============APPS   ===============
+export PATH="~/apps/android-studio/bin:$PATH"
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('${HOME}/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "${HOME}/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "${HOME}/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="${HOME}/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+### HOW TO CREATE NEW PYTHON VERSION
+#conda create --name=py311 python=3.11 -y
+if [ "~/miniconda3" ] || [ "~/anaconda3"] ; 
+then
+{
+    conda deactivate
+    conda activate py39
+}
+fi
+
+
+#===============OTHER  =================
 
 # If not running interactively, don't do anything
 case $- in
@@ -41,6 +70,7 @@ case $- in
       *) return;;
 esac
 
+#===============HISTORY=================
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -52,17 +82,20 @@ shopt -s histappend
 HISTSIZE=1000
 HISTFILESIZE=2000
 
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
-#shopt -s globstar
+shopt -s globstar
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
+
+#===================PROMPT ====================
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
@@ -89,17 +122,33 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+
+# \e[ tells bash it's color info, \m signifies the end of color tag
+# 8bit
+# \[{typeface};{color}m\]
+# typeface: 0 - normal, 1 - bold, 2 - dim, 4 - underlined
+# color: Black: 30 Red: 31 Green: 32 Yellow: 33 Blue: 34 Purple: 35 Cyan: 36 White: 37
+# 256bit
 # color explanation - https://misc.flogisoft.com/bash/tip_colors_and_formatting
 # 88/256 foreground “<Esc>[38;5;ColorNumberm”]"
 # 88/256 background “<Esc>[48;5;ColorNumberm”]"
 # 256 color pallete - https://jonasjacek.github.io/colors/
+# foreground = 38;5, background = 48;5
+PS1=''
+if [ ! -z "$CONDA_DEFAULT_ENV" ]
+then
+    #8bit 
+    # PS1+='\[\e[2;37m\]($CONDA_DEFAULT_ENV) \[\e[0;0m\]'
+    #256bit
+    PS1+='\[\e[38;5;244m\]($CONDA_DEFAULT_ENV) \[\e[0;0m\]'
+fi
 
 if [ "$color_prompt" = yes ]; then
     # export PS1="${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\e[32m\]\$(__git_ps1)\[\e[m\] λ "
     # 8/16bit color PS1='\e[01;32m\u@\h \e[01;36m\w\e[01;32m$(__git_ps1)\n\e[01;32m└─ λ ~ \e[0m'
-    PS1='\[\e[01;32m\]\u@\h \[\e[38;5;81m\]\w\[\e[01;32m\]$(__git_ps1)\n\[\e[01;32m\]└─ λ ~ \[\e[0m\]'
+    PS1+='\[\e[1;32m\]\u@\h \[\e[38;5;81m\]\w\[\e[1;32m\]$(__git_ps1)\n\[\e[1;32m\]└─ λ ~ \[\e[0m\]'
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1+='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
 unset color_prompt force_color_prompt
 
@@ -190,22 +239,9 @@ if ! shopt -oq posix; then
 fi
 
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/harry/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/harry/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/harry/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/harry/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
 
 # ow=34;42:
 # ex=01;32
 LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=1;34:st=37;44:ex=0:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:';
 export LS_COLORS
+
