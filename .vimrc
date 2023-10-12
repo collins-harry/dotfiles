@@ -93,7 +93,7 @@ Plugin 'VundleVim/Vundle.vim'
   "Plugin 'vim-pandoc/vim-pandoc-syntax'
   "Plugin 'vim-pandoc/vim-pandoc'
   "Plugin 'vim-pandoc/vim-rmarkdown'
-  "Plugin 'iamcco/markdown-preview.nvim' "https://github.com/iamcco/markdown-preview.nvim
+  Plugin 'iamcco/markdown-preview.nvim' "https://github.com/iamcco/markdown-preview.nvim
   Plugin 'vimwiki/vimwiki'
 "Colorschemes
   Plugin 'NLKNguyen/papercolor-theme'
@@ -158,9 +158,8 @@ filetype plugin indent on    " required
 if !exists("g:syntax_on")
   syntax enable
 endif
-" runtime! plugin/sensible.vim
-" }}}
 runtime! plugin/sensible.vim
+" }}}
 "===== ColorScheme/ SynTax/ Spelling  {{{
 " Enable True color or 256 if not available (I think)
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
