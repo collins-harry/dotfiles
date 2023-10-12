@@ -67,15 +67,19 @@ Else
   Update-SessionEnvironment
 }
 
-Write-Host "Installing x64 neovim, ripgrep, winget, windows terminal, hwinfo, minikube" -ForegroundColor Green
-choco upgrade neovim ripgrep winget microsoft-windows-terminal hwinfo minikube fzf -y
+Write-Host "Installing x64 neovim, ripgrep, winget, windows terminal, hwinfo, minikube, fzf, nodejs" -ForegroundColor Green
+choco upgrade neovim ripgrep winget microsoft-windows-terminal hwinfo minikube fzf nodejs-lts -y
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
 
-Write-Host "Installing vs-code" -ForegroundColor Green
+Write-Host "Installing VS Code" -ForegroundColor Green
 winget install -e --id Microsoft.VisualStudioCode --accept-source-agreements --accept-package-agreements
+Write-Host "Installing SQLServerManagementStudio" -ForegroundColor Green
 winget install -e --id Microsoft.SQLServerManagementStudio 
+Write-Host "Installing AzureCLI" -ForegroundColor Green
 winget install -e --id Microsoft.AzureCLI
+Write-Host "Installing AutoHotkey" -ForegroundColor Green
+winget install -e --id AutoHotkey.AutoHotkey
 
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
@@ -101,13 +105,17 @@ Else
 Write-Host "Add windows terminal symlink" -ForegroundColor Green
 if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState")
 {
-  Write-Host "  Creating symlink for terminal settings"
+  Write-Host "  Creating symlink for terminal settings and autohotkey"
   New-Item -ItemType SymbolicLink -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Target "$HOME\dotfiles\windows_startup\settings.json" -Force
 }
 else
 {
   Write-Host "  Windows Terminal not installed or not from choco" -ForegroundColor Red
 }
+
+
+Write-Host "Add autohotkey script to STARTUP folder"
+New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\script.ahk" -Target "$HOME\dotfiles\ahkscripts\script.ahk" -Force
 
 
 

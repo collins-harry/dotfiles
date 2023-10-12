@@ -495,7 +495,6 @@ https://www.msi.com/Landing/afterburner
   Windows (GIT BASH/ Windows terminal)
   ----------------------
 
-
   1. Install git https://git-scm.com/download/win
   2. Update ssh key 
       ```bash
@@ -516,6 +515,8 @@ https://www.msi.com/Landing/afterburner
   4. .\powershell.ps1
   
                                       
+### TODO tab completion for az
+https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=winget
                                       
   ### Python3
   https://www.anaconda.com/products/individual (scroll to bottom of page)
