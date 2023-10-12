@@ -59,7 +59,7 @@ Plugin 'VundleVim/Vundle.vim'
   Plugin 'OmniSharp/omnisharp-vim'
   "Plugin 'vim-latex/vim-latex'
   "Plugin 'Raimondi/delimitMate'
-  " Plugin 'github/copilot.vim'
+  Plugin 'github/copilot.vim'
 "Search
   Plugin 'junegunn/fzf'
   Plugin 'junegunn/fzf.vim'
