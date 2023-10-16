@@ -4,6 +4,10 @@ Set-ExecutionPolicy Bypass -Scope Process -Force;
 
 # Write-Host "Installing Chrome " -ForegroundColor Green
 # $LocalTempDir = $env:TEMP; $ChromeInstaller = "ChromeInstaller.exe"; (new-object System.Net.WebClient).DownloadFile('https://dl.google.com/chrome/install/375.126/chrome_installer.exe', "$LocalTempDir$ChromeInstaller"); & "$LocalTempDir$ChromeInstaller" /silent /install; $Process2Monitor = "ChromeInstaller"; Do { $ProcessesFound = Get-Process | ?{$Process2Monitor -contains $_.Name} | Select-Object -ExpandProperty Name; If ($ProcessesFound) { "Still running: $($ProcessesFound -join ', ')" | Write-Host; Start-Sleep -Seconds 2 } else { rm "$LocalTempDir$ChromeInstaller" -ErrorAction SilentlyContinue -Verbose } } Until (!$ProcessesFound)< Write-Host "Finished Chrome installation command" -ForegroundColor Green
+#
+
+
+Set-MpPreference -DisableRealtimeMonitoring $true
 
 Write-Host "Changing keyboard to en-US" -ForegroundColor Green
 $CurrentInputMethod = Get-WinDefaultInputMethodOverride
@@ -51,12 +55,13 @@ Else {
 #Update-Help
 
 Write-Host "Installing Miniconda..." -ForegroundColor Green
-if (Test-Path -Path "$env:LOCALAPPDATA\miniconda3")
+if (Test-Path -Path "$HOME\miniconda3")
 {
   Write-Host "  Already complete, skipping"
 }
 Else 
 {
+  Write-Host "  Make sure to install locally not globally" -ForegroundColor Magenta
   Write-Host "  Downloading.."
   Invoke-WebRequest -Uri "https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe" -Outfile "$HOME/Miniconda3_installer.exe"
   Write-Host "  Installing, please click through installer..."
@@ -93,13 +98,15 @@ if (Test-Path -Path "$HOME\.vimrc")
 Else 
 {
   Write-Host "  Creating symlink for .vimrc in $HOME"
-  New-Item -ItemType SymbolicLink -Path "$HOME\.vimrc" -Target "$HOME\dotfiles\.vimrc"
+  New-Item -ItemType SymbolicLink -Path "$HOME\.vimrc" -Target "$HOME\dotfiles\.vimrc" -Force
   Write-Host "  Creating swap file directory in ~\tmp"
   New-Item -Path "$HOME" -Name "tmp" -ItemType "directory"
   Write-Host "  Creating init.vim file referencing .vimrc"
-  New-Item -ItemType File -Path "$env:LOCALAPPDATA\nvim\init.vim" -Force -Value "source ~/.vimrc"
+  New-Item -ItemType File -Path "$env:LOCALAPPDATA\nvim\init.vim" -Value "source ~/.vimrc" -Force
   Write-Host "  Creating symlink for nerdtree bookmarks in $HOME"
-  New-Item -ItemType SymbolicLink -Path "$HOME\.NERDTreeBookmarks" -Target "$HOME\dotfiles\.NERDTreeBookmarks"
+  New-Item -ItemType SymbolicLink -Path "$HOME\.NERDTreeBookmarks" -Target "$HOME\dotfiles\.NERDTreeBookmarks" -Force
+  Write-Host "  Setting isWin to 1 in .os_config_vim"
+  New-Item -ItemType File -Path "$HOME\dotfiles\.os_config_vim" -Value "let IsWSL=0`r`nlet IsLinux=0`r`nlet IsWin=1" -Force
 }
 
 Write-Host "Add windows terminal symlink" -ForegroundColor Green
@@ -203,7 +210,7 @@ ELSE
           Qt Creator x.x.x Debug Symbols
           CMake x.x.x
           Ninja x.x.x
-          OpenSSL 1.1.1q Toolkit:
+          OpenSSL x.x.x Toolkit:
             OpenSSL 64-bit binaries
 "@ -ForegroundColor Magenta
   Start-process -wait "~/qt-unified-windows-x64.exe"
@@ -231,19 +238,21 @@ ELSE
   # [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\NewPath', 'Machine')   # For all users
 }
 
+
 Write-Host "Installing WSL2 w/ Ubuntu" -ForegroundColor Green
-# if ([Environment]::GetEnvironmentVariable('CMAKE_PREFIX_PATH', 'User'))
-# {
-#   Write-Host "  Already complete, skipping"
-# }
-# ELSE
-# {
-  # wsl --install
-# }
+$installedDistributions = wsl --list --quiet
+$distroFound = $installedDistributions | Select-String -Pattern "Ubuntu"
+if ($distroFound) {
+  Write-Host "  Already complete, skipping"
+} else {
+  wsl --install
+}
+
+
+
+Set-MpPreference -DisableRealtimeMonitoring $false
 
 exit
-
-
 
 
 Write-Host "  Installing YCM.."
