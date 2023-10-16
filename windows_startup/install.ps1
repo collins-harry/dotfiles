@@ -115,7 +115,7 @@ else
 
 
 Write-Host "Add autohotkey script to STARTUP folder"
-New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\script.ahk" -Target "$HOME\dotfiles\ahkscripts\script.ahk" -Force
+New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk" -Target "$HOME\dotfiles\ahkscripts\startup.ahk" -Force
 
 
 
