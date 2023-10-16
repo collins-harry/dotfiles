@@ -1,4 +1,7 @@
 *.html
 *.swp
 work.ahk
+*/work.ahk
+**/work.ahk
+**work.ahk
 .work.bashrc
