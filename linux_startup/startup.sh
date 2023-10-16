@@ -5,7 +5,7 @@ if false;
 then
 	sudo apt-get update -y && \
 	sudo apt-get upgrade -y && \
-	sudo apt-get install --assume-yes xclip tmux firefox podman git r-base neovim pandoc pandoc-citeproc cmake build-essential fonts-powerline && \
+	sudo apt-get install --assume-yes xclip tmux firefox podman git r-base neovim pandoc pandoc-citeproc cmake build-essential fonts-powerline nodejs && \
 	echo "install.packages(c('rmarkdown', 'reticulate', 'tinytex'), repos='http://cran.rstudio.com/'); tinytex::install_tinytex()" | sudo R --vanilla && \
 	cd /tmp && \
     curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
@@ -14,28 +14,46 @@ then
     ~/miniconda3/bin/conda init bash
 	sudo chown -R hcollins ~/.vim && \
     source .bashrc && \
-    conda create --name=py39 python=3.9 -y
-    conda create --name=py311 python=3.11 -y
+    echo "Installing different python versions" 
+    conda create --name=py39 python=3.9 -y && \
+    conda create --name=py311 python=3.11 -y && \
     conda install -c conda-forge powerline-status && \
     cd ~
 else
-	echo "skipping part of code"
+	echo "Skipping part of code"
 fi
 
 
-
-if false;
+echo "Installing Nodejs"
+if [[ -d ~/.nvm ]] 
 then
-    echo "Installing work items"
+    echo "  nvm/nodejs already installed"
+else
+    echo "  Installing nvm"
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash && \
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+    echo "  Installing latest nodejs"
+    nvm install --lts && \
+    source ~/.bashrc
+fi
+
+
+echo "Installing items for hamilton work"
+if false; then
+    echo "  Installing work items"
     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 else
-    echo "Skipping installing work items"
+    echo "  Skipping installing work items"
 fi
 
 
-if [ "~/.vimrc" ]
-then
-    echo "Creating symbolic links" 
+echo "Installing symlinks"
+if [[ -f ~/.vimrc ]]; then
+    echo '  Symbolic links already created, skipping'
+else
+    echo "  Creating symbolic links" 
     ln -sf ~/dotfiles/.bashrc ~/.bashrc
     ln -sf ~/dotfiles/.vimrc ~/.vimrc
     ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
@@ -45,17 +63,15 @@ then
     mkdir ~/tmp
     echo 'set completion-ignore-case On' | sudo tee -a /etc/inputrc
     source ~/.bashrc
-else
-    echo 'Symbolic links already created, skipping'
 fi
 # sudo chown -R hcollins ~/.TinyTex && \
 
 
-if [ "~/.vim/bundle/Vundle.vim" ]
-then
-    echo "Vim plugins already installed, skipping"
+echo "Installing nvim plugins"
+if [[ -d ~/.vim/bundle/Vundle.vim ]]; then
+    echo "  Vim plugins already installed, skipping"
 else
-    echo "Installing plugins"
+    echo "  Installing plugins"
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim && \
     nvim +PluginInstall +qall && \
     python ~/.vim/bundle/YouCompleteMe/install.py
@@ -65,12 +81,12 @@ fi
 # git config --global user.email "hcollins345@gmail.com"
 # git config --global user.name "hcollins345"
 
-if [ "~/.tmux/plugins/tpm" ]
-then
-    echo "Tmux plugins already installed, running update"
+echo "Installing tmux plugins"
+if [[ -d ~/.tmux/plugins/tpm ]]; then
+    echo "  Tmux plugins already installed, running update"
     ~/.tmux/plugins/tpm/bin/update_plugins all
 else
-    echo 'Installing Tmux packages'
+    echo "  Installing plugins"
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
     ~/.tmux/plugins/tpm/bin/install_plugins
 fi

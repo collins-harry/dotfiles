@@ -287,6 +287,10 @@ xmap ga <Plug>(EasyAlign)
 nmap ga: :'{,'}EasyAlign*:>l1<cr>
 xmap ga: :EasyAlign*:>l1<cr>
 
+
+" Map ,co to open Copilot panel
+nnoremap <silent> ,co :Copilot<CR>
+
 " Gitgutter
 "set foldtext=gitgutter#fold#foldtext()
 " set signcolumn=number " use number column as signcolumn
@@ -391,8 +395,8 @@ if IsWin
   command UI silent exec "!start explorer ."
   command CMD silent exec "!start cmd ."
 elseif IsWSL
-  command UI silent exec "!start explorer.exe ."
-  command CMD silent exec "!start cmd.exe ."
+  command UI silent exec "!explorer.exe ."
+  command CMD silent exec "!cmd.exe ."
 endif
 "" Edit configuration files
 " https://stackoverflow.com/a/52156757/13734567

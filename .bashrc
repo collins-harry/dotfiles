@@ -134,32 +134,53 @@ fi
 # 88/256 background “<Esc>[48;5;ColorNumberm”]"
 # 256 color pallete - https://jonasjacek.github.io/colors/
 # foreground = 38;5, background = 48;5
-PS1=''
-if [ ! -z "$CONDA_DEFAULT_ENV" ]
-then
-    #8bit 
-    # PS1+='\[\e[2;37m\]($CONDA_DEFAULT_ENV) \[\e[0;0m\]'
-    #256bit
-    PS1+='\[\e[38;5;244m\]($CONDA_DEFAULT_ENV) \[\e[0;0m\]'
-fi
 
-if [ "$color_prompt" = yes ]; then
-    # export PS1="${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\e[32m\]\$(__git_ps1)\[\e[m\] λ "
-    # 8/16bit color PS1='\e[01;32m\u@\h \e[01;36m\w\e[01;32m$(__git_ps1)\n\e[01;32m└─ λ ~ \e[0m'
-    PS1+='\[\e[1;32m\]\u@\h \[\e[38;5;81m\]\w\[\e[1;32m\]$(__git_ps1)\n\[\e[1;32m\]└─ λ ~ \[\e[0m\]'
+
+# Add ranger level info to PromptRangerLvl if $RANGER_LEVEL is set
+if [ ! -z "$RANGER_LEVEL" ]
+then
+    PromptRangerLvl='\[\e[38;5;244m\](r$RANGER_LEVEL)\[\e[0;0m\]'
 else
-    PS1+='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PromptRangerLvl=''
 fi
+# Add conda env info to prompt
+if [ ! -z "$CONDA_DEFAULT_ENV" ] 
+then
+    PromptCondaEnv='\[\e[38;5;244m\]($CONDA_DEFAULT_ENV) \[\e[0;0m\]'
+else
+    PromptCondaEnv=''
+fi
+# Add user, path and git info to prompt
+PromptUser='\[\e[1;32m\]\u@\h'
+PromptCWD='\[\e[38;5;81m\]\w'
+PromptGit='\[\e[1;32m\]$(__git_ps1)'
+PromptEnd='\[\e[1;32m\]\n└─ λ ~ \[\e[0m\]'
+# Add second line to prompt
+FULLPS1="$PromptRangerLvl$PromptCondaEnv$PromptUser $PromptCWD $PromptGit$PromptEnd"
+MINIPS1='\[\e[1;32m\]λ - \[\e[0m\]'
+PS1="$FULLPS1"
+
+# fix function to toggle PS1 between full and mini prompt
+function tps() {
+if [ "$PS1" = "$FULLPS1" ]
+    then
+        PS1="$MINIPS1"
+    else
+        PS1="$FULLPS1"
+    fi
+}
+
+
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
+# case "$TERM" in
+# xterm*|rxvt*)
+#     PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+#     ;;
+# *)
+#     ;;
+# esac
 
 function colorgrid( )
 {
@@ -245,3 +266,7 @@ fi
 LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=1;34:st=37;44:ex=0:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:';
 export LS_COLORS
 
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
