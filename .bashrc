@@ -38,14 +38,14 @@ export GREP_COLORS='ms=01;31:mc=01;31:sl=:cx=:fn=38;5;81:ln=32:bn=32:se=36'
 export PATH="~/apps/android-studio/bin:$PATH"
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('${HOME}/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/hcollins/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "${HOME}/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "${HOME}/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "/home/hcollins/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/hcollins/miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH="${HOME}/anaconda3/bin:$PATH"
+        export PATH="/home/hcollins/miniconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup

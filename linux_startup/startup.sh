@@ -1,33 +1,52 @@
 #!/bin/bash
 
+
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
 #Need to add the cran link to etc/../sources.list for ubuntu bionic (if still using linux mint Tara), looks like deb https...
-if false; 
+
+echo -e "${GREEN}Updating${NC}"
+sudo apt-get update -y && \
+
+echo -e "${GREEN}Upgrading${NC}"
+sudo apt-get upgrade -y && \
+
+echo -e "${GREEN}Installing from apt-get${NC}"
+sudo apt-get install --assume-yes xclip tmux firefox podman git r-base neovim pandoc pandoc-citeproc cmake build-essential fonts-powerline nodejs ripgrep && \
+
+
+echo -e "${GREEN}Installing miniconda with python 3.9 and 3.11${NC}"
+if [[ -d ~/miniconda3 ]];
 then
-	sudo apt-get update -y && \
-	sudo apt-get upgrade -y && \
-	sudo apt-get install --assume-yes xclip tmux firefox podman git r-base neovim pandoc pandoc-citeproc cmake build-essential fonts-powerline nodejs && \
-	echo "install.packages(c('rmarkdown', 'reticulate', 'tinytex'), repos='http://cran.rstudio.com/'); tinytex::install_tinytex()" | sudo R --vanilla && \
-	cd /tmp && \
+    echo "  Already installed, skipping"
+else
+    cd /tmp && \
     curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-	bash Miniconda3-latest-Linux-x86_64.sh -b && \
-	sudo chown -R hcollins ~/miniconda3 && \
+    bash Miniconda3-latest-Linux-x86_64.sh -b && \
+    sudo chown -R hcollins ~/miniconda3 && \
+    rm Miniconda3-latest-Linux-x86_64.sh
     ~/miniconda3/bin/conda init bash
-	sudo chown -R hcollins ~/.vim && \
-    source .bashrc && \
-    echo "Installing different python versions" 
     conda create --name=py39 python=3.9 -y && \
     conda create --name=py311 python=3.11 -y && \
     conda install -c conda-forge powerline-status && \
     cd ~
-else
-	echo "Skipping part of code"
 fi
 
+sudo chown -R hcollins ~/.vim && \
+source ~/.bashrc
 
-echo "Installing Nodejs"
-if [[ -d ~/.nvm ]] 
-then
-    echo "  nvm/nodejs already installed"
+echo -e "${GREEN}Installing Rmarkdown${NC}"
+if [[ /usr/bin/R ]]; then
+    echo "  Already installed, skipping"
+else
+    echo "install.packages(c('rmarkdown', 'reticulate', 'tinytex'), repos='http://cran.rstudio.com/'); tinytex::install_tinytex()" | sudo R --vanilla && \
+    cd ~
+fi
+
+echo -e "${GREEN}Installing Nodejs${NC}"
+if [[ -d ~/.nvm ]]; then
+    echo "  Already installed, skipping"
 else
     echo "  Installing nvm"
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash && \
@@ -40,18 +59,18 @@ else
 fi
 
 
-echo "Installing items for hamilton work"
-if false; then
+echo -e "${GREEN}Installing items for hamilton work${NC}"
+if type az 1> /dev/null 2>&1; then
+    echo "  Already installed, skipping"
+else
     echo "  Installing work items"
     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-else
-    echo "  Skipping installing work items"
 fi
 
 
-echo "Installing symlinks"
+echo -e "${GREEN}Installing symlinks${NC}"
 if [[ -f ~/.vimrc ]]; then
-    echo '  Symbolic links already created, skipping'
+    echo '  Already installed, skipping'
 else
     echo "  Creating symbolic links" 
     ln -sf ~/dotfiles/.bashrc ~/.bashrc
@@ -67,12 +86,19 @@ fi
 # sudo chown -R hcollins ~/.TinyTex && \
 
 
-echo "Installing nvim plugins"
+echo -e "${GREEN}Installing nvim plugin manager${NC}"
 if [[ -d ~/.vim/bundle/Vundle.vim ]]; then
-    echo "  Vim plugins already installed, skipping"
+    echo "  Already installed, skipping"
 else
-    echo "  Installing plugins"
+    echo "  Downloading Vundle"
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim && \
+    cd ~
+fi
+
+echo -e "${GREEN}Installing nvim plugins and compile YCM${NC}"
+if [[ -d ~/.vim/bundle/fzf.vim ]]; then
+    echo "  Already installed, skipping"
+else
     nvim +PluginInstall +qall && \
     python ~/.vim/bundle/YouCompleteMe/install.py
 fi
@@ -81,10 +107,10 @@ fi
 # git config --global user.email "hcollins345@gmail.com"
 # git config --global user.name "hcollins345"
 
-echo "Installing tmux plugins"
+echo -e "${GREEN}Installing tmux plugins${NC}"
 if [[ -d ~/.tmux/plugins/tpm ]]; then
-    echo "  Tmux plugins already installed, running update"
-    ~/.tmux/plugins/tpm/bin/update_plugins all
+    echo "  Already installed, skipping"
+    #~/.tmux/plugins/tpm/bin/update_plugins all
 else
     echo "  Installing plugins"
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
