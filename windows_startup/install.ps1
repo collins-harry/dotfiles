@@ -30,7 +30,6 @@ if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\
 Else {
   Write-Host "  Creating symlink for uncap_script in STARTUP folders"
   New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\uncap_script.bat" -Target "$HOME\dotfiles\windows_startup\uncap_script.bat"
-  # New-Item -ItemType SymbolicLink -Path "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp" -Target "$HOME\dotfiles\windows_startup\uncap_script.bat"
   Write-Host "  Executing Uncap script in STARTUP folder"
   Start-Process "$HOME\dotfiles\windows_startup\uncap_script.bat"
 }
@@ -111,10 +110,10 @@ Else
   New-Item -ItemType File -Path "$HOME\dotfiles\.os_config_vim" -Value "let IsWSL=0`r`nlet IsLinux=0`r`nlet IsWin=1" -Force
 }
 
-Write-Host "Add windows terminal symlink" -ForegroundColor Green
+Write-Host "Add symlink for windows terminal settings" -ForegroundColor Green
 if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState")
 {
-  Write-Host "  Creating symlink for terminal settings and autohotkey"
+  Write-Host "  Creating symlink for terminal settings"
   New-Item -ItemType SymbolicLink -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Target "$HOME\dotfiles\windows_startup\settings.json" -Force
 }
 else
@@ -123,17 +122,25 @@ else
 }
 
 
-Write-Host "Add autohotkey script to STARTUP folder"
+Write-Host "Add symlink in STARTUP folder for autohotkey script" -ForegroundColor Green
 New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk" -Target "$HOME\dotfiles\ahkscripts\startup.ahk" -Force
 
 
+Write-Host "Add symlink in HOME for OneDrive" -ForegroundColor Green
+if (Test-Path -Path "$HOME\OneDrive")
+{
+  Write-Host "  Already complete, skipping"
+}
+else
+{
+  New-Item -ItemType SymbolicLink -Path "$HOME\OneDrive" -Target "$env:OneDrive"
+}
 
-# Write-Host "Enable/ Install Hyper-V (Virtualisation)" -ForegroundColor Green
-# DISM /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
+Write-Host "Enable/ Install Hyper-V (Virtualisation)" -ForegroundColor Green
+DISM /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
 
-Write-Host "Installing (n)vim plugin and mover2.py requirements" -ForegroundColor Green
+Write-Host "Installing (n)vim plugin and mover2.py python requirements" -ForegroundColor Green
 echo y | pip install pynvim pyautogui pynput
-
 
 Write-Host "Installing (n)vim plugins" -ForegroundColor Green
 if (Test-Path -Path "$HOME\.vim\bundle\Vundle.vim")

@@ -58,4 +58,4 @@ SetKeyDelay -1  ; Recommended for new scripts due to its superior speed and reli
 }
 
 ; Add work sensitive ahk commands
-#Include C:\Users\%A_UserName%\work.ahk
+#Include *i C:\Users\%A_UserName%\OneDrive\work.ahk
