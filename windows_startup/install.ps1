@@ -55,7 +55,7 @@ Else {
 #Update-Help
 
 Write-Host "Installing Miniconda..." -ForegroundColor Green
-if (Test-Path -Path "$HOME\miniconda3")
+if (Test-Path -Path "$env:LOCALAPPDATA\miniconda3")
 {
   Write-Host "  Already complete, skipping"
 }
@@ -85,6 +85,8 @@ Write-Host "Installing AzureCLI" -ForegroundColor Green
 winget install -e --id Microsoft.AzureCLI
 Write-Host "Installing AutoHotkey" -ForegroundColor Green
 winget install -e --id AutoHotkey.AutoHotkey
+Write-Host "Installing Beyond Compare 4" -ForegroundColor Green
+winget install -e --id=ScooterSoftware.BeyondCompare4
 
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
@@ -241,8 +243,7 @@ ELSE
 
 Write-Host "Installing WSL2 w/ Ubuntu" -ForegroundColor Green
 $installedDistributions = wsl --list --quiet
-$distroFound = $installedDistributions | Select-String -Pattern "Ubuntu"
-if ($distroFound) {
+if ($installedDistributions -contains "Ubuntu") {
   Write-Host "  Already complete, skipping"
 } else {
   wsl --install
