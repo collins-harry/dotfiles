@@ -55,7 +55,7 @@ Plugin 'VundleVim/Vundle.vim'
 " ===== PLUGINS {{{
 "run :PluginInstall after saving (might have to reload vimrc)
 "Syntax and code completion
-  Plugin 'Valloric/YouCompleteMe'
+  " Plugin 'Valloric/YouCompleteMe'
   Plugin 'OmniSharp/omnisharp-vim'
   "Plugin 'vim-latex/vim-latex'
   "Plugin 'Raimondi/delimitMate'
