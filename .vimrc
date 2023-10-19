@@ -55,7 +55,7 @@ Plugin 'VundleVim/Vundle.vim'
 " ===== PLUGINS {{{
 "run :PluginInstall after saving (might have to reload vimrc)
 "Syntax and code completion
-  Plugin 'Valloric/YouCompleteMe'
+  " Plugin 'Valloric/YouCompleteMe'
   Plugin 'OmniSharp/omnisharp-vim'
   "Plugin 'vim-latex/vim-latex'
   "Plugin 'Raimondi/delimitMate'
@@ -689,6 +689,7 @@ if has("autocmd")
   " autocmd FileType rmd setlocal ts=2 sts=2 sw=2
   autocmd FileType xml setlocal noexpandtab
   autocmd FileType *.tcg,*.lvl,*.ptm,*.soc setlocal filetype=c syntax=off syntax=on
+  autocmd FileType autohotkey setlocal commentstring=;%s;
   " autocmd BufRead,BufNewFile *.pde,*.ino set filetype=arduino
   " autocmd BufRead,BufNewFile *.tex set filetype=tex
   " autocmd BufRead,BufNewFile *.jsl setlocal ts=4 sts=4 sw=4 noexpandtab
@@ -696,7 +697,6 @@ if has("autocmd")
 endif
 let g:xml_syntax_folding=1
 au FileType xml setlocal foldmethod=syntax
-autocmd FileType autohotkey setlocal commentstring=;
 "}}}
 "===== Functions {{{
 
