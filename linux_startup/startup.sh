@@ -29,7 +29,7 @@ else
     ~/miniconda3/bin/conda init bash
     conda create --name=py39 python=3.9 -y && \
     conda create --name=py311 python=3.11 -y && \
-    conda install -c conda-forge powerline-status && \
+    conda install -c conda-forge powerline-status -y && \
     cd ~
 fi
 
