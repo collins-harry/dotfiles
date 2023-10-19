@@ -121,12 +121,17 @@ else
   Write-Host "  Windows Terminal not installed or not from choco" -ForegroundColor Red
 }
 
+Write-Host "Install symlink in STARTUP folder for autohotkey script" -ForegroundColor Green
+if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk")
+{
+  Write-Host "  Already complete, skipping"
+}
+else
+{
+  New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk" -Target "$HOME\dotfiles\ahkscripts\startup.ahk" -Force
+}
 
-Write-Host "Add symlink in STARTUP folder for autohotkey script" -ForegroundColor Green
-New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk" -Target "$HOME\dotfiles\ahkscripts\startup.ahk" -Force
-
-
-Write-Host "Add symlink in HOME for OneDrive" -ForegroundColor Green
+Write-Host "Install symlink in HOME for OneDrive" -ForegroundColor Green
 if (Test-Path -Path "$HOME\OneDrive")
 {
   Write-Host "  Already complete, skipping"
@@ -227,7 +232,6 @@ ELSE
   rm "~\qt-unified-windows-x64.exe"
 }
 
-
 Write-Host "Adding Path variables" -ForegroundColor Green
 if ([Environment]::GetEnvironmentVariable('CMAKE_PREFIX_PATH', 'User'))
 {
@@ -247,7 +251,6 @@ ELSE
   # [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\NewPath', 'Machine')   # For all users
 }
 
-
 Write-Host "Installing WSL2 w/ Ubuntu" -ForegroundColor Green
 $installedDistributions = wsl --list --quiet
 if ($installedDistributions -contains "Ubuntu") {
@@ -255,8 +258,6 @@ if ($installedDistributions -contains "Ubuntu") {
 } else {
   wsl --install
 }
-
-
 
 Set-MpPreference -DisableRealtimeMonitoring $false
 
