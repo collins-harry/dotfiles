@@ -13,8 +13,7 @@ echo -e "${GREEN}Upgrading${NC}"
 sudo apt-get upgrade -y && \
 
 echo -e "${GREEN}Installing from apt-get${NC}"
-sudo apt-get install --assume-yes xclip tmux firefox podman git r-base neovim pandoc pandoc-citeproc cmake build-essential fonts-powerline nodejs ripgrep && \
-
+sudo apt-get install --assume-yes xclip tmux firefox podman git r-base neovim pandoc pandoc-citeproc cmake build-essential fonts-powerline ripgrep && \
 
 echo -e "${GREEN}Installing miniconda with python 3.9 and 3.11${NC}"
 if [[ -d ~/miniconda3 ]];
@@ -58,7 +57,6 @@ else
     source ~/.bashrc
 fi
 
-
 echo -e "${GREEN}Installing items for hamilton work${NC}"
 if type az 1> /dev/null 2>&1; then
     echo "  Already installed, skipping"
@@ -66,7 +64,6 @@ else
     echo "  Installing work items"
     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 fi
-
 
 echo -e "${GREEN}Installing symlinks${NC}"
 if [[ -f ~/.vimrc ]]; then
@@ -125,6 +122,19 @@ else
     ~/.tmux/plugins/tpm/bin/install_plugins
 fi
 
+echo -e "${GREEN}Installing chrome${NC}"
+if type google-chrome 1> /dev/null 2>&1; then
+    echo "  Already installed, skipping"
+else
+    echo "  Downloading chrome"
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+    echo "  Installing chrome"
+    sudo apt install --assume-yes ./google-chrome-stable_current_amd64.deb && \
+    echo "  Deleting chrome"
+    rm google-chrome-stable_current_amd64.deb
+fi
+
+echo -e "${GREEN}Setup complete${NC}"
 # for jupyter notebook -- conda install notebook
 # for vimpyter -- conda install -c conda-forge notedown
 
