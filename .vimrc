@@ -90,9 +90,9 @@ Plugin 'VundleVim/Vundle.vim'
   "Plugin 'christoomey/vim-sort-motion' "https://github.com/christoomey/vim-sort-motion
   "Plugin 'vim-scripts/ReplaceWithRegister' "https://github.com/vim-scripts
 " Documentation
-  "Plugin 'vim-pandoc/vim-pandoc-syntax'
-  "Plugin 'vim-pandoc/vim-pandoc'
-  "Plugin 'vim-pandoc/vim-rmarkdown'
+  Plugin 'vim-pandoc/vim-pandoc-syntax'
+  Plugin 'vim-pandoc/vim-pandoc'
+  Plugin 'vim-pandoc/vim-rmarkdown'
   Plugin 'iamcco/markdown-preview.nvim' "https://github.com/iamcco/markdown-preview.nvim
   Plugin 'vimwiki/vimwiki'
 "Colorschemes
