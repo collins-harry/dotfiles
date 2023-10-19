@@ -2,7 +2,7 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 # ==============WORK   ===============
-source ~/dotfiles/.work.bashrc
+source ~/OneDrive/.work.bashrc
 
 # ==============TWENTE ===============
 export CLUSTER="s1664050@korenvliet.ewi.utwente.nl"
@@ -135,42 +135,36 @@ fi
 # 256 color pallete - https://jonasjacek.github.io/colors/
 # foreground = 38;5, background = 48;5
 
-
-# Add ranger level info to PromptRangerLvl if $RANGER_LEVEL is set
-if [ ! -z "$RANGER_LEVEL" ]
-then
+# Create prompt component for ranger level
+if [ ! -z "$RANGER_LEVEL" ]; then
     PromptRangerLvl='\[\e[38;5;244m\](r$RANGER_LEVEL)\[\e[0;0m\]'
 else
     PromptRangerLvl=''
 fi
-# Add conda env info to prompt
-if [ ! -z "$CONDA_DEFAULT_ENV" ] 
-then
+# Create prompt component for conda env
+if [ ! -z "$CONDA_DEFAULT_ENV" ]; then
     PromptCondaEnv='\[\e[38;5;244m\]($CONDA_DEFAULT_ENV) \[\e[0;0m\]'
 else
     PromptCondaEnv=''
 fi
-# Add user, path and git info to prompt
+# Create prompt components for user, path and git info
 PromptUser='\[\e[1;32m\]\u@\h'
 PromptCWD='\[\e[38;5;81m\]\w'
 PromptGit='\[\e[1;32m\]$(__git_ps1)'
 PromptEnd='\[\e[1;32m\]\n└─ λ ~ \[\e[0m\]'
-# Add second line to prompt
-FULLPS1="$PromptRangerLvl$PromptCondaEnv$PromptUser $PromptCWD $PromptGit$PromptEnd"
+# Create mini prompt
 MINIPS1='\[\e[1;32m\]λ - \[\e[0m\]'
+# Create full prompt
+FULLPS1="$PromptRangerLvl$PromptCondaEnv$PromptUser $PromptCWD $PromptGit$PromptEnd"
 PS1="$FULLPS1"
-
-# fix function to toggle PS1 between full and mini prompt
+# Function to toggle PS1 between full and mini prompt
 function tps() {
-if [ "$PS1" = "$FULLPS1" ]
-    then
+    if [ "$PS1" = "$FULLPS1" ]; then
         PS1="$MINIPS1"
     else
         PS1="$FULLPS1"
     fi
 }
-
-
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
