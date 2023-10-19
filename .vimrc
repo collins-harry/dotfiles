@@ -57,7 +57,6 @@ Plugin 'VundleVim/Vundle.vim'
 "Syntax and code completion
   " Plugin 'Valloric/YouCompleteMe'
   Plugin 'OmniSharp/omnisharp-vim'
-  "Plugin 'vim-latex/vim-latex'
   "Plugin 'Raimondi/delimitMate'
   Plugin 'github/copilot.vim'
 "Search
@@ -93,6 +92,7 @@ Plugin 'VundleVim/Vundle.vim'
   Plugin 'vim-pandoc/vim-pandoc-syntax'
   Plugin 'vim-pandoc/vim-pandoc'
   Plugin 'vim-pandoc/vim-rmarkdown'
+  " Plugin 'vim-latex/vim-latex'
   Plugin 'iamcco/markdown-preview.nvim' "https://github.com/iamcco/markdown-preview.nvim
   Plugin 'vimwiki/vimwiki'
 "Colorschemes
@@ -534,15 +534,20 @@ map <Leader>vz :VimuxZoomRunner<CR>|  "Zoom the tmux runner pane
   autocmd FileType qf nnoremap <buffer> <C-v> :call <SID>OpenQuickfix("vnew")<CR>
   autocmd FileType qf nnoremap <buffer> <C-x> :call <SID>OpenQuickfix("split")<CR>
 "MARKDOWN
+" jump to next <++>
+autocmd Filetype markdown,rmd imap ,, <esc>:keepp /<++><CR>ca<
 autocmd Filetype markdown,rmd map <leader>w yiWi[<esc>Ea](<esc>pa)
 autocmd Filetype markdown,rmd inoremap ;n ---<Enter><Enter>
+" bold
 autocmd Filetype markdown,rmd inoremap ;b ****<++><Esc>F*hi
+" strikethrough
 autocmd Filetype markdown,rmd inoremap ;s ~~~~<++><Esc>F~hi
+" italics/emphasise
 autocmd Filetype markdown,rmd inoremap ;e **<++><Esc>F*i
 autocmd Filetype markdown,rmd inoremap ;h ====<Space><++><Esc>F=hi
-"image
+" image
 autocmd Filetype markdown,rmd inoremap ;i ![](<++>)<++><Esc>F[a
-"links
+" links
 autocmd Filetype markdown,rmd inoremap ;a [](<++>)<++><Esc>F[a
 autocmd Filetype markdown,rmd inoremap ;1 #<Space><Enter><++><Esc>kA
 autocmd Filetype markdown,rmd inoremap ;2 ##<Space><Enter><++><Esc>kA
