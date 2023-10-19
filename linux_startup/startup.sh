@@ -55,6 +55,15 @@ if [[ -f ~/.vimrc ]]; then
 else
     echo "  Creating symbolic links" 
     ln -sf ~/dotfiles/.bashrc ~/.bashrc
+    onedrive0=$(
+        powershell.exe -Command "echo \$env:OneDrive" | 
+        tr -d '\r' |
+        tr '\\' '/' |
+        sed 's/ /\\ /g'
+    )
+    # replace C: with /mnt/c at begining of path
+    onedrive1="/mnt/c${onedrive0:2}"
+    echo ln -sf ${onedrive1} ~/OneDrive | bash
     ln -sf ~/dotfiles/.vimrc ~/.vimrc
     ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
     ln -sf ~/dotfiles/.NERDTreeBookmarks ~/.NERDTreeBookmarks
@@ -65,6 +74,8 @@ else
     source ~/.bashrc
 fi
 # sudo chown -R hcollins ~/.TinyTex && \
+
+
 
 
 echo "Installing nvim plugins"
