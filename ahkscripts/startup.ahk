@@ -47,6 +47,8 @@ SetKeyDelay -1  ; Recommended for new scripts due to its superior speed and reli
 }
 
 ::,start::C`:\Users\hcollins\AppData\Roaming\Microsoft\Windows\Start` Menu\Programs\Startup\
+::,gdot::git@github.com:collins-harry/dotfiles.git
+
 
 
 ; Close active window
@@ -55,5 +57,5 @@ SetKeyDelay -1  ; Recommended for new scripts due to its superior speed and reli
   WinClose("A")
 }
 
-; Include work.ahk file in $HOME\dotfiles\ahkscripts\work.ahk
-#Include %A_ScriptDir%\work.ahk
+; Add work sensitive ahk commands
+#Include *i C:\Users\%A_UserName%\OneDrive\work.ahk
