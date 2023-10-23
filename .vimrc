@@ -270,9 +270,9 @@ let g:Tex_MultipleCompileFormats='pdf, aux'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 "VimWiki
-let g:vimwiki_list = [{'path': '~/dotfiles/vimwiki/', 'syntax': 'markdown','ext': '.md', 'auto_tags': 1}]
-let g:instant_markdown_autostart = 0
-let g:vimwiki_ext2syntax = {'.Rmd': 'markdown','.rmd': 'markdown','.md':'markdown','.markdown': 'markdown','.mddown': 'markdown',}
+" let g:vimwiki_list = [{'path': '~/dotfiles/vimwiki/', 'syntax': 'markdown','ext': '.md', 'auto_tags': 1}]
+" let g:instant_markdown_autostart = 0
+" let g:vimwiki_ext2syntax = {'.Rmd': 'markdown','.rmd': 'markdown','.md':'markdown','.markdown': 'markdown','.mddown': 'markdown',}
 
 "Pandoc/ Rmarkdown
 let g:pandoc#syntax#conceal#use = 1
@@ -693,8 +693,7 @@ if has("autocmd")
   autocmd FileType tex setlocal sw=2 sts=2 ts=2
   autocmd FileType LaTex setlocal sw=2 sts=2 ts=2
   autocmd FileType sh setlocal sw=4 ts=4
-  autocmd FileType markdown setlocal ts=2 sts=2 sw=2 tw=79
-  " autocmd FileType rmd setlocal ts=2 sts=2 sw=2
+  autocmd FileType *.rmd,*.md setlocal ts=2 sts=2 sw=2 tw=79 commentstring=<!--%s-->
   autocmd FileType xml setlocal noexpandtab
   autocmd FileType *.tcg,*.lvl,*.ptm,*.soc setlocal filetype=c syntax=off syntax=on
   autocmd FileType autohotkey setlocal commentstring=;%s;
