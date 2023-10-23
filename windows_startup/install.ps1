@@ -54,7 +54,7 @@ Else {
 #Update-Help
 
 Write-Host "Installing Miniconda..." -ForegroundColor Green
-if (Test-Path -Path "$env:LOCALAPPDATA\miniconda3")
+if (Test-Path -Path "$HOME\miniconda3")
 {
   Write-Host "  Already complete, skipping"
 }
