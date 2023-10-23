@@ -26,8 +26,7 @@ if ($CurrentInputMethod -eq "0409:00000409") {
 Write-Host "Remapping ESC and Capslock keys..." -ForegroundColor Green
 if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\uncap_script.bat"){
   Write-Host "  Already complete, skipping"
-}
-Else {
+} Else {
   Write-Host "  Creating symlink for uncap_script in STARTUP folders"
   New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\uncap_script.bat" -Target "$HOME\dotfiles\windows_startup\uncap_script.bat"
   Write-Host "  Executing Uncap script in STARTUP folder"
@@ -39,8 +38,7 @@ if (Test-Path -Path "$env:ProgramData\Chocolatey"){
   Write-Host "  Already complete, skipping"
   Write-Host "  Importing refreshenv/Update-SessionEnvironment"
   Import-Module "C:\ProgramData\chocolatey\helpers\chocolateyProfile.psm1"
-}
-Else {
+} Else {
   Write-Host "Installing chocolatey" -ForegroundColor Green
   Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
   Write-Host "  Refreshing Path"
@@ -54,12 +52,9 @@ Else {
 #Update-Help
 
 Write-Host "Installing Miniconda..." -ForegroundColor Green
-if (Test-Path -Path "$HOME\miniconda3")
-{
+if (Test-Path -Path "$HOME\miniconda3") {
   Write-Host "  Already complete, skipping"
-}
-Else 
-{
+} Else {
   Write-Host "  Make sure to install locally not globally" -ForegroundColor Magenta
   Write-Host "  Downloading.."
   Invoke-WebRequest -Uri "https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe" -Outfile "$HOME/Miniconda3_installer.exe"
@@ -76,28 +71,50 @@ choco upgrade neovim ripgrep winget microsoft-windows-terminal hwinfo minikube f
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
 
+Write-Host "Collating installed packages" -ForegroundColor Green
+$installedList = winget list
 Write-Host "Installing VS Code" -ForegroundColor Green
-winget install -e --id Microsoft.VisualStudioCode --accept-source-agreements --accept-package-agreements
+if ($installedList | findstr "Microsoft.VisualStudioCode") {
+  Write-Host "  Already complete, skipping"
+} else {
+  winget install -e --id Microsoft.VisualStudioCode --accept-source-agreements --accept-package-agreements
+}
+
 Write-Host "Installing SQLServerManagementStudio" -ForegroundColor Green
-winget install -e --id Microsoft.SQLServerManagementStudio 
+if ($installedList | findstr "Microsoft.SQLServerManagementStudio") {
+  Write-Host "  Already complete, skipping"
+} else {
+  winget install -e --id Microsoft.SQLServerManagementStudio 
+}
+
 Write-Host "Installing AzureCLI" -ForegroundColor Green
-winget install -e --id Microsoft.AzureCLI
+if ($installedList | findstr "Microsoft.AzureCLI") {
+  Write-Host "  Already complete, skipping"
+} else {
+  winget install -e --id Microsoft.AzureCLI
+}
+
 Write-Host "Installing AutoHotkey" -ForegroundColor Green
-winget install -e --id AutoHotkey.AutoHotkey
+if ($installedList | findstr "AutoHotkey.AutoHotkey") {
+  Write-Host "  Already complete, skipping"
+} else {
+  winget install -e --id AutoHotkey.AutoHotkey
+}
+
 Write-Host "Installing Beyond Compare 4" -ForegroundColor Green
-winget install -e --id=ScooterSoftware.BeyondCompare4
+if ($installedList | findstr "ScooterSoftware.BeyondCompare4") {
+  Write-Host "  Already complete, skipping"
+} else {
+  winget install -e --id ScooterSoftware.BeyondCompare4
+}
 
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
 
-
 Write-Host "Installing nvim symlinks" -ForegroundColor Green
-if (Test-Path -Path "$HOME\.vimrc")
-{
+if (Test-Path -Path "$HOME\.vimrc") {
   Write-Host "  Already complete, skipping"
-} 
-Else 
-{
+} Else {
   Write-Host "  Creating symlink for .vimrc in $HOME"
   New-Item -ItemType SymbolicLink -Path "$HOME\.vimrc" -Target "$HOME\dotfiles\.vimrc" -Force
   Write-Host "  Creating swap file directory in ~\tmp"
@@ -111,49 +128,35 @@ Else
 }
 
 Write-Host "Add symlink for windows terminal settings" -ForegroundColor Green
-if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState")
-{
+if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState") {
   Write-Host "  Creating symlink for terminal settings"
   New-Item -ItemType SymbolicLink -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Target "$HOME\dotfiles\windows_startup\settings.json" -Force
-}
-else
-{
+} else {
   Write-Host "  Windows Terminal not installed or not from choco" -ForegroundColor Red
 }
 
 Write-Host "Install symlink in STARTUP folder for autohotkey script" -ForegroundColor Green
-if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk")
-{
+if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk") {
   Write-Host "  Already complete, skipping"
-}
-else
-{
+} else {
   New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk" -Target "$HOME\dotfiles\ahkscripts\startup.ahk" -Force
 }
 
 Write-Host "Install symlink in HOME for OneDrive" -ForegroundColor Green
-if (Test-Path -Path "$HOME\OneDrive")
-{
+if (Test-Path -Path "$HOME\OneDrive") {
   Write-Host "  Already complete, skipping"
-}
-else
-{
+} else {
   New-Item -ItemType SymbolicLink -Path "$HOME\OneDrive" -Target "$env:OneDrive"
 }
 
-Write-Host "Enable/ Install Hyper-V (Virtualisation)" -ForegroundColor Green
-DISM /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
 
 Write-Host "Installing (n)vim plugin and mover2.py python requirements" -ForegroundColor Green
 echo y | pip install pynvim pyautogui pynput
 
 Write-Host "Installing (n)vim plugins" -ForegroundColor Green
-if (Test-Path -Path "$HOME\.vim\bundle\Vundle.vim")
-{
+if (Test-Path -Path "$HOME\.vim\bundle\Vundle.vim") {
   Write-Host "  Already complete, skipping"
-} 
-Else 
-{
+} Else {
   Write-Host "  Downloading Vundle (plugin installer).."
   git clone "https://github.com/VundleVim/Vundle.vim.git" "$HOME/.config/nvim/bundle/Vundle.vim"
   Write-Host "  Installing Vundle plugins.."
@@ -164,12 +167,9 @@ Else
 
 Write-Host "Installing VisualStudio2022 (17) for c++ development" -ForegroundColor Green
 
-if (Test-Path -Path "$env:LOCALAPPDATA\Microsoft\VisualStudio")
-{
+if (Test-Path -Path "$env:LOCALAPPDATA\Microsoft\VisualStudio") {
   Write-Host "  Already complete, skipping"
-}
-ELSE
-{
+} ELSE {
   Write-Host "  Downloading..."
   Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vs_community.exe" -Outfile "~/vs_BuildTools.exe"
   Write-Host "  Installing..."
@@ -190,12 +190,9 @@ ELSE
 }
 
 Write-Host "Install Qt, CMake & Ninja" -ForegroundColor Green
-if (Test-Path -Path "C:\Qt")
-{
+if (Test-Path -Path "C:\Qt") {
   Write-Host "  Already complete, skipping"
-}
-ELSE
-{
+} ELSE {
   Write-Host "  Downloading..."
   Write-Host "  https://www.qt.io/download-qt-installer"
   Invoke-WebRequest -Uri "https://d13lb3tujbc8s0.cloudfront.net/onlineinstallers/qt-unified-windows-x64-4.6.1-online.exe" -Outfile "~/qt-unified-windows-x64.exe"
@@ -233,12 +230,9 @@ ELSE
 }
 
 Write-Host "Adding Path variables" -ForegroundColor Green
-if ([Environment]::GetEnvironmentVariable('CMAKE_PREFIX_PATH', 'User'))
-{
+if ([Environment]::GetEnvironmentVariable('CMAKE_PREFIX_PATH', 'User')) {
   Write-Host "  Already complete, skipping"
-}
-ELSE
-{
+} ELSE {
   $qtVersion = Read-Host -Prompt 'What QT version eg. 6.5.2 did you pick? '
   [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\Qt\Tools\CMake_64\bin', 'User')   # For current user
   Update-SessionEnvironment
@@ -256,6 +250,9 @@ $installedDistributions = wsl --list --quiet
 if ($installedDistributions -contains "Ubuntu") {
   Write-Host "  Already complete, skipping"
 } else {
+  Write-Host "  Enable/ Install Hyper-V (Virtualisation)" -ForegroundColor Green
+  DISM /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
+  Write-Host "  Install wsl"
   wsl --install
 }
 
