@@ -112,7 +112,9 @@
     ],
     "profiles": 
     {
-        "defaults": {},
+        "defaults": {
+            "intenseTextStyle":"bold"
+        },
         "list": 
         [
             {
