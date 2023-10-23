@@ -55,9 +55,8 @@ Plugin 'VundleVim/Vundle.vim'
 " ===== PLUGINS {{{
 "run :PluginInstall after saving (might have to reload vimrc)
 "Syntax and code completion
-  Plugin 'Valloric/YouCompleteMe'
+  " Plugin 'Valloric/YouCompleteMe'
   Plugin 'OmniSharp/omnisharp-vim'
-  "Plugin 'vim-latex/vim-latex'
   "Plugin 'Raimondi/delimitMate'
   Plugin 'github/copilot.vim'
 "Search
@@ -90,9 +89,10 @@ Plugin 'VundleVim/Vundle.vim'
   "Plugin 'christoomey/vim-sort-motion' "https://github.com/christoomey/vim-sort-motion
   "Plugin 'vim-scripts/ReplaceWithRegister' "https://github.com/vim-scripts
 " Documentation
-  "Plugin 'vim-pandoc/vim-pandoc-syntax'
-  "Plugin 'vim-pandoc/vim-pandoc'
-  "Plugin 'vim-pandoc/vim-rmarkdown'
+  Plugin 'vim-pandoc/vim-pandoc-syntax'
+  Plugin 'vim-pandoc/vim-pandoc'
+  Plugin 'vim-pandoc/vim-rmarkdown'
+  " Plugin 'vim-latex/vim-latex'
   Plugin 'iamcco/markdown-preview.nvim' "https://github.com/iamcco/markdown-preview.nvim
   Plugin 'vimwiki/vimwiki'
 "Colorschemes
@@ -124,9 +124,9 @@ Plugin 'VundleVim/Vundle.vim'
   Plugin 'tmhedberg/SimpylFold'
 "Panes
   Plugin 'christoomey/vim-tmux-navigator'
-"if !IsWin
-  "Plugin 'benmills/vimux'
-"endif
+if IsWSL || IsLinux
+  Plugin 'benmills/vimux'
+endif
 ""Powerline
   "Plugin 'vim-airline/vim-airline'
   "Plugin 'vim-airline/vim-airline-themes'
@@ -175,8 +175,8 @@ highlight clear signcolumn
 
  set background=dark
 " set background=light
- colorscheme gruvbox
- " colorscheme solarized
+colorscheme gruvbox
+" colorscheme solarized
 " colorscheme PaperColor
 " colorscheme one
 " colorscheme nightfly
@@ -534,15 +534,20 @@ map <Leader>vz :VimuxZoomRunner<CR>|  "Zoom the tmux runner pane
   autocmd FileType qf nnoremap <buffer> <C-v> :call <SID>OpenQuickfix("vnew")<CR>
   autocmd FileType qf nnoremap <buffer> <C-x> :call <SID>OpenQuickfix("split")<CR>
 "MARKDOWN
+" jump to next <++>
+autocmd Filetype markdown,rmd imap ,, <esc>:keepp /<++><CR>ca<
 autocmd Filetype markdown,rmd map <leader>w yiWi[<esc>Ea](<esc>pa)
 autocmd Filetype markdown,rmd inoremap ;n ---<Enter><Enter>
+" bold
 autocmd Filetype markdown,rmd inoremap ;b ****<++><Esc>F*hi
+" strikethrough
 autocmd Filetype markdown,rmd inoremap ;s ~~~~<++><Esc>F~hi
+" italics/emphasise
 autocmd Filetype markdown,rmd inoremap ;e **<++><Esc>F*i
 autocmd Filetype markdown,rmd inoremap ;h ====<Space><++><Esc>F=hi
-"image
+" image
 autocmd Filetype markdown,rmd inoremap ;i ![](<++>)<++><Esc>F[a
-"links
+" links
 autocmd Filetype markdown,rmd inoremap ;a [](<++>)<++><Esc>F[a
 autocmd Filetype markdown,rmd inoremap ;1 #<Space><Enter><++><Esc>kA
 autocmd Filetype markdown,rmd inoremap ;2 ##<Space><Enter><++><Esc>kA
@@ -555,11 +560,14 @@ autocmd Filetype markdown,rmd inoremap ;r ```{r}<CR>```<CR><CR><esc>2kO
 autocmd Filetype markdown,rmd inoremap ;p ```{python echo=FALSE, fig.cap=''}<CR>```<CR><CR><esc>2kO
 autocmd Filetype markdown map <buffer> <F5> :!pandoc<space><C-r>%<space>--latex-engine=xelatex<space>-o<space>%:t:r.pdf<space>--verbose<Enter><Enter>
 if exists('$TMUX')
-  autocmd Filetype rmd map <buffer> <F5> :call VimuxRunCommand("echo<space>$'require(rmarkdown);<space>render('~/test.Rmd')'<space>\|<space>R<space>--vanilla")<CR>
-  autocmd Filetype markdown,rmd map <F7> :!<space>xreader<space>%:t:r.pdf<space>&<CR>
+  autocmd Filetype rmd map <buffer> <F5> :call VimuxRunCommand("echo<space>\"require(rmarkdown);<space>render('<c-r>%')\"<space>\|<space>R<space>--vanilla")<CR>
 else
   autocmd Filetype rmd map <buffer> <F5> :!echo<space>"require(rmarkdown);<space>render('<c-r>%')"<space>\|<space>R<space>--vanilla<enter>
-  autocmd Filetype markdown,rmd map <F7> :!<space>xreader<space>%:t:r.pdf<space>&<CR>
+endif
+if IsWin
+  autocmd Filetype markdown,rmd map <F7> :!<space>start<space>%:t:r.pdf<space>&<CR>
+elseif IsWSL || IsLinux
+  autocmd Filetype markdown,rmd map <F7> :!<space>xdg-open<space>%:t:r.pdf<space>&<CR>
 endif
 "ARDUINO
   autocmd FileType arduino nnoremap <buffer> <leader>am :ArduinoVerify<CR>
@@ -689,6 +697,7 @@ if has("autocmd")
   " autocmd FileType rmd setlocal ts=2 sts=2 sw=2
   autocmd FileType xml setlocal noexpandtab
   autocmd FileType *.tcg,*.lvl,*.ptm,*.soc setlocal filetype=c syntax=off syntax=on
+  autocmd FileType autohotkey setlocal commentstring=;%s;
   " autocmd BufRead,BufNewFile *.pde,*.ino set filetype=arduino
   " autocmd BufRead,BufNewFile *.tex set filetype=tex
   " autocmd BufRead,BufNewFile *.jsl setlocal ts=4 sts=4 sw=4 noexpandtab
@@ -696,7 +705,6 @@ if has("autocmd")
 endif
 let g:xml_syntax_folding=1
 au FileType xml setlocal foldmethod=syntax
-autocmd FileType autohotkey setlocal commentstring=;
 "}}}
 "===== Functions {{{
 

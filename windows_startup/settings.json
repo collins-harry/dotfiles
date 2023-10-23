@@ -45,6 +45,14 @@
             "keys": "alt+shift+d"
         },
         {
+            "command": 
+            {
+                "action": "splitPane",
+                "split": "down"
+            },
+            "keys": "ctrl+shift+minus"
+        },
+        {
             "command": "unbound",
             "keys": "alt+down"
         },
@@ -91,14 +99,6 @@
                 "direction": "up"
             },
             "keys": "ctrl+k"
-        },
-        {
-            "command": 
-            {
-                "action": "splitPane",
-                "split": "down"
-            },
-            "keys": "ctrl+shift+minus"
         }
     ],
     "copyFormatting": "none",
@@ -112,8 +112,13 @@
     ],
     "profiles": 
     {
-        "defaults": {
+        "defaults": 
+        {
             "intenseTextStyle":"bold"
+            "font": 
+            {
+                "face": "Consolas"
+            }
         },
         "list": 
         [
@@ -400,50 +405,6 @@
             "yellow": "#808000"
         }
     ],
-    "themes": 
-    [
-        {
-            "name": "legacyDark",
-            "tab": 
-            {
-                "background": null,
-                "showCloseButton": "always",
-                "unfocusedBackground": null
-            },
-            "window": 
-            {
-                "applicationTheme": "dark",
-                "useMica": false
-            }
-        },
-        {
-            "name": "legacyLight",
-            "tab": 
-            {
-                "background": null,
-                "showCloseButton": "always",
-                "unfocusedBackground": null
-            },
-            "window": 
-            {
-                "applicationTheme": "light",
-                "useMica": false
-            }
-        },
-        {
-            "name": "legacySystem",
-            "tab": 
-            {
-                "background": null,
-                "showCloseButton": "always",
-                "unfocusedBackground": null
-            },
-            "window": 
-            {
-                "applicationTheme": "system",
-                "useMica": false
-            }
-        }
-    ],
+    "themes": [],
     "windowingBehavior": "useAnyExisting"
 }
