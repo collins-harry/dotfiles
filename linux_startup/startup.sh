@@ -2,7 +2,8 @@
 
 
 GREEN='\033[0;32m'
-NC='\033[0m' # No Color
+PURPLE='\033[0;35m'
+NC='\033[0;0m' # No Color
 
 #Need to add the cran link to etc/../sources.list for ubuntu bionic (if still using linux mint Tara), looks like deb https...
 
@@ -13,7 +14,10 @@ echo -e "${GREEN}Upgrading${NC}"
 sudo apt-get upgrade -y && \
 
 echo -e "${GREEN}Installing from apt-get${NC}"
-sudo apt-get install --assume-yes xclip tmux firefox podman git r-base neovim pandoc pandoc-citeproc cmake build-essential fonts-powerline ripgrep ranger fzf && \
+sudo apt-get install --assume-yes xclip tmux firefox podman git neovim cmake build-essential fonts-powerline ripgrep ranger fzf && \
+# rmarkdown/latex installs
+sudo apt-get install --assume-yes r-base pandoc-citeproc && \
+# sudo apt-get install pandoc
 
 echo -e "${GREEN}Installing miniconda with python 3.9 and 3.11${NC}"
 if [[ -d ~/miniconda3 ]];
@@ -39,7 +43,9 @@ echo -e "${GREEN}Installing Rmarkdown${NC}"
 if [[ /usr/bin/R ]]; then
     echo "  Already installed, skipping"
 else
-    echo "install.packages(c('rmarkdown', 'reticulate', 'tinytex'), repos='http://cran.rstudio.com/'); tinytex::install_tinytex()" | sudo R --vanilla && \
+    # You need to pass yes twice to this - might not work, DO NOT USE sudo
+    echo -e "  ${PURPLE}You need to pass yes twice here - also edit comment ^ if this works${NC}"
+    echo "install.packages(c('rmarkdown', 'reticulate', 'tinytex'), repos='http://cran.rstudio.com/'); tinytex::install_tinytex()" | R --vanilla && \
     cd ~
 fi
 

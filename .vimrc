@@ -124,9 +124,9 @@ Plugin 'VundleVim/Vundle.vim'
   Plugin 'tmhedberg/SimpylFold'
 "Panes
   Plugin 'christoomey/vim-tmux-navigator'
-"if !IsWin
-  "Plugin 'benmills/vimux'
-"endif
+if IsWSL || IsLinux
+  Plugin 'benmills/vimux'
+endif
 ""Powerline
   "Plugin 'vim-airline/vim-airline'
   "Plugin 'vim-airline/vim-airline-themes'
@@ -175,8 +175,8 @@ highlight clear signcolumn
 
  set background=dark
 " set background=light
- colorscheme gruvbox
- " colorscheme solarized
+colorscheme gruvbox
+" colorscheme solarized
 " colorscheme PaperColor
 " colorscheme one
 " colorscheme nightfly
@@ -560,11 +560,14 @@ autocmd Filetype markdown,rmd inoremap ;r ```{r}<CR>```<CR><CR><esc>2kO
 autocmd Filetype markdown,rmd inoremap ;p ```{python echo=FALSE, fig.cap=''}<CR>```<CR><CR><esc>2kO
 autocmd Filetype markdown map <buffer> <F5> :!pandoc<space><C-r>%<space>--latex-engine=xelatex<space>-o<space>%:t:r.pdf<space>--verbose<Enter><Enter>
 if exists('$TMUX')
-  autocmd Filetype rmd map <buffer> <F5> :call VimuxRunCommand("echo<space>$'require(rmarkdown);<space>render('~/test.Rmd')'<space>\|<space>R<space>--vanilla")<CR>
-  autocmd Filetype markdown,rmd map <F7> :!<space>xreader<space>%:t:r.pdf<space>&<CR>
+  autocmd Filetype rmd map <buffer> <F5> :call VimuxRunCommand("echo<space>\"require(rmarkdown);<space>render('<c-r>%')\"<space>\|<space>R<space>--vanilla")<CR>
 else
   autocmd Filetype rmd map <buffer> <F5> :!echo<space>"require(rmarkdown);<space>render('<c-r>%')"<space>\|<space>R<space>--vanilla<enter>
-  autocmd Filetype markdown,rmd map <F7> :!<space>xreader<space>%:t:r.pdf<space>&<CR>
+endif
+if IsWin
+  autocmd Filetype markdown,rmd map <F7> :!<space>start<space>%:t:r.pdf<space>&<CR>
+elseif IsWSL || IsLinux
+  autocmd Filetype markdown,rmd map <F7> :!<space>xdg-open<space>%:t:r.pdf<space>&<CR>
 endif
 "ARDUINO
   autocmd FileType arduino nnoremap <buffer> <leader>am :ArduinoVerify<CR>
