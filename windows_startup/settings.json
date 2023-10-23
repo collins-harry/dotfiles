@@ -114,7 +114,7 @@
     {
         "defaults": 
         {
-            "intenseTextStyle":"bold"
+            "intenseTextStyle":"bold",
             "font": 
             {
                 "face": "Consolas"
