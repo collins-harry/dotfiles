@@ -151,7 +151,7 @@ fi
 PromptUser='\[\e[1;32m\]\u@\h'
 PromptCWD='\[\e[38;5;81m\]\w'
 PromptGit='\[\e[1;32m\]$(__git_ps1)'
-PromptEnd='\[\e[1;32m\]\n└─ λ ~ \[\e[0m\]'
+PromptEnd='\[\e[1;32m\]\n\[\e[1;32m\]└─ λ ~ \[\e[0m\]'
 # Create mini prompt
 MINIPS1='\[\e[1;32m\]λ - \[\e[0m\]'
 # Create full prompt
