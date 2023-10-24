@@ -20,18 +20,6 @@
             "keys": "ctrl+j"
         },
         {
-            "command": 
-            {
-                "action": "copy",
-                "singleLine": false
-            },
-            "keys": "ctrl+c"
-        },
-        {
-            "command": "paste",
-            "keys": "ctrl+v"
-        },
-        {
             "command": "find",
             "keys": "ctrl+shift+f"
         },
@@ -51,30 +39,6 @@
                 "split": "down"
             },
             "keys": "ctrl+shift+minus"
-        },
-        {
-            "command": "unbound",
-            "keys": "alt+down"
-        },
-        {
-            "command": "unbound",
-            "keys": "alt+left"
-        },
-        {
-            "command": "unbound",
-            "keys": "alt+right"
-        },
-        {
-            "command": "unbound",
-            "keys": "alt+up"
-        },
-        {
-            "command": "unbound",
-            "keys": "alt+shift+plus"
-        },
-        {
-            "command": "unbound",
-            "keys": "alt+shift+minus"
         },
         {
             "command": 
@@ -114,6 +78,7 @@
     {
         "defaults": 
         {
+            "intenseTextStyle":"bold",
             "font": 
             {
                 "face": "Consolas"
