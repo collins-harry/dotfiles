@@ -2,7 +2,9 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 # ==============WORK   ===============
-source ~/OneDrive/.work.bashrc
+if [[ -f ~/OneDrive/.work.bashrc ]]; then
+    source ~/OneDrive/.work.bashrc
+fi
 
 # ==============TWENTE ===============
 export CLUSTER="s1664050@korenvliet.ewi.utwente.nl"

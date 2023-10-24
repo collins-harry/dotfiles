@@ -2,7 +2,8 @@
 
 
 GREEN='\033[0;32m'
-NC='\033[0m' # No Color
+PURPLE='\033[0;35m'
+NC='\033[0;0m' # No Color
 
 #Need to add the cran link to etc/../sources.list for ubuntu bionic (if still using linux mint Tara), looks like deb https...
 
@@ -13,8 +14,10 @@ echo -e "${GREEN}Upgrading${NC}"
 sudo apt-get upgrade -y && \
 
 echo -e "${GREEN}Installing from apt-get${NC}"
-sudo apt-get install --assume-yes xclip tmux firefox podman git r-base neovim pandoc pandoc-citeproc cmake build-essential fonts-powerline nodejs ripgrep && \
-
+sudo apt-get install --assume-yes xclip tmux firefox podman git neovim cmake build-essential fonts-powerline ripgrep ranger fzf && \
+# rmarkdown/latex installs
+sudo apt-get install --assume-yes r-base pandoc-citeproc && \
+# sudo apt-get install pandoc
 
 echo -e "${GREEN}Installing miniconda with python 3.9 and 3.11${NC}"
 if [[ -d ~/miniconda3 ]];
@@ -29,7 +32,7 @@ else
     ~/miniconda3/bin/conda init bash
     conda create --name=py39 python=3.9 -y && \
     conda create --name=py311 python=3.11 -y && \
-    conda install -c conda-forge powerline-status && \
+    conda install -c conda-forge powerline-status -y && \
     cd ~
 fi
 
@@ -40,7 +43,9 @@ echo -e "${GREEN}Installing Rmarkdown${NC}"
 if [[ /usr/bin/R ]]; then
     echo "  Already installed, skipping"
 else
-    echo "install.packages(c('rmarkdown', 'reticulate', 'tinytex'), repos='http://cran.rstudio.com/'); tinytex::install_tinytex()" | sudo R --vanilla && \
+    # You need to pass yes twice to this - might not work, DO NOT USE sudo
+    echo -e "  ${PURPLE}You need to pass yes twice here - also edit comment ^ if this works${NC}"
+    echo "install.packages(c('rmarkdown', 'reticulate', 'tinytex'), repos='http://cran.rstudio.com/'); tinytex::install_tinytex()" | R --vanilla && \
     cd ~
 fi
 
@@ -58,7 +63,6 @@ else
     source ~/.bashrc
 fi
 
-
 echo -e "${GREEN}Installing items for hamilton work${NC}"
 if type az 1> /dev/null 2>&1; then
     echo "  Already installed, skipping"
@@ -66,7 +70,6 @@ else
     echo "  Installing work items"
     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 fi
-
 
 echo -e "${GREEN}Installing symlinks${NC}"
 if [[ -f ~/.vimrc ]]; then
@@ -125,6 +128,19 @@ else
     ~/.tmux/plugins/tpm/bin/install_plugins
 fi
 
+echo -e "${GREEN}Installing chrome${NC}"
+if type google-chrome 1> /dev/null 2>&1; then
+    echo "  Already installed, skipping"
+else
+    echo "  Downloading chrome"
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+    echo "  Installing chrome"
+    sudo apt install --assume-yes ./google-chrome-stable_current_amd64.deb && \
+    echo "  Deleting chrome"
+    rm google-chrome-stable_current_amd64.deb
+fi
+
+echo -e "${GREEN}Setup complete${NC}"
 # for jupyter notebook -- conda install notebook
 # for vimpyter -- conda install -c conda-forge notedown
 
