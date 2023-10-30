@@ -9,18 +9,10 @@ Repo should be cloned into $HOME
 Linux
 -----------------------------------------------------
 <details>
-  <summary>Linux</summary>
-
-#### startup.sh
-To be run after sudo after new OS installation. Installs Rmarkdown with
-tinytex, Anaconda etc.
-
-#### sync.sh
-Creates symbolic links for each of the config files.
+  <summary>Installation</summary>
 
 ### Installation
 
-1. set up keyboard mappings (details in startup.sh)
 2. sudo apt install git 
 3. Update ssh key [tutorial](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/)
     ```bash
@@ -36,28 +28,25 @@ Creates symbolic links for each of the config files.
     ```bash
     git clone git@github.com:hcollins345/dotfiles.git
     ```
-5. bash sync.sh
-6. sudo bash startup.sh
-7. bash startup_part_2.sh
+5. ./linux_startup/startup.sh
 8. in usr/share/vim/vim80/syntax/tex.vim find the TexNewMathZone parts and add 
       call TexNewMathZone("E","align",1)
 
-#### Vim install (if not using startup.sh)
-```bash
-bash sync.sh 
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-:PluginInstall #in vim
-source ~/.bashrc
-```
+</details>
+<details>
+<summary>Patched fonts</summary>
 
-#### Adding patched fonts
+### Adding patched fonts
 https://github.com/ryanoasis/nerd-fonts#option-6-ad-hoc-curl-download
 ```bash
 mkdir -p ~/.local/share/fonts
 cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 ```
+</details>
+<details>
+<summary>SC-IM</summary>
 
-#### SC-IM
+### SC-IM
 https://github.com/andmarti1424/sc-im/wiki/Ubuntu-with-XLSX-import-&-export
 
 ```bash
@@ -75,16 +64,12 @@ cd sc-im/src
 make
 sudo make install
 ```
-
-Install conda
-
-```bash
-conda config --add channels conda-forge
-conda update -y conda
-conda update -y python
-```
+</details>
+<details>
+<summary>Jupyter Extensions</summary>
                               
-Extensions:
+### Jupyter Extensions:
+
 https://github.com/lambdalisue/jupyter-vim-binding/wiki/Installation
 ``` {bash}
 conda install jupyter_contrib_nbextensions
@@ -99,6 +84,10 @@ chmod -R go-w vim_binding
 
 jupyter nbextension enable vim_binding/vim_binding
 ```
+</details>
+<details>
+<summary>TODO</summary>
+
 ### TODO
 - [x] Run :PluginInstall from commandline
 - [ ] Insert backticks in tmux https://gist.github.com/JikkuJose/7509315
@@ -144,7 +133,7 @@ WINDOWS (WSL1)
 -------------------------------------------------------
 
 <details>
-  <summary>Windows - WSL1</summary>
+  <summary>Install guide</summary>
   
 [More Info](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 1. Run command in Powershell as administer
@@ -302,13 +291,15 @@ cp dotfiles/config.xlaunch ~/hcollins/AppData/Roaming/Microsoft/Windows/Start\ M
 Can modify registry keys or https://www.sordum.org/7615/easy-context-menu-v1-6/
 
 </details>
-
-</details>
-<details>
-  <summary>Windows Monitor Overlay</summary>
   
 Windows (GIT BASH/ Windows terminal)
 ----------------------
+
+</details>
+<details>
+<summary>Install guide</summary>
+
+### Install guide
 
 1. Install git https://git-scm.com/download/win
 2. Update ssh key 
@@ -323,18 +314,24 @@ Windows (GIT BASH/ Windows terminal)
     ```bash
     git clone git@github.com:hcollins345/dotfiles.git
     ```
+</details>
+<details>
+<summary>Install script</summary>
+
 ### Startup powershell script
-1. start powershell as admin
-2. Set-ExecutionPolicy Unrestricted
-3. cd ~\dotfiles
-4. .\powershell.ps1
+3. cd ~\dotfiles\windows_startup
+4. .\install.ps1
   
+</details>
+<details>
+<summary>TODO</summary>
                                       
 ### TODO tab completion for az
 https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=winget
                                       
-### Python3
-https://www.anaconda.com/products/individual (scroll to bottom of page)
+</details>
+<details>
+<summary>VIM</summary>
 
 ### 64bit Vim
 1. Install 64 bit vim - https://github.com/vim/vim-win32-installer/releases
@@ -350,6 +347,13 @@ https://www.anaconda.com/products/individual (scroll to bottom of page)
     vim +PluginInstall +qall
     ```
 
+</details>
+
+
+</details>
+<details>
+<summary>YCM</summary>
+
 ### YCM - needs 64 bit vim and python3
 1. Install cake - https://cmake.org/download/
 2. Install Visual Studio Build Tools - https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16  
@@ -357,6 +361,11 @@ https://www.anaconda.com/products/individual (scroll to bottom of page)
             ![Visual studio workload screenshot](https://github.com/hcollins345/random/blob/master/visual_studio_build_tools.png)
 3. Compile YCM - ```python .vim/bundle/YouCompleteMe/install.py```
 4. Add Environment variable ```PYTHONPATH``` with value (update path names first), ```C:\Users\<name>\Anaconda3\Lib;C:\Users\<name>\Anaconda3\libs;C:\Users\<name>\Anaconda3\Lib\site-packages;C:\Users\<name>\Anaconda3\DLLs```
+
+</details>
+<details>
+<summary>Powerline font</summary>
+
 
 ### POWERLINE fonts
 ```bash
@@ -366,6 +375,11 @@ rm -rf fonts
 ```
 Navigate to ```C:\Program Files\Git\mingw64\share\fonts```, highlight all, right click and hit install
 
+</details>
+<details>
+<summary>Ripgrep</summary>
+
+
 ### Ripgrep
 Run in admin powershell
 ```powershell
@@ -373,6 +387,11 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 
 choco install ripgrep
 ```
+
+</details>
+<details>
+<summary>Ranger</summary>
+
 
 ### Ranger
 
@@ -384,8 +403,16 @@ or
 curl https://raw.githubusercontent.com/kyoz/purify/master/ranger/purify.py --output ~/.config/ranger/colorschemes/default.py
 ```
 
+</details>
+<details>
+<summary>Switcheroo</summary>
+
 ### Switcheroo
 https://github.com/kvakulo/Switcheroo
+
+</details>
+<details>
+<summary>Powershell</summary>
 
 ### Powershell
 To use powershell scripting, run this in powershell in admin mode
@@ -393,41 +420,60 @@ To use powershell scripting, run this in powershell in admin mode
 Set-ExecutionPolicy RemoteSigned
 ```
 
+</details>
+<details>
+<summary>Google drive integration</summary>
 
 ### Google drive integration
 https://www.digitalcitizen.life/set-up-add-google-drive-file-explorer/
 
+</details>
+<details>
+<summary>Libre office</summary>
 
 ### Libre office
 https://www.libreoffice.org/download/download/
 
+</details>
+<details>
+<summary>Windows Terminal Setup</summary>
 
 ### Windows terminal setup
 Copied from https://www.youtube.com/watch?v=VT2L1SXFq9U
 
+
+</details>
+<details>
+<summary>Windows Terminal</summary>
+
 ### Windows Termainal
 You can download window terminal from the microsoft store installed on all windows machines
+
+</details>
+<details>
+<summary>Zoomit</summary>
 
 ### Zoomit
 https://docs.microsoft.com/en-us/sysinternals/downloads/zoomit
 Copy the 64 bit version to startup folder and it will run by default
 
+</details>
+<details>
+<summary>MathPix</summary>
+
 ### Mathpix (for screenshots/tex)
 https://mathpix.com/
-  
 
 </details>
 
------------------------------------------------------
-
-
-                                    
------------------------------------------------------
+Gymes
+------------------------------
 
 <details>
 <summary>Gymes</summary>
 
-## Windows Monitor Overlay
+### Windows Monitor Overlay
 https://www.msi.com/Landing/afterburner
 
+</details>
 
