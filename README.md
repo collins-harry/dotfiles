@@ -11,226 +11,132 @@ Linux
 <details>
   <summary>Linux</summary>
 
-  #### startup.sh
-  To be run after sudo after new OS installation. Installs Rmarkdown with
-  tinytex, Anaconda etc.
+#### startup.sh
+To be run after sudo after new OS installation. Installs Rmarkdown with
+tinytex, Anaconda etc.
 
-  #### sync.sh
-  Creates symbolic links for each of the config files.
+#### sync.sh
+Creates symbolic links for each of the config files.
 
-  ### Installation
+### Installation
 
-  1. set up keyboard mappings (details in startup.sh)
-  2. sudo apt install git 
-  3. Update ssh key [tutorial](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/)
-      ```bash
-      sudo apt install xclip
-      cat /dev/zero | ssh-keygen -t ed25519 -C "hcollins345@gmail.com"
-      git config --global user.email "hcollins345@gmail.com"
-      git config --global user.name "hcollins345" 
-      sudo apt install xclip
-      xclip < ~/.ssh/id_ed25519.pub
-      ```
-      1. Paste clipboard into https://github.com/settings/ssh/new
-  4. git clone dotfiles
-      ```bash
-      git clone git@github.com:hcollins345/dotfiles.git
-      ```
-  5. bash sync.sh
-  6. sudo bash startup.sh
-  7. bash startup_part_2.sh
-  8. in usr/share/vim/vim80/syntax/tex.vim find the TexNewMathZone parts and add 
-        call TexNewMathZone("E","align",1)
-
-  #### Vim install (if not using startup.sh)
-  ```bash
-  bash sync.sh 
-  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-  :PluginInstall #in vim
-  source ~/.bashrc
-  ```
-
-  #### Adding patched fonts
-  https://github.com/ryanoasis/nerd-fonts#option-6-ad-hoc-curl-download
-  ```bash
-  mkdir -p ~/.local/share/fonts
-  cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
-  ```
-
-  #### SC-IM
-  https://github.com/andmarti1424/sc-im/wiki/Ubuntu-with-XLSX-import-&-export
-
-  ```bash
-  sudo apt-get install -y bison libncurses5-dev libncursesw5-dev libxml2-dev libzip-dev gnuplot
-  git clone https://github.com/jmcnamara/libxlsxwriter.git
-  cd libxlsxwriter/
-  make
-  sudo make install
-  ```
-  ```bash
-  sudo ldconfig
-  cd ..
-  git clone https://github.com/andmarti1424/sc-im.git
-  cd sc-im/src
-  make
-  sudo make install
-  ```
-
-  Install conda
-
-  ```bash
-  conda config --add channels conda-forge
-  conda update -y conda
-  conda update -y python
-  ```
-                                
-  Extensions:
-  https://github.com/lambdalisue/jupyter-vim-binding/wiki/Installation
-  ``` {bash}
-  conda install jupyter_contrib_nbextensions
-  jupyter nbextensions_configurator enable --user
-
-  # You may need the following to create the directoy
-  mkdir -p $(jupyter --data-dir)/nbextensions
-  # Now clone the repository
-  cd $(jupyter --data-dir)/nbextensions
-  git clone https://github.com/lambdalisue/jupyter-vim-binding vim_binding
-  chmod -R go-w vim_binding
-
-  jupyter nbextension enable vim_binding/vim_binding
-  ```
-  ### TODO
-  - [x] Run :PluginInstall from commandline
-  - [ ] Insert backticks in tmux https://gist.github.com/JikkuJose/7509315
-              (mod so 3 backticks will insert one backtick)
-
-  </details>
-  <details>
-    <summary>Power management</summary>                                  
-
-  Details here
-  https://itsfoss.com/reduce-overheating-laptops-linux/
-
-  #### tlp
-
-  ```bash
-  sudo add-apt-repository ppa:linrunner/tlp
-  sudo apt-get update
-  sudo apt-get install tlp tlp-rdw
-  **If you are using ThinkPads, you require an additional step:**
-  sudo apt-get install tp-smapi-dkms acpi-call-dkms
-  ```
-
-  #### thermald
-
-  ```bash
-  sudo apt-get install thermald
-  ```
-
-  #### CPUfreq
-
-  ```bash
-  sudo apt-get install indicator-cpufreq
-  ```
-                              
-</details>
-
-
-
-Windows (GIT BASH)
-----------------------
-
-<details>
-  <summary>Windows - GIT BASH</summary>
-
-1. Install git https://git-scm.com/download/win
-2. Update ssh key 
+1. set up keyboard mappings (details in startup.sh)
+2. sudo apt install git 
+3. Update ssh key [tutorial](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/)
     ```bash
-    git config --global user.email "hcollins345@gmail.com" 
+    sudo apt install xclip
+    cat /dev/zero | ssh-keygen -t ed25519 -C "hcollins345@gmail.com"
+    git config --global user.email "hcollins345@gmail.com"
     git config --global user.name "hcollins345" 
-    ssh-keygen -t ed25519 -C "hcollins345@gmail.com"
-    clip.exe < ~/.ssh/id_ed25519.pub or Get-Content ~/.ssh/id_ed25519.pub | Set-Clipboard
+    sudo apt install xclip
+    xclip < ~/.ssh/id_ed25519.pub
     ```
     1. Paste clipboard into https://github.com/settings/ssh/new
-3. Clone dotfiles repo
+4. git clone dotfiles
     ```bash
     git clone git@github.com:hcollins345/dotfiles.git
     ```
-    
-### Python3
-https://www.anaconda.com/products/individual (scroll to bottom of page)
+5. bash sync.sh
+6. sudo bash startup.sh
+7. bash startup_part_2.sh
+8. in usr/share/vim/vim80/syntax/tex.vim find the TexNewMathZone parts and add 
+      call TexNewMathZone("E","align",1)
 
-### 64bit Vim
-1. Install 64 bit vim - https://github.com/vim/vim-win32-installer/releases
-2. Add to dotfiles/.bashrc 
-    ```bash
-    alias vim="vim.bat"  
-    alias gvim="gvim.bat"  
-    ```
-3. In git bash
-    ```bash
-    bash ~/dotfiles/sync.sh  
-    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-    vim +PluginInstall +qall
-    ```
-
-## NEOVIM
-  Python error output
-    Python 3 provider (optional) ~
-    - Using: g:python3_host_prog = "C:\Users\Hcollins\anaconda3\python"
-    - Executable: C:/Users/Hcollins/anaconda3/python.EXE
-    - ERROR Command error (job=144, exit code 1): `'C:/Users/Hcollins/anaconda3/python.EXE' -c 'import sys; sys.path = [p for p in sys.path if p != ""]; import neovim; print(neovim.__file__)'` (in 'C:/Users/Hcollins/OneDrive - Intel Corporation/scripts/edc2kill_fun')
-      stderr: Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-ModuleNotFoundError: No module named 'neovim'
-    - Python version: 3.8.5
-    - pynvim version: unable to load neovim Python module
-    - ERROR pynvim is not installed.
-      Error: unable to load neovim Python module
-      - ADVICE:
-        - Run in shell: C:/Users/Hcollins/anaconda3/python.EXE -m pip install pynvim
-    - WARNING Could not contact PyPI to get latest version.
-    - ERROR HTTP request failed: error: curl error with https://pypi.python.org/pypi/pynvim/json: 28
-
-### YCM - needs 64 bit vim and python3
-1. Install cake - https://cmake.org/download/
-2. Install Visual Studio Build Tools - https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16  
-        * Select Visual C++ build tools in Workloads in Visual Studio (was selected by default).  
-            ![Visual studio workload screenshot](https://github.com/hcollins345/random/blob/master/visual_studio_build_tools.png)
-3. Compile YCM - ```python .vim/bundle/YouCompleteMe/install.py```
-4. Add Environment variable ```PYTHONPATH``` with value (update path names first), ```C:\Users\<name>\Anaconda3\Lib;C:\Users\<name>\Anaconda3\libs;C:\Users\<name>\Anaconda3\Lib\site-packages;C:\Users\<name>\Anaconda3\DLLs```
-
-### POWERLINE fonts
+#### Vim install (if not using startup.sh)
 ```bash
-git clone https://github.com/powerline/fonts.git --depth=1
-./fonts/install.sh
-rm -rf fonts
-```
-Navigate to ```C:\Program Files\Git\mingw64\share\fonts```, highlight all, right click and hit install
-
-### Ripgrep
-Run in admin powershell
-```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-
-choco install ripgrep
+bash sync.sh 
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+:PluginInstall #in vim
+source ~/.bashrc
 ```
 
-### Ranger
+#### Adding patched fonts
+https://github.com/ryanoasis/nerd-fonts#option-6-ad-hoc-curl-download
+```bash
+mkdir -p ~/.local/share/fonts
+cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+```
+
+#### SC-IM
+https://github.com/andmarti1424/sc-im/wiki/Ubuntu-with-XLSX-import-&-export
 
 ```bash
-wget https://raw.githubusercontent.com/kyoz/purify/master/ranger/purify.py -O ~/.config/ranger/colorschemes/default.py
-# or
-$ curl https://raw.githubusercontent.com/kyoz/purify/master/ranger/purify.py --output ~/.config/ranger/colorschemes/default.py
+sudo apt-get install -y bison libncurses5-dev libncursesw5-dev libxml2-dev libzip-dev gnuplot
+git clone https://github.com/jmcnamara/libxlsxwriter.git
+cd libxlsxwriter/
+make
+sudo make install
+```
+```bash
+sudo ldconfig
+cd ..
+git clone https://github.com/andmarti1424/sc-im.git
+cd sc-im/src
+make
+sudo make install
 ```
 
-### Powershell
-To use powershell scripting, run this in powershell in admin mode
+Install conda
+
+```bash
+conda config --add channels conda-forge
+conda update -y conda
+conda update -y python
 ```
-Set-ExecutionPolicy RemoteSigned
+                              
+Extensions:
+https://github.com/lambdalisue/jupyter-vim-binding/wiki/Installation
+``` {bash}
+conda install jupyter_contrib_nbextensions
+jupyter nbextensions_configurator enable --user
+
+# You may need the following to create the directoy
+mkdir -p $(jupyter --data-dir)/nbextensions
+# Now clone the repository
+cd $(jupyter --data-dir)/nbextensions
+git clone https://github.com/lambdalisue/jupyter-vim-binding vim_binding
+chmod -R go-w vim_binding
+
+jupyter nbextension enable vim_binding/vim_binding
 ```
+### TODO
+- [x] Run :PluginInstall from commandline
+- [ ] Insert backticks in tmux https://gist.github.com/JikkuJose/7509315
+            (mod so 3 backticks will insert one backtick)
 
 </details>
+<details>
+<summary>Power management</summary>                                  
+
+Details here
+https://itsfoss.com/reduce-overheating-laptops-linux/
+
+#### tlp
+
+```bash
+sudo add-apt-repository ppa:linrunner/tlp
+sudo apt-get update
+sudo apt-get install tlp tlp-rdw
+**If you are using ThinkPads, you require an additional step:**
+sudo apt-get install tp-smapi-dkms acpi-call-dkms
+```
+
+#### thermald
+
+```bash
+sudo apt-get install thermald
+```
+
+#### CPUfreq
+
+```bash
+sudo apt-get install indicator-cpufreq
+```
+                            
+</details>
+
+
+
 
 
 
@@ -401,129 +307,113 @@ Can modify registry keys or https://www.sordum.org/7615/easy-context-menu-v1-6/
 <details>
   <summary>Windows Monitor Overlay</summary>
   
-## Windows Monitor Overlay
-https://www.msi.com/Landing/afterburner
+Windows (GIT BASH/ Windows terminal)
+----------------------
 
-</details>
-
------------------------------------------------------
-
-
-<details>
-  <summary>Windows - General</summary>
-  ### Switcheroo
-  https://github.com/kvakulo/Switcheroo
-</details>
-
------------------------------------------------------
-
-<details>
-  <summary>Windows - Windows terminal</summary>
-
-  Windows (GIT BASH/ Windows terminal)
-  ----------------------
-
-  1. Install git https://git-scm.com/download/win
-  2. Update ssh key 
-      ```bash
-      git config --global user.email "hcollins345@gmail.com" 
-      git config --global user.name "hcollins345" 
-      ssh-keygen -t ed25519 -C "hcollins345@gmail.com"
-      clip.exe < ~/.ssh/id_ed25519.pub
-      ```
-      1. Paste clipboard into https://github.com/settings/ssh/new
-  3. Clone dotfiles repo
-      ```bash
-      git clone git@github.com:hcollins345/dotfiles.git
-      ```
-  ### Startup powershell script
-  1. start powershell as admin
-  2. Set-ExecutionPolicy Unrestricted
-  3. cd ~\dotfiles
-  4. .\powershell.ps1
+1. Install git https://git-scm.com/download/win
+2. Update ssh key 
+    ```bash
+    git config --global user.email "hcollins345@gmail.com" 
+    git config --global user.name "hcollins345" 
+    ssh-keygen -t ed25519 -C "hcollins345@gmail.com"
+    clip.exe < ~/.ssh/id_ed25519.pub
+    ```
+    1. Paste clipboard into https://github.com/settings/ssh/new
+3. Clone dotfiles repo
+    ```bash
+    git clone git@github.com:hcollins345/dotfiles.git
+    ```
+### Startup powershell script
+1. start powershell as admin
+2. Set-ExecutionPolicy Unrestricted
+3. cd ~\dotfiles
+4. .\powershell.ps1
   
                                       
 ### TODO tab completion for az
 https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=winget
                                       
-  ### Python3
-  https://www.anaconda.com/products/individual (scroll to bottom of page)
+### Python3
+https://www.anaconda.com/products/individual (scroll to bottom of page)
 
-  ### 64bit Vim
-  1. Install 64 bit vim - https://github.com/vim/vim-win32-installer/releases
-  2. Add to dotfiles/.bashrc 
-      ```bash
-      alias vim="vim.bat"  
-      alias gvim="gvim.bat"  
-      ```
-  3. In git bash
-      ```bash
-      bash ~/dotfiles/sync.sh  
-      git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-      vim +PluginInstall +qall
-      ```
+### 64bit Vim
+1. Install 64 bit vim - https://github.com/vim/vim-win32-installer/releases
+2. Add to dotfiles/.bashrc 
+    ```bash
+    alias vim="vim.bat"  
+    alias gvim="gvim.bat"  
+    ```
+3. In git bash
+    ```bash
+    bash ~/dotfiles/sync.sh  
+    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    vim +PluginInstall +qall
+    ```
 
-  ### YCM - needs 64 bit vim and python3
-  1. Install cake - https://cmake.org/download/
-  2. Install Visual Studio Build Tools - https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16  
-          * Select Visual C++ build tools in Workloads in Visual Studio (was selected by default).  
-              ![Visual studio workload screenshot](https://github.com/hcollins345/random/blob/master/visual_studio_build_tools.png)
-  3. Compile YCM - ```python .vim/bundle/YouCompleteMe/install.py```
-  4. Add Environment variable ```PYTHONPATH``` with value (update path names first), ```C:\Users\<name>\Anaconda3\Lib;C:\Users\<name>\Anaconda3\libs;C:\Users\<name>\Anaconda3\Lib\site-packages;C:\Users\<name>\Anaconda3\DLLs```
+### YCM - needs 64 bit vim and python3
+1. Install cake - https://cmake.org/download/
+2. Install Visual Studio Build Tools - https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16  
+        * Select Visual C++ build tools in Workloads in Visual Studio (was selected by default).  
+            ![Visual studio workload screenshot](https://github.com/hcollins345/random/blob/master/visual_studio_build_tools.png)
+3. Compile YCM - ```python .vim/bundle/YouCompleteMe/install.py```
+4. Add Environment variable ```PYTHONPATH``` with value (update path names first), ```C:\Users\<name>\Anaconda3\Lib;C:\Users\<name>\Anaconda3\libs;C:\Users\<name>\Anaconda3\Lib\site-packages;C:\Users\<name>\Anaconda3\DLLs```
 
-  ### POWERLINE fonts
-  ```bash
-  git clone https://github.com/powerline/fonts.git --depth=1
-  ./fonts/install.sh
-  rm -rf fonts
-  ```
-  Navigate to ```C:\Program Files\Git\mingw64\share\fonts```, highlight all, right click and hit install
+### POWERLINE fonts
+```bash
+git clone https://github.com/powerline/fonts.git --depth=1
+./fonts/install.sh
+rm -rf fonts
+```
+Navigate to ```C:\Program Files\Git\mingw64\share\fonts```, highlight all, right click and hit install
 
-  ### Ripgrep
-  Run in admin powershell
-  ```powershell
-  Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+### Ripgrep
+Run in admin powershell
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
-  choco install ripgrep
-  ```
+choco install ripgrep
+```
 
-  ### Ranger
+### Ranger
 
-  ```bash
-  wget https://raw.githubusercontent.com/kyoz/purify/master/ranger/purify.py -O ~/.config/ranger/colorschemes/default.py
-  # or
-  $ curl https://raw.githubusercontent.com/kyoz/purify/master/ranger/purify.py --output ~/.config/ranger/colorschemes/default.py
-  ```
+```bash
+wget https://raw.githubusercontent.com/kyoz/purify/master/ranger/purify.py -O ~/.config/ranger/colorschemes/default.py
+``` 
+or
+```bash
+curl https://raw.githubusercontent.com/kyoz/purify/master/ranger/purify.py --output ~/.config/ranger/colorschemes/default.py
+```
 
-  ### Switcheroo
-  https://github.com/kvakulo/Switcheroo
+### Switcheroo
+https://github.com/kvakulo/Switcheroo
 
-
-  ### Powershell
-  To use powershell scripting, run this in powershell in admin mode
-  ```
-  Set-ExecutionPolicy RemoteSigned
-  ```
-
-  ### Google drive integration
-  https://www.digitalcitizen.life/set-up-add-google-drive-file-explorer/
+### Powershell
+To use powershell scripting, run this in powershell in admin mode
+```
+Set-ExecutionPolicy RemoteSigned
+```
 
 
-  ### Libre office
-  https://www.libreoffice.org/download/download/
+### Google drive integration
+https://www.digitalcitizen.life/set-up-add-google-drive-file-explorer/
 
 
-  ## Windows terminal setup
-  Copied from https://www.youtube.com/watch?v=VT2L1SXFq9U
-  ### Windows Termainal
-  You can download window terminal from the microsoft store installed on all windows machines
-  ### Zoomit
-  https://docs.microsoft.com/en-us/sysinternals/downloads/zoomit
-  Copy the 64 bit version to startup folder and it will run by default
+### Libre office
+https://www.libreoffice.org/download/download/
 
 
-  ## Mathpix (for screenshots/tex)
-  https://mathpix.com/
+### Windows terminal setup
+Copied from https://www.youtube.com/watch?v=VT2L1SXFq9U
+
+### Windows Termainal
+You can download window terminal from the microsoft store installed on all windows machines
+
+### Zoomit
+https://docs.microsoft.com/en-us/sysinternals/downloads/zoomit
+Copy the 64 bit version to startup folder and it will run by default
+
+### Mathpix (for screenshots/tex)
+https://mathpix.com/
   
 
 </details>
@@ -531,475 +421,13 @@ https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=winge
 -----------------------------------------------------
 
 
-<details>
-  <summary>Windows - WSL1</summary>
-
-  WINDOWS (WSL1)
-  -------------------------------------------------------
-  [More Info](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
-  1. Run command in Powershell as administer
-      ```powershell
-      dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-      ```
-  2. Restart computer
-  3. Install Linux distro from [Microsoft Store](https://aka.ms/wslstore) or direct [Ubuntu 20.04 LTS](https://www.microsoft.com/store/apps/9n6svws3rx71)
-  4. Run Ubuntu Terminal to finish install
-  ```bash
-  sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y 
-  ln -s /mnt/c/Users/hcollins hcollins
-  ln -svf hcollins/OneDrive\ -\ Intel\ Corporation/ onedrive
-  ```
-  1. Install WSLTTY https://github.com/mintty/wsltty/releases
-  2. Update ssh key 
-      ```bash
-      git config --global user.email "hcollins345@gmail.com" 
-      git config --global user.name "hcollins345" 
-      ssh-keygen -t ed25519 -C "hcollins345@gmail.com"
-      clip.exe < ~/.ssh/id_ed25519.pub
-      ```
-      1. Paste clipboard into https://github.com/settings/ssh/new
-  7. Clone dotfiles repo
-      ```bash
-      git clone -q git@github.com:hcollins345/dotfiles.git
-      bash ~/dotfiles/sync.sh 
-      ```
-  8. make tab completion case-insensitive for all users
-      ```bash
-      echo 'set completion-ignore-case On' | sudo tee -a /etc/inputrc
-      ```
-  5. change vi mode cursor styles depending on mode
-      ```bash
-      echo 'set vi-ins-mode-string \1\e[5 q\2' | sudo tee -a /etc/inputrc
-      echo 'set vi-cmd-mode-string \1\e[2 q\2' | sudo tee -a /etc/inputrc
-      echo 'set show-mode-in-prompt on' | sudo tee -a /etc/inputrc
-      ```
-
-
-  ### VIM
-  Default vim seems fine
-  ```bash
-  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-  vim +PluginInstall +qall
-  ```
-  Update vim
-  ```bash
-  sudo add-apt-repository ppa:jonathonf/vim
-  sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y 
-  ```
-  Upgrading fzf.vim
-  ```bash
-  sudo apt install bat silversearcher-ag
-  ```
-  http://www.viemu.com/a_vi_vim_graphical_cheat_sheet_tutorial.html
-
-  ### YCM and python - need to install linux anaconda
-
-  https://gist.github.com/kauffmanes/5e74916617f9993bc3479f401dfec7da  
-  https://www.anaconda.com/products/individual (scroll to bottom of page)
-
-  ```bash
-  curl -O https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh && bash Anaconda3-2020.11-Linux-x86_64.sh -b
-  sudo apt -y install python3-dev cmake build-essential
-  python ~/.vim/bundle/YouCompleteMe/install.py
-  ```
-
-  ### TMUX config
-  ```bash
-  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-  ```  
-  prefix + r # re-source tmux  
-  prefix + I # fetch plugins
-
-  ### Prompts
-  ```
-  \[\033]0;$TITLEPREFIX:$PWD\007\]\n\[\033[32m\]\u@\h \[\033[35m\]$MSYSTEM \[\033[33m\]\w\[\033[36m\]`__git_ps1`\[\033[0m\]\n$
-  ```  
-  ![Git Bash Prompt](https://github.com/hcollins345/random/blob/master/PS1_gitbash.png)  
-  ```
-  \[\e]0;\u@\h: \w\a\]\[\033[01;32m\]\u@\h \[\033[0;36m\]\w\[\033[01;32m\]$(__git_ps1)\n\[\033[01;32m\]└─\[\033[0m\033[01;32m\] λ\[\033[0m\033[01;32m\] ~\[\033[0m\]
-  ```  
-  ![WSLTTY Prompt](https://github.com/hcollins345/random/blob/master/PS1_WSLTTY.png)
-
-  colours
-  https://misc.flogisoft.com/bash/tip_colors_and_formatting
-  More detail in .bashrc
-
-  ### COPY/PASTE
-  In the WSLTTY Terminal, right click acts as both copy and paste using the windows clipboard ie. highlight and right click to copy, no highlight and right click to paste.
-
-  [WSL, TMUX and VIM copy/paste setup](https://www.youtube.com/watch?v=_MgrjgQqDcE)
-
-  First set up enable copy/paste using ctrl+shift+letter shortcuts in properties (right click image in top left corner of terminal)  
-  ![Git Bash Prompt](https://github.com/hcollins345/random/blob/master/WSLTTY_copy_paste_settings.png)
-  VcXsrv - install and add config.xlaunch to startup folder
-  https://sourceforge.net/projects/vcxsrv/files/latest/download
-
-  ```bash
-  cp dotfiles/config.xlaunch ~/hcollins/AppData/Roaming/Microsoft/Windows/Start\ Menu/
-  ```
-
-  ### Right click launch modification (shift right click works already by default)
-  Can modify registry keys or https://www.sordum.org/7615/easy-context-menu-v1-6/
-
-</details>
                                     
 -----------------------------------------------------
 
 <details>
-  <summary>Gymes</summary>
+<summary>Gymes</summary>
 
-  ## Windows Monitor Overlay
-  https://www.msi.com/Landing/afterburner
+## Windows Monitor Overlay
+https://www.msi.com/Landing/afterburner
 
 
-
-
-
-
-
-=======
-Configs
-=====================================================
-
-Config files for vim, tmux, bash alongside startup scripts for
-installations, symbolic links etc
-
-Repo should be cloned into $HOME
-
------------------------------------------------------
-<details>
-  <summary>Linux</summary>
-
-  ## Linux
-
-  #### startup.sh
-  To be run after sudo after new OS installation. Installs Rmarkdown with
-  tinytex, Anaconda etc.
-
-  #### sync.sh
-  Creates symbolic links for each of the config files.
-
-  ### Installation
-
-  1. set up keyboard mappings (details in startup.sh)
-  2. sudo apt install git 
-  3. Update ssh key [tutorial](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/)
-      ```bash
-      sudo apt install xclip
-      cat /dev/zero | ssh-keygen -t ed25519 -C "hcollins345@gmail.com"
-      git config --global user.email "hcollins345@gmail.com"
-      git config --global user.name "hcollins345" 
-      sudo apt install xclip
-      xclip < ~/.ssh/id_ed25519.pub
-      ```
-      1. Paste clipboard into https://github.com/settings/ssh/new
-  4. git clone dotfiles
-      ```bash
-      git clone git@github.com:hcollins345/dotfiles.git
-      ```
-  5. bash sync.sh
-  6. sudo bash startup.sh
-  7. bash startup_part_2.sh
-  8. in usr/share/vim/vim80/syntax/tex.vim find the TexNewMathZone parts and add 
-        call TexNewMathZone("E","align",1)
-
-  #### Vim install (if not using startup.sh)
-  ```bash
-  bash sync.sh 
-  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-  :PluginInstall #in vim
-  source ~/.bashrc
-  ```
-
-  #### Adding patched fonts
-  https://github.com/ryanoasis/nerd-fonts#option-6-ad-hoc-curl-download
-  ```bash
-  mkdir -p ~/.local/share/fonts
-  cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
-  ```
-
-  #### SC-IM
-  https://github.com/andmarti1424/sc-im/wiki/Ubuntu-with-XLSX-import-&-export
-
-  ```bash
-  sudo apt-get install -y bison libncurses5-dev libncursesw5-dev libxml2-dev libzip-dev gnuplot
-  git clone https://github.com/jmcnamara/libxlsxwriter.git
-  cd libxlsxwriter/
-  make
-  sudo make install
-  ```
-  ```bash
-  sudo ldconfig
-  cd ..
-  git clone https://github.com/andmarti1424/sc-im.git
-  cd sc-im/src
-  make
-  sudo make install
-  ```
-
-  Install conda
-
-  ```bash
-  conda config --add channels conda-forge
-  conda update -y conda
-  conda update -y python
-  ```
-                                
-  Extensions:
-  https://github.com/lambdalisue/jupyter-vim-binding/wiki/Installation
-  ``` {bash}
-  conda install jupyter_contrib_nbextensions
-  jupyter nbextensions_configurator enable --user
-
-  # You may need the following to create the directoy
-  mkdir -p $(jupyter --data-dir)/nbextensions
-  # Now clone the repository
-  cd $(jupyter --data-dir)/nbextensions
-  git clone https://github.com/lambdalisue/jupyter-vim-binding vim_binding
-  chmod -R go-w vim_binding
-
-  jupyter nbextension enable vim_binding/vim_binding
-  ```
-  ### TODO
-  - [x] Run :PluginInstall from commandline
-  - [ ] Insert backticks in tmux https://gist.github.com/JikkuJose/7509315
-              (mod so 3 backticks will insert one backtick)
-
-  <details>
-    <summary>Power management</summary>                                  
-    POWER MANAGEMENT (Linux)
-  ----------------------------------
-
-  Details here
-  https://itsfoss.com/reduce-overheating-laptops-linux/
-
-  #### tlp
-
-  ```bash
-  sudo add-apt-repository ppa:linrunner/tlp
-  sudo apt-get update
-  sudo apt-get install tlp tlp-rdw
-  **If you are using ThinkPads, you require an additional step:**
-  sudo apt-get install tp-smapi-dkms acpi-call-dkms
-  ```
-
-  #### thermald
-
-  ```bash
-  sudo apt-get install thermald
-  ```
-
-  #### CPUfreq
-
-  ```bash
-  sudo apt-get install indicator-cpufreq
-  ```
-  </details>
-                              
-</details>
-
-
------------------------------------------------------
-
-<details>
-  <summary>Windows - Windows terminal</summary>
-                                      
-  ### Python3
-  https://www.anaconda.com/products/individual (scroll to bottom of page)
-
-  ### 64bit Vim
-  1. Install 64 bit vim - https://github.com/vim/vim-win32-installer/releases
-  2. Add to dotfiles/.bashrc 
-      ```bash
-      alias vim="vim.bat"  
-      alias gvim="gvim.bat"  
-      ```
-  3. In git bash
-      ```bash
-      bash ~/dotfiles/sync.sh  
-      git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-      vim +PluginInstall +qall
-      ```
-
-  ### POWERLINE fonts
-  ```bash
-  git clone https://github.com/powerline/fonts.git --depth=1
-  ./fonts/install.sh
-  rm -rf fonts
-  ```
-  Navigate to ```C:\Program Files\Git\mingw64\share\fonts```, highlight all, right click and hit install
-
-  ### Ripgrep
-  Run in admin powershell
-  ```powershell
-  Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-
-  choco install ripgrep
-  ```
-
-  ### Ranger
-
-  ```bash
-  wget https://raw.githubusercontent.com/kyoz/purify/master/ranger/purify.py -O ~/.config/ranger/colorschemes/default.py
-  # or
-  $ curl https://raw.githubusercontent.com/kyoz/purify/master/ranger/purify.py --output ~/.config/ranger/colorschemes/default.py
-  ```
-
-
-
-  ### Powershell
-  To use powershell scripting, run this in powershell in admin mode
-  ```
-  Set-ExecutionPolicy RemoteSigned
-  ```
-
-  ### Google drive integration
-  https://www.digitalcitizen.life/set-up-add-google-drive-file-explorer/
-
-
-  ### Libre office
-  https://www.libreoffice.org/download/download/
-
-
-  ## Windows terminal setup
-  Copied from https://www.youtube.com/watch?v=VT2L1SXFq9U
-  ### Windows Termainal
-  You can download window terminal from the microsoft store installed on all windows machines
-  ### Zoomit
-  https://docs.microsoft.com/en-us/sysinternals/downloads/zoomit
-  Copy the 64 bit version to startup folder and it will run by default
-
-
-  ## Mathpix (for screenshots/tex)
-  https://mathpix.com/
-  
-
-</details>
-
------------------------------------------------------
-
-<details>
-  <summary>Windows - WSL1</summary>
-
-  WINDOWS (WSL1)
-  -------------------------------------------------------
-  [More Info](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
-  1. Run command in Powershell as administer
-      ```powershell
-      dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-      ```
-  2. Restart computer
-  3. Install Linux distro from [Microsoft Store](https://aka.ms/wslstore) or direct [Ubuntu 20.04 LTS](https://www.microsoft.com/store/apps/9n6svws3rx71)
-  4. Run Ubuntu Terminal to finish install
-  ```bash
-  sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y 
-  ln -s /mnt/c/Users/hcollins hcollins
-  ln -svf hcollins/OneDrive\ -\ Intel\ Corporation/ onedrive
-  ```
-  1. Install WSLTTY https://github.com/mintty/wsltty/releases
-  2. Update ssh key 
-      ```bash
-      git config --global user.email "hcollins345@gmail.com" 
-      git config --global user.name "hcollins345" 
-      ssh-keygen -t ed25519 -C "hcollins345@gmail.com"
-      clip.exe < ~/.ssh/id_ed25519.pub
-      ```
-      1. Paste clipboard into https://github.com/settings/ssh/new
-  7. Clone dotfiles repo
-      ```bash
-      git clone -q git@github.com:hcollins345/dotfiles.git
-      bash ~/dotfiles/sync.sh 
-      ```
-  8. make tab completion case-insensitive for all users
-      ```bash
-      echo 'set completion-ignore-case On' | sudo tee -a /etc/inputrc
-      ```
-  5. change vi mode cursor styles depending on mode
-      ```bash
-      echo 'set vi-ins-mode-string \1\e[5 q\2' | sudo tee -a /etc/inputrc
-      echo 'set vi-cmd-mode-string \1\e[2 q\2' | sudo tee -a /etc/inputrc
-      echo 'set show-mode-in-prompt on' | sudo tee -a /etc/inputrc
-      ```
-
-
-  ### VIM
-  Default vim seems fine
-  ```bash
-  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-  vim +PluginInstall +qall
-  ```
-  Update vim
-  ```bash
-  sudo add-apt-repository ppa:jonathonf/vim
-  sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y 
-  ```
-  Upgrading fzf.vim
-  ```bash
-  sudo apt install bat silversearcher-ag
-  ```
-  http://www.viemu.com/a_vi_vim_graphical_cheat_sheet_tutorial.html
-
-  ### YCM and python - need to install linux anaconda
-
-  https://gist.github.com/kauffmanes/5e74916617f9993bc3479f401dfec7da  
-  https://www.anaconda.com/products/individual (scroll to bottom of page)
-
-  ```bash
-  curl -O https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh && bash Anaconda3-2020.11-Linux-x86_64.sh -b
-  sudo apt -y install python3-dev cmake build-essential
-  python ~/.vim/bundle/YouCompleteMe/install.py
-  ```
-
-  ### TMUX config
-  ```bash
-  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-  ```  
-  prefix + r # re-source tmux  
-  prefix + I # fetch plugins
-
-  ### Prompts
-  ```
-  \[\033]0;$TITLEPREFIX:$PWD\007\]\n\[\033[32m\]\u@\h \[\033[35m\]$MSYSTEM \[\033[33m\]\w\[\033[36m\]`__git_ps1`\[\033[0m\]\n$
-  ```  
-  ![Git Bash Prompt](https://github.com/hcollins345/random/blob/master/PS1_gitbash.png)  
-  ```
-  \[\e]0;\u@\h: \w\a\]\[\033[01;32m\]\u@\h \[\033[0;36m\]\w\[\033[01;32m\]$(__git_ps1)\n\[\033[01;32m\]└─\[\033[0m\033[01;32m\] λ\[\033[0m\033[01;32m\] ~\[\033[0m\]
-  ```  
-  ![WSLTTY Prompt](https://github.com/hcollins345/random/blob/master/PS1_WSLTTY.png)
-
-  colours
-  https://misc.flogisoft.com/bash/tip_colors_and_formatting
-  More detail in .bashrc
-
-  ### COPY/PASTE
-  In the WSLTTY Terminal, right click acts as both copy and paste using the windows clipboard ie. highlight and right click to copy, no highlight and right click to paste.
-
-  [WSL, TMUX and VIM copy/paste setup](https://www.youtube.com/watch?v=_MgrjgQqDcE)
-
-  First set up enable copy/paste using ctrl+shift+letter shortcuts in properties (right click image in top left corner of terminal)  
-  ![Git Bash Prompt](https://github.com/hcollins345/random/blob/master/WSLTTY_copy_paste_settings.png)
-  VcXsrv - install and add config.xlaunch to startup folder
-  https://sourceforge.net/projects/vcxsrv/files/latest/download
-
-  ```bash
-  cp dotfiles/config.xlaunch ~/hcollins/AppData/Roaming/Microsoft/Windows/Start\ Menu/
-  ```
-
-  ### Right click launch modification (shift right click works already by default)
-  Can modify registry keys or https://www.sordum.org/7615/easy-context-menu-v1-6/
-
-</details>
-                                    
------------------------------------------------------
-
-<details>
-  <summary>Gymes</summary>
-
-  ## Windows Monitor Overlay
-  https://www.msi.com/Landing/afterburner
-
-  Msi afterburner auto installs RTSS (used for the overlays)
-
-  https://pcgamehaven.com/easily-monitor-cpu-gpu-usage-gaming/
-
-</details>
