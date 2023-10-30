@@ -52,7 +52,7 @@ if (Test-Path -Path "$env:ProgramData\Chocolatey"){
 #Update-Help
 
 Write-Host "Installing Miniconda..." -ForegroundColor Green
-if (Test-Path -Path "$HOME\miniconda3") {
+if ((Test-Path -Path "$HOME\miniconda3") -or (Test-Path -Path "$env:LOCALAPPDATA\miniconda3")){
   Write-Host "  Already complete, skipping"
 } Else {
   Write-Host "  Make sure to install locally not globally" -ForegroundColor Magenta
@@ -66,8 +66,8 @@ if (Test-Path -Path "$HOME\miniconda3") {
   Update-SessionEnvironment
 }
 
-Write-Host "Installing x64 neovim, ripgrep, winget, windows terminal, hwinfo, minikube, fzf, nodejs" -ForegroundColor Green
-choco upgrade neovim ripgrep winget microsoft-windows-terminal hwinfo minikube fzf nodejs-lts -y
+Write-Host "Installing x64 neovim, ripgrep, winget, windows terminal, hwinfo, minikube, fzf, nodejs, switcheroo" -ForegroundColor Green
+choco upgrade neovim ripgrep winget microsoft-windows-terminal hwinfo minikube fzf nodejs-lts switcheroo -y
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
 

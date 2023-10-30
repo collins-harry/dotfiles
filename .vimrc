@@ -88,7 +88,7 @@ Plugin 'VundleVim/Vundle.vim'
   Plugin 'vim-pandoc/vim-rmarkdown'
   " Plugin 'vim-latex/vim-latex'
   Plugin 'iamcco/markdown-preview.nvim' "https://github.com/iamcco/markdown-preview.nvim
-  Plugin 'vimwiki/vimwiki'
+  " Plugin 'vimwiki/vimwiki'
 "Colorschemes
   Plugin 'NLKNguyen/papercolor-theme'
   Plugin 'ericbn/vim-solarized'
@@ -699,6 +699,7 @@ if has("autocmd")
   filetype plugin indent on
 endif
 let g:xml_syntax_folding=1
+let g:markdown_folding = 1
 au FileType xml setlocal foldmethod=syntax
 "}}}
 "===== Functions {{{
