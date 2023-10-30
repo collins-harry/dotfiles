@@ -26,30 +26,24 @@ if IsWSL
   set t_u7=
   set t_ut=
   set rtp+=~/.vim/bundle/Vundle.vim
-endif
-if IsWin
+elseif IsWin
   set shellslash
   if has('nvim')
     set rtp+=~/.config/nvim/bundle/Vundle.vim
     let g:python3_host_prog='C:\Users\Hcollins\anaconda3\python'
-  endif
-  if !has('nvim')
+  else 
     set rtp+=~/.vimfiles/bundle/Vundle.vim
     set pythonthreehome=C:\Users\Hcollins\anaconda3
     set pythonthreedll=C:\Users\Hcollins\anaconda3\python38.dll
   endif
-endif
-if IsLinux
+elseif IsLinux
   set rtp+=~/.vim/bundle/Vundle.vim
 endif
-"pythonthreehome and pythonthreedll
 " }}}
 " ===== INIT SETTINGS AND VUNDLE REQUIREMENTS {{{
 set nocompatible              " be iMproved, required
 filetype off                  " required
 call vundle#begin()
-" End OS choice===========================
-" let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 " }}}
 " ===== PLUGINS {{{
@@ -404,8 +398,6 @@ nnoremap <leader>ev :e ~/dotfiles/.vimrc<CR>
 " current file's filetype configuration
 nnoremap <leader>ef :e ~/.vim/after/ftplugin/<C-R>=&filetype<CR>.vim<CR>
 
-nmap <leader>w :w!<cr>
-
 command Time pu=strftime('%c')
 
 map <silent> <leader><cr> :set hls!<cr>
@@ -535,8 +527,8 @@ map <Leader>vz :VimuxZoomRunner<CR>|  "Zoom the tmux runner pane
   autocmd FileType qf nnoremap <buffer> <C-x> :call <SID>OpenQuickfix("split")<CR>
 "MARKDOWN
 " jump to next <++>
-autocmd Filetype markdown,rmd imap ,, <esc>:keepp /<++><CR>ca<
-autocmd Filetype markdown,rmd map <leader>w yiWi[<esc>Ea](<esc>pa)
+autocmd Filetype markdown,rmd imap ,, <esc>:keepp /<++><CR>"_ca<
+autocmd Filetype markdown,rmd nnoremap <leader>w yiWi[<esc>Ea](<esc>pa)
 autocmd Filetype markdown,rmd inoremap ;n ---<Enter><Enter>
 " bold
 autocmd Filetype markdown,rmd inoremap ;b ****<++><Esc>F*hi
@@ -544,23 +536,27 @@ autocmd Filetype markdown,rmd inoremap ;b ****<++><Esc>F*hi
 autocmd Filetype markdown,rmd inoremap ;s ~~~~<++><Esc>F~hi
 " italics/emphasise
 autocmd Filetype markdown,rmd inoremap ;e **<++><Esc>F*i
+" highlight (html)
 autocmd Filetype markdown,rmd inoremap ;h ====<Space><++><Esc>F=hi
 " image
 autocmd Filetype markdown,rmd inoremap ;i ![](<++>)<++><Esc>F[a
 " links
 autocmd Filetype markdown,rmd inoremap ;a [](<++>)<++><Esc>F[a
+" Headings
 autocmd Filetype markdown,rmd inoremap ;1 #<Space><Enter><++><Esc>kA
 autocmd Filetype markdown,rmd inoremap ;2 ##<Space><Enter><++><Esc>kA
 autocmd Filetype markdown,rmd inoremap ;3 ###<Space><Enter><++><Esc>kA
+" linebreak
 autocmd Filetype markdown,rmd inoremap ;l --------<Enter>
 autocmd Filetype markdown,rmd inoremap ;eq \begin{align}<CR><CR>\end{align}<CR><++><Esc>kki<space><space>
 autocmd Filetype markdown,rmd inoremap ;hr \hyperref[]{<++> \autoref{<++>}}<Esc>21hi
+" yaml 
 autocmd Filetype markdown,rmd map <F6> i---<CR>title: <++><CR>subtitle: <++><CR>author: Harry Collins<CR>date: '<C-r>=strftime('%c')<CR><++>'<CR>output: <++>pdf_document<CR>urlcolor: <++>blue<CR>linkcolor: <++>black<CR>---<CR><CR><++><C-j>
 autocmd Filetype markdown,rmd inoremap ;r ```{r}<CR>```<CR><CR><esc>2kO
 autocmd Filetype markdown,rmd inoremap ;p ```{python echo=FALSE, fig.cap=''}<CR>```<CR><CR><esc>2kO
 autocmd Filetype markdown map <buffer> <F5> :!pandoc<space><C-r>%<space>--latex-engine=xelatex<space>-o<space>%:t:r.pdf<space>--verbose<Enter><Enter>
 if exists('$TMUX')
-  autocmd Filetype rmd map <buffer> <F5> :call VimuxRunCommand("echo<space>\"require(rmarkdown);<space>render('<c-r>%')\"<space>\|<space>R<space>--vanilla")<CR>
+  autocmd Filetype rmd map <buffer> <F5> :w<Enter>:call VimuxRunCommand("echo<space>\"require(rmarkdown);<space>render('<c-r>%')\"<space>\|<space>R<space>--vanilla")<CR>
 else
   autocmd Filetype rmd map <buffer> <F5> :!echo<space>"require(rmarkdown);<space>render('<c-r>%')"<space>\|<space>R<space>--vanilla<enter>
 endif
