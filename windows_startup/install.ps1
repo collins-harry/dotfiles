@@ -108,6 +108,13 @@ if ($installedList | findstr "ScooterSoftware.BeyondCompare4") {
   winget install -e --id ScooterSoftware.BeyondCompare4
 }
 
+Write-Host "Installing Helm" -ForegroundColor Green
+if ($installedList | findstr "Helm.Helm") {
+  Write-Host "  Already complete, skipping"
+} else {
+  winget install -e --id Helm.Helm
+}
+
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
 
