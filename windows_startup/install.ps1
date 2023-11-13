@@ -167,9 +167,9 @@ if (Test-Path -Path "$HOME\.vim\bundle\Vundle.vim") {
   Write-Host "  Downloading Vundle (plugin installer).."
   git clone "https://github.com/VundleVim/Vundle.vim.git" "$HOME/.config/nvim/bundle/Vundle.vim"
   Write-Host "  Installing Vundle plugins.."
-  nvim -c PluginInstall
+  nvim +PluginInstall +qall
   Write-Host "  ReInstalling Vundle plugins.. (often some fail on first pass)"
-  nvim -c PluginInstall
+  nvim +PluginInstall +qall
 }
 
 Write-Host "Installing VisualStudio2022 (17) for c++ development" -ForegroundColor Green
