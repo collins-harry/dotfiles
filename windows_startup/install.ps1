@@ -90,6 +90,7 @@ Install-ChocoPackage Minikube
 Install-ChocoPackage fzf
 Install-ChocoPackage nodejs-lts
 Install-ChocoPackage switcheroo
+Install-ChocoPackage chocolatey
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
 
@@ -132,10 +133,19 @@ if (Test-Path -Path "$HOME\.vimrc") {
 }
 
 Write-Host "Add symlink for windows terminal settings" -ForegroundColor Green
-if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState") {
-  Write-Host "  Creating symlink for terminal settings"
-  New-Item -ItemType SymbolicLink -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Target "$HOME\dotfiles\windows_startup\settings.json" -Force
-} else {
+if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState") 
+{
+  if ((Get-ItemProperty "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json").LinkType) 
+  {
+    Write-Host "  Already complete, skipping"
+  } 
+  else 
+  {
+    Write-Host "  Creating symlink for terminal settings"
+    New-Item -ItemType SymbolicLink -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Target "$HOME\dotfiles\windows_startup\settings.json" -Force
+  }
+} else 
+{
   Write-Host "  Windows Terminal not installed or not from choco" -ForegroundColor Red
 }
 
