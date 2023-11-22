@@ -154,10 +154,22 @@ if (Test-Path -Path "$HOME\OneDrive") {
 }
 
 
-Write-Host "Installing (n)vim plugin and mover2.py python requirements" -ForegroundColor Green
-echo y | pip install pynvim pyautogui pynput
+$installedPythonList = pip list
+function Install-PythonPackage {
+  param( [string]$packageId )
+  Write-Host "Installing $packageId" -ForegroundColor Green
+  if ($installedPythonList | findstr /I "$packageId ") {
+    Write-Host "  Already complete, skipping"
+  } else {
+    echo y | pip install $packageId
+  }
+}
+Write-Host "`r`nInstalling (n)vim plugin and mover2.py python requirements" -ForegroundColor Green
+Install-PythonPackage pynvim
+Install-PythonPackage pyautogui
+Install-PythonPackage pynput
 
-Write-Host "Installing (n)vim plugins" -ForegroundColor Green
+Write-Host "`r`nInstalling (n)vim plugins" -ForegroundColor Green
 if (Test-Path -Path "$HOME\.vim\bundle\Vundle.vim") {
   Write-Host "  Already complete, skipping"
 } Else {
