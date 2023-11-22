@@ -66,59 +66,56 @@ if ((Test-Path -Path "$HOME\miniconda3") -or (Test-Path -Path "$env:LOCALAPPDATA
   Update-SessionEnvironment
 }
 
-Write-Host "Installing x64 neovim, ripgrep, winget, windows terminal, hwinfo, minikube, fzf, nodejs, switcheroo" -ForegroundColor Green
-choco upgrade neovim ripgrep winget microsoft-windows-terminal hwinfo minikube fzf nodejs-lts switcheroo -y
+# Write-Host "Installing x64 neovim, ripgrep, winget, windows terminal, hwinfo, minikube, fzf, nodejs, switcheroo" -ForegroundColor Green
+# choco install neovim ripgrep winget microsoft-windows-terminal hwinfo minikube fzf nodejs-lts switcheroo -y
+# Write-Host "  Refreshing Path"
+# Update-SessionEnvironment
+
+function Install-ChocoPackage {
+  param( [string]$packageId )
+  Write-Host "Installing $packageId" -ForegroundColor Green
+  if ($installedChocoList | findstr "$packageId ") {
+    Write-Host "  Already complete, skipping"
+  } else {
+    choco upgrade $packageId -y
+  }
+}
+Write-Host "`r`nCollating installed choco packages" -ForegroundColor Green
+$installedChocoList = choco list
+Install-ChocoPackage neovim
+Install-ChocoPackage ripgrep
+Install-ChocoPackage microsoft-windows-terminal
+Install-ChocoPackage hwinfo
+Install-ChocoPackage Minikube
+Install-ChocoPackage fzf
+Install-ChocoPackage nodejs-lts
+Install-ChocoPackage switcheroo
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
 
-Write-Host "Collating installed packages" -ForegroundColor Green
-$installedList = winget list
-Write-Host "Installing VS Code" -ForegroundColor Green
-if ($installedList | findstr "Microsoft.VisualStudioCode") {
-  Write-Host "  Already complete, skipping"
-} else {
-  winget install -e --id Microsoft.VisualStudioCode --accept-source-agreements --accept-package-agreements
+function Install-WingetPackage {
+  param( [string]$packageId )
+  $packageName = $packageId.Split(".")[1]
+  Write-Host "Installing $packageName" -ForegroundColor Green
+  if ($installedWingetList | findstr "$packageId ") {
+    Write-Host "  Already complete, skipping"
+  } else {
+    winget install -e --id $packageId --accept-source-agreements --accept-package-agreements
+  }
 }
-
-Write-Host "Installing SQLServerManagementStudio" -ForegroundColor Green
-if ($installedList | findstr "Microsoft.SQLServerManagementStudio") {
-  Write-Host "  Already complete, skipping"
-} else {
-  winget install -e --id Microsoft.SQLServerManagementStudio 
-}
-
-Write-Host "Installing AzureCLI" -ForegroundColor Green
-if ($installedList | findstr "Microsoft.AzureCLI") {
-  Write-Host "  Already complete, skipping"
-} else {
-  winget install -e --id Microsoft.AzureCLI
-}
-
-Write-Host "Installing AutoHotkey" -ForegroundColor Green
-if ($installedList | findstr "AutoHotkey.AutoHotkey") {
-  Write-Host "  Already complete, skipping"
-} else {
-  winget install -e --id AutoHotkey.AutoHotkey
-}
-
-Write-Host "Installing Beyond Compare 4" -ForegroundColor Green
-if ($installedList | findstr "ScooterSoftware.BeyondCompare4") {
-  Write-Host "  Already complete, skipping"
-} else {
-  winget install -e --id ScooterSoftware.BeyondCompare4
-}
-
-Write-Host "Installing Helm" -ForegroundColor Green
-if ($installedList | findstr "Helm.Helm") {
-  Write-Host "  Already complete, skipping"
-} else {
-  winget install -e --id Helm.Helm
-}
-
+Write-Host "`r`nCollating installed winget packages" -ForegroundColor Green
+$installedWingetList = winget list
+Install-WingetPackage Microsoft.VisualStudioCode
+Install-WingetPackage Microsoft.SQLServerManagementStudio
+Install-WingetPackage Microsoft.AzureCLI
+Install-WingetPackage AutoHotkey.AutoHotkey
+Install-WingetPackage ScooterSoftware.BeyondCompare4
+Install-WingetPackage Helm.Helm
+Install-WingetPackage gokcehan.lf
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
 
-Write-Host "Installing nvim symlinks" -ForegroundColor Green
+Write-Host "`r`nInstalling nvim symlinks" -ForegroundColor Green
 if (Test-Path -Path "$HOME\.vimrc") {
   Write-Host "  Already complete, skipping"
 } Else {
