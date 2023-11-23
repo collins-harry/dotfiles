@@ -132,7 +132,7 @@ if (Test-Path -Path "$HOME\.vimrc") {
   New-Item -ItemType File -Path "$HOME\dotfiles\.os_config_vim" -Value "let IsWSL=0`r`nlet IsLinux=0`r`nlet IsWin=1" -Force
 }
 
-Write-Host "Add symlink for windows terminal settings" -ForegroundColor Green
+Write-Host "Installing symlink for windows terminal settings" -ForegroundColor Green
 if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState") 
 {
   if ((Get-ItemProperty "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json").LinkType) 
@@ -149,7 +149,7 @@ if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb
   Write-Host "  Windows Terminal not installed or not from choco" -ForegroundColor Red
 }
 
-Write-Host "Install symlink in STARTUP folder for autohotkey script" -ForegroundColor Green
+Write-Host "Installing symlink in STARTUP folder for autohotkey script" -ForegroundColor Green
 if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk") {
   Write-Host "  Already complete, skipping"
 } else {
@@ -189,10 +189,11 @@ if (Test-Path -Path "$HOME\.vim\bundle\Vundle.vim") {
   nvim +PluginInstall +qall
   Write-Host "  ReInstalling Vundle plugins.. (often some fail on first pass)"
   nvim +PluginInstall +qall
+  Write-Host "  Installing Markdown viewer <c-p><c-p>"
+  nvim -c ":call mkdp#util#install()" +qall
 }
 
 Write-Host "Installing VisualStudio2022 (17) for c++ development" -ForegroundColor Green
-
 if (Test-Path -Path "$env:LOCALAPPDATA\Microsoft\VisualStudio") {
   Write-Host "  Already complete, skipping"
 } ELSE {
@@ -215,7 +216,7 @@ if (Test-Path -Path "$env:LOCALAPPDATA\Microsoft\VisualStudio") {
   rm "~\vs_BuildTools.exe"
 }
 
-Write-Host "Install Qt, CMake & Ninja" -ForegroundColor Green
+Write-Host "Installing Qt, CMake & Ninja" -ForegroundColor Green
 if (Test-Path -Path "C:\Qt") {
   Write-Host "  Already complete, skipping"
 } ELSE {
@@ -255,7 +256,7 @@ if (Test-Path -Path "C:\Qt") {
   rm "~\qt-unified-windows-x64.exe"
 }
 
-Write-Host "Adding Path variables" -ForegroundColor Green
+Write-Host "Installing Path variables" -ForegroundColor Green
 if ([Environment]::GetEnvironmentVariable('CMAKE_PREFIX_PATH', 'User')) {
   Write-Host "  Already complete, skipping"
 } ELSE {
@@ -308,9 +309,6 @@ Write-Host "    Installing YouCompleteMe"
 # python install.py --msvc 16 #16 for VS2019, 17 for VS2022
 Write-Host "    Changing directory back to ~\dotfiles\windows_startup"
 # cd ~\dotfiles\windows_startup
-Write-Host "  Installing markdown viewer (shortcut <c-p><c-p>)"
-# vim -c "call mkdp#util#install()"
-
 
 Write-Host "Finished Install Script" -ForegroundColor Green
 
