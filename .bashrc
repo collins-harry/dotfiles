@@ -5,6 +5,7 @@
 if [[ -f ~/OneDrive/.work.bashrc ]]; then
     source ~/OneDrive/.work.bashrc
 fi
+export DOCKER_BUILDKIT=1
 
 # ==============TWENTE ===============
 export CLUSTER="s1664050@korenvliet.ewi.utwente.nl"
@@ -21,7 +22,7 @@ if grep -qE "(Microsoft|WSL)" /proc/version &>/dev/null; then
 fi
 
 # ==============ALIASES===============
-alias r=ranger
+alias r=lf
 alias v=nvim
 alias bat=batcat
 alias calc='libreoffice --calc'
@@ -29,6 +30,7 @@ alias scim=sc-im
 alias k=kubectl
 alias eb="nvim ~/.bashrc && source ~/.bashrc"
 alias sb="source ~/.bashrc"
+alias telehack="telnet telehack.com"
 
 #===============CONFIG ===============
 export EDITOR="nvim"
@@ -38,6 +40,7 @@ export GREP_COLORS='ms=01;31:mc=01;31:sl=:cx=:fn=38;5;81:ln=32:bn=32:se=36'
 
 #===============APPS   ===============
 export PATH="~/apps/android-studio/bin:$PATH"
+export PATH="$(go env GOPATH)/bin:$PATH"
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/hcollins/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
