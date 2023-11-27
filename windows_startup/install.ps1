@@ -66,52 +66,57 @@ if ((Test-Path -Path "$HOME\miniconda3") -or (Test-Path -Path "$env:LOCALAPPDATA
   Update-SessionEnvironment
 }
 
-Write-Host "Installing x64 neovim, ripgrep, winget, windows terminal, hwinfo, minikube, fzf, nodejs, switcheroo" -ForegroundColor Green
-choco upgrade neovim ripgrep winget microsoft-windows-terminal hwinfo minikube fzf nodejs-lts switcheroo -y
+# Write-Host "Installing x64 neovim, ripgrep, winget, windows terminal, hwinfo, minikube, fzf, nodejs, switcheroo" -ForegroundColor Green
+# choco install neovim ripgrep winget microsoft-windows-terminal hwinfo minikube fzf nodejs-lts switcheroo -y
+# Write-Host "  Refreshing Path"
+# Update-SessionEnvironment
+
+function Install-ChocoPackage {
+  param( [string]$packageId )
+  Write-Host "Installing $packageId" -ForegroundColor Green
+  if ($installedChocoList | findstr "$packageId ") {
+    Write-Host "  Already complete, skipping"
+  } else {
+    choco upgrade $packageId -y
+  }
+}
+Write-Host "`r`nCollating installed choco packages" -ForegroundColor Green
+$installedChocoList = choco list
+Install-ChocoPackage neovim
+Install-ChocoPackage ripgrep
+Install-ChocoPackage microsoft-windows-terminal
+Install-ChocoPackage hwinfo
+Install-ChocoPackage Minikube
+Install-ChocoPackage fzf
+Install-ChocoPackage nodejs-lts
+Install-ChocoPackage switcheroo
+Install-ChocoPackage chocolatey
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
 
-Write-Host "Collating installed packages" -ForegroundColor Green
-$installedList = winget list
-Write-Host "Installing VS Code" -ForegroundColor Green
-if ($installedList | findstr "Microsoft.VisualStudioCode") {
-  Write-Host "  Already complete, skipping"
-} else {
-  winget install -e --id Microsoft.VisualStudioCode --accept-source-agreements --accept-package-agreements
+function Install-WingetPackage {
+  param( [string]$packageId )
+  $packageName = $packageId.Split(".")[1]
+  Write-Host "Installing $packageName" -ForegroundColor Green
+  if ($installedWingetList | findstr "$packageId ") {
+    Write-Host "  Already complete, skipping"
+  } else {
+    winget install -e --id $packageId --accept-source-agreements --accept-package-agreements
+  }
 }
-
-Write-Host "Installing SQLServerManagementStudio" -ForegroundColor Green
-if ($installedList | findstr "Microsoft.SQLServerManagementStudio") {
-  Write-Host "  Already complete, skipping"
-} else {
-  winget install -e --id Microsoft.SQLServerManagementStudio 
-}
-
-Write-Host "Installing AzureCLI" -ForegroundColor Green
-if ($installedList | findstr "Microsoft.AzureCLI") {
-  Write-Host "  Already complete, skipping"
-} else {
-  winget install -e --id Microsoft.AzureCLI
-}
-
-Write-Host "Installing AutoHotkey" -ForegroundColor Green
-if ($installedList | findstr "AutoHotkey.AutoHotkey") {
-  Write-Host "  Already complete, skipping"
-} else {
-  winget install -e --id AutoHotkey.AutoHotkey
-}
-
-Write-Host "Installing Beyond Compare 4" -ForegroundColor Green
-if ($installedList | findstr "ScooterSoftware.BeyondCompare4") {
-  Write-Host "  Already complete, skipping"
-} else {
-  winget install -e --id ScooterSoftware.BeyondCompare4
-}
-
+Write-Host "`r`nCollating installed winget packages" -ForegroundColor Green
+$installedWingetList = winget list
+Install-WingetPackage Microsoft.VisualStudioCode
+Install-WingetPackage Microsoft.SQLServerManagementStudio
+Install-WingetPackage Microsoft.AzureCLI
+Install-WingetPackage AutoHotkey.AutoHotkey
+Install-WingetPackage ScooterSoftware.BeyondCompare4
+Install-WingetPackage Helm.Helm
+Install-WingetPackage gokcehan.lf
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
 
-Write-Host "Installing nvim symlinks" -ForegroundColor Green
+Write-Host "`r`nInstalling nvim symlinks" -ForegroundColor Green
 if (Test-Path -Path "$HOME\.vimrc") {
   Write-Host "  Already complete, skipping"
 } Else {
@@ -127,15 +132,24 @@ if (Test-Path -Path "$HOME\.vimrc") {
   New-Item -ItemType File -Path "$HOME\dotfiles\.os_config_vim" -Value "let IsWSL=0`r`nlet IsLinux=0`r`nlet IsWin=1" -Force
 }
 
-Write-Host "Add symlink for windows terminal settings" -ForegroundColor Green
-if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState") {
-  Write-Host "  Creating symlink for terminal settings"
-  New-Item -ItemType SymbolicLink -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Target "$HOME\dotfiles\windows_startup\settings.json" -Force
-} else {
+Write-Host "Installing symlink for windows terminal settings" -ForegroundColor Green
+if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState") 
+{
+  if ((Get-ItemProperty "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json").LinkType) 
+  {
+    Write-Host "  Already complete, skipping"
+  } 
+  else 
+  {
+    Write-Host "  Creating symlink for terminal settings"
+    New-Item -ItemType SymbolicLink -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Target "$HOME\dotfiles\windows_startup\settings.json" -Force
+  }
+} else 
+{
   Write-Host "  Windows Terminal not installed or not from choco" -ForegroundColor Red
 }
 
-Write-Host "Install symlink in STARTUP folder for autohotkey script" -ForegroundColor Green
+Write-Host "Installing symlink in STARTUP folder for autohotkey script" -ForegroundColor Green
 if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk") {
   Write-Host "  Already complete, skipping"
 } else {
@@ -150,10 +164,22 @@ if (Test-Path -Path "$HOME\OneDrive") {
 }
 
 
-Write-Host "Installing (n)vim plugin and mover2.py python requirements" -ForegroundColor Green
-echo y | pip install pynvim pyautogui pynput
+$installedPythonList = pip list
+function Install-PythonPackage {
+  param( [string]$packageId )
+  Write-Host "Installing $packageId" -ForegroundColor Green
+  if ($installedPythonList | findstr /I "$packageId ") {
+    Write-Host "  Already complete, skipping"
+  } else {
+    echo y | pip install $packageId
+  }
+}
+Write-Host "`r`nInstalling (n)vim plugin and mover2.py python requirements" -ForegroundColor Green
+Install-PythonPackage pynvim
+Install-PythonPackage pyautogui
+Install-PythonPackage pynput
 
-Write-Host "Installing (n)vim plugins" -ForegroundColor Green
+Write-Host "`r`nInstalling (n)vim plugins" -ForegroundColor Green
 if (Test-Path -Path "$HOME\.vim\bundle\Vundle.vim") {
   Write-Host "  Already complete, skipping"
 } Else {
@@ -163,10 +189,11 @@ if (Test-Path -Path "$HOME\.vim\bundle\Vundle.vim") {
   nvim +PluginInstall +qall
   Write-Host "  ReInstalling Vundle plugins.. (often some fail on first pass)"
   nvim +PluginInstall +qall
+  Write-Host "  Installing Markdown viewer <c-p><c-p>"
+  nvim -c ":call mkdp#util#install()" +qall
 }
 
 Write-Host "Installing VisualStudio2022 (17) for c++ development" -ForegroundColor Green
-
 if (Test-Path -Path "$env:LOCALAPPDATA\Microsoft\VisualStudio") {
   Write-Host "  Already complete, skipping"
 } ELSE {
@@ -189,7 +216,7 @@ if (Test-Path -Path "$env:LOCALAPPDATA\Microsoft\VisualStudio") {
   rm "~\vs_BuildTools.exe"
 }
 
-Write-Host "Install Qt, CMake & Ninja" -ForegroundColor Green
+Write-Host "Installing Qt, CMake & Ninja" -ForegroundColor Green
 if (Test-Path -Path "C:\Qt") {
   Write-Host "  Already complete, skipping"
 } ELSE {
@@ -229,7 +256,7 @@ if (Test-Path -Path "C:\Qt") {
   rm "~\qt-unified-windows-x64.exe"
 }
 
-Write-Host "Adding Path variables" -ForegroundColor Green
+Write-Host "Installing Path variables" -ForegroundColor Green
 if ([Environment]::GetEnvironmentVariable('CMAKE_PREFIX_PATH', 'User')) {
   Write-Host "  Already complete, skipping"
 } ELSE {
@@ -282,9 +309,6 @@ Write-Host "    Installing YouCompleteMe"
 # python install.py --msvc 16 #16 for VS2019, 17 for VS2022
 Write-Host "    Changing directory back to ~\dotfiles\windows_startup"
 # cd ~\dotfiles\windows_startup
-Write-Host "  Installing markdown viewer (shortcut <c-p><c-p>)"
-# vim -c "call mkdp#util#install()"
-
 
 Write-Host "Finished Install Script" -ForegroundColor Green
 
