@@ -31,8 +31,6 @@ sudo apt-get install --assume-yes \
 sudo apt-get install --assume-yes \
     r-base \
     pandoc-citeproc && \
-# WORK - NPM
-sudo apt-get install yarn --assume-yes
 
 echo -e "${GREEN}Installing miniconda with python 3.9 and 3.11${NC}"
 if [[ -d ~/miniconda3 ]];
@@ -76,6 +74,7 @@ else
     echo "  Installing latest nodejs"
     nvm install --lts && \
     source ~/.bashrc
+    npm install -g yarn
 fi
 
 echo -e "${GREEN}Installing items for hamilton work${NC}"
