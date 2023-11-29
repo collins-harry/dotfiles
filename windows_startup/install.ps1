@@ -1,12 +1,6 @@
 Write-Host "Starting Installation Script" -ForegroundColor Green
 Write-Host "Setting Execution policy to bypass for this script" -ForegroundColor Green
 Set-ExecutionPolicy Bypass -Scope Process -Force;
-
-# Write-Host "Installing Chrome " -ForegroundColor Green
-# $LocalTempDir = $env:TEMP; $ChromeInstaller = "ChromeInstaller.exe"; (new-object System.Net.WebClient).DownloadFile('https://dl.google.com/chrome/install/375.126/chrome_installer.exe', "$LocalTempDir$ChromeInstaller"); & "$LocalTempDir$ChromeInstaller" /silent /install; $Process2Monitor = "ChromeInstaller"; Do { $ProcessesFound = Get-Process | ?{$Process2Monitor -contains $_.Name} | Select-Object -ExpandProperty Name; If ($ProcessesFound) { "Still running: $($ProcessesFound -join ', ')" | Write-Host; Start-Sleep -Seconds 2 } else { rm "$LocalTempDir$ChromeInstaller" -ErrorAction SilentlyContinue -Verbose } } Until (!$ProcessesFound)< Write-Host "Finished Chrome installation command" -ForegroundColor Green
-#
-
-
 Set-MpPreference -DisableRealtimeMonitoring $true
 
 Write-Host "Changing keyboard to en-US" -ForegroundColor Green
@@ -47,7 +41,6 @@ if (Test-Path -Path "$env:ProgramData\Chocolatey"){
   Update-SessionEnvironment
 }
 
-
 #Write-Host "Update Help" -ForegroundColor Green
 #Update-Help
 
@@ -65,11 +58,6 @@ if ((Test-Path -Path "$HOME\miniconda3") -or (Test-Path -Path "$env:LOCALAPPDATA
   Write-Host "  Refreshing Path"
   Update-SessionEnvironment
 }
-
-# Write-Host "Installing x64 neovim, ripgrep, winget, windows terminal, hwinfo, minikube, fzf, nodejs, switcheroo" -ForegroundColor Green
-# choco install neovim ripgrep winget microsoft-windows-terminal hwinfo minikube fzf nodejs-lts switcheroo -y
-# Write-Host "  Refreshing Path"
-# Update-SessionEnvironment
 
 function Install-ChocoPackage {
   param( [string]$packageId )
@@ -272,21 +260,20 @@ if ([Environment]::GetEnvironmentVariable('CMAKE_PREFIX_PATH', 'User')) {
   # [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\NewPath', 'Machine')   # For all users
 }
 
-Write-Host "Installing WSL2 w/ Ubuntu" -ForegroundColor Green
-$installedDistributions = wsl --list --quiet
-if ($installedDistributions -contains "Ubuntu") {
-  Write-Host "  Already complete, skipping"
-} else {
-  Write-Host "  Enable/ Install Hyper-V (Virtualisation)" -ForegroundColor Green
-  DISM /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
-  Write-Host "  Install wsl"
-  wsl --install
-}
+# Write-Host "Installing WSL2 w/ Ubuntu" -ForegroundColor Green
+# $installedDistributions = wsl --list --quiet
+# if ($installedDistributions -contains "Ubuntu") {
+#   Write-Host "  Already complete, skipping"
+# } else {
+#   Write-Host "  Enable/ Install Hyper-V (Virtualisation)" -ForegroundColor Green
+#   DISM /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
+#   Write-Host "  Install wsl"
+#   wsl --install
+# }
 
 Set-MpPreference -DisableRealtimeMonitoring $false
 
 exit
-
 
 Write-Host "  Installing YCM.."
 Write-Host "    Installing VS build tools - C++ build tools in workloads.."
