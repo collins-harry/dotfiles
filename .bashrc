@@ -1,6 +1,11 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
+# if [ ! -z $DEFAULT_PATH ]; then
+#     export PATH="$DEFAULT_PATH"
+# else
+#     export DEFAULT_PATH="$PATH"
+# fi
 # ==============WORK   ===============
 if [[ -f ~/OneDrive/.work.bashrc ]]; then
     source ~/OneDrive/.work.bashrc
@@ -18,7 +23,7 @@ export CLUSTER="s1664050@korenvliet.ewi.utwente.nl"
 if grep -qE "(Microsoft|WSL)" /proc/version &>/dev/null; then
     export DISPLAY=:0
     PATH=$PATH:~/.local/bin
-    export PATH=~/anaconda3/bin:$PATH
+    export PATH=~/miniconda3/bin:$PATH
 fi
 
 # ==============ALIASES===============
@@ -38,9 +43,7 @@ set -o vi
 shopt -s autocd
 export GREP_COLORS='ms=01;31:mc=01;31:sl=:cx=:fn=38;5;81:ln=32:bn=32:se=36'
 
-#===============APPS   ===============
-export PATH="~/apps/android-studio/bin:$PATH"
-export PATH="$(go env GOPATH)/bin:$PATH"
+#===============CONDA/PYTHON==========
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/home/hcollins/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
@@ -55,17 +58,26 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-
 ### HOW TO CREATE NEW PYTHON VERSION
 #conda create --name=py311 python=3.11 -y
-if [ "~/miniconda3" ] || [ "~/anaconda3"] ; 
-then
-{
+if [ "~/miniconda3" ] || [ "~/anaconda3"]; then
     conda deactivate
     conda activate py39
-}
+    # conda activate py311
 fi
 
+#===============NVM/ NODE ===============
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+if [ "~/.nvm" ]; then
+    nvm use 16.15 1>/dev/null
+fi
+
+#===============OTHER APPS==============
+export PATH="~/apps/android-studio/bin:$PATH"
+export PATH="$(go env GOPATH)/bin:$PATH"
 
 #===============OTHER  =================
 
@@ -114,7 +126,7 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+# force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -146,11 +158,22 @@ if [ ! -z "$RANGER_LEVEL" ]; then
 else
     PromptRangerLvl=''
 fi
+if [ ! -z "$LF_LEVEL" ]; then
+    PromptLFLvl='\[\e[38;5;244m\](l$LF_LEVEL)\[\e[0;0m\]'
+else
+    PromptLFLvl=''
+fi
 # Create prompt component for conda env
 if [ ! -z "$CONDA_DEFAULT_ENV" ]; then
-    PromptCondaEnv='\[\e[38;5;244m\]($CONDA_DEFAULT_ENV) \[\e[0;0m\]'
+    PromptCondaEnv='\[\e[38;5;244m\]($CONDA_DEFAULT_ENV)\[\e[0;0m\]'
 else
     PromptCondaEnv=''
+fi
+# Create prompt component for node version
+if [ "~/.nvm" ]; then
+    PromptNodeVersion='\[\e[38;5;244m\]($(node --version | cut -d'.' -f 1-2))\[\e[0;0m\]'
+else
+    PromptNodeVersion=''
 fi
 # Create prompt components for user, path and git info
 PromptUser='\[\e[1;32m\]\u@\h'
@@ -160,7 +183,7 @@ PromptEnd='\[\e[1;32m\]\n\[\e[1;32m\]└─ λ ~ \[\e[0m\]'
 # Create mini prompt
 MINIPS1='\[\e[1;32m\]λ - \[\e[0m\]'
 # Create full prompt
-FULLPS1="$PromptRangerLvl$PromptCondaEnv$PromptUser $PromptCWD $PromptGit$PromptEnd"
+FULLPS1="$PromptRangerLvl$PromptLFLvl$PromptCondaEnv$PromptNodeVersion$PromptUser $PromptCWD $PromptGit$PromptEnd"
 PS1="$FULLPS1"
 # Function to toggle PS1 between full and mini prompt
 function tps() {
@@ -266,6 +289,3 @@ LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:c
 export LS_COLORS
 
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
