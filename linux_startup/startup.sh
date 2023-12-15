@@ -14,10 +14,23 @@ echo -e "${GREEN}Upgrading${NC}"
 sudo apt-get upgrade -y && \
 
 echo -e "${GREEN}Installing from apt-get${NC}"
-sudo apt-get install --assume-yes xclip tmux firefox podman git neovim cmake build-essential fonts-powerline ripgrep ranger fzf && \
+sudo apt-get install --assume-yes \
+    xclip \
+    tmux \
+    firefox \
+    podman \
+    git \
+    neovim \
+    cmake \
+    build-essential \
+    fonts-powerline \
+    ripgrep \
+    golang-go \
+    fzf && \
 # rmarkdown/latex installs
-sudo apt-get install --assume-yes r-base pandoc-citeproc && \
-# sudo apt-get install pandoc
+sudo apt-get install --assume-yes \
+    r-base \
+    pandoc-citeproc && \
 
 echo -e "${GREEN}Installing miniconda with python 3.9 and 3.11${NC}"
 if [[ -d ~/miniconda3 ]];
@@ -61,6 +74,7 @@ else
     echo "  Installing latest nodejs"
     nvm install --lts && \
     source ~/.bashrc
+    npm install -g yarn
 fi
 
 echo -e "${GREEN}Installing items for hamilton work${NC}"
@@ -69,6 +83,7 @@ if type az 1> /dev/null 2>&1; then
 else
     echo "  Installing work items"
     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+    sudo apt install rabbitmq-server -y
 fi
 
 echo -e "${GREEN}Installing symlinks${NC}"
@@ -139,6 +154,62 @@ else
     echo "  Deleting chrome"
     rm google-chrome-stable_current_amd64.deb
 fi
+
+
+echo -e "${GREEN}Installing lf (file manager)${NC}"
+if type lf 1> /dev/null 2>&1; then
+    echo "  Already installed, skipping"
+else
+    env CGO_ENABLED=0 go install -ldflags="-s -w" github.com/gokcehan/lf@latest
+fi
+
+echo -e "${GREEN}Installing docker${NC}"
+if type docker 1> /dev/null 2>&1; then
+    echo "  Already installed, skipping"
+else
+    # Add Docker's official GPG key:
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl gnupg
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+    # Add the repository to Apt sources:
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+    sudo docker run hello-world
+fi
+
+echo -e "${GREEN}Installing SQL Server${NC}"
+# Check if SQL Server is already installed
+if [[ "/opt/mssql/bin/sqlservr" ]]; then
+    echo "  Already installed, skipping"
+else
+    curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg
+    curl -fsSL https://packages.microsoft.com/config/ubuntu/22.04/mssql-server-2022.list | sudo tee /etc/apt/sources.list.d/mssql-server-2022.list
+    sudo apt-get update
+    sudo apt-get install -y mssql-server
+    sudo /opt/mssql/bin/mssql-conf setup
+    systemctl status mssql-server --no-pager
+fi
+
+echo -e "${GREEN}Installing sqlcmd${NC}"
+# Check if SQL Server is already installed
+if type sqlcmd 1> /dev/null 2>&1; then
+    echo "  Already installed, skipping"
+else
+    curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
+    sudo add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/22.04/prod.list)" -y
+    sudo apt-get update
+    sudo apt-get install mssql-tools unixodbc-dev
+fi
+
 
 echo -e "${GREEN}Setup complete${NC}"
 # for jupyter notebook -- conda install notebook

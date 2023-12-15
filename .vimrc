@@ -571,25 +571,30 @@ endif
   autocmd FileType arduino nnoremap <buffer> <leader>ad :ArduinoUploadAndSerial<CR>
   autocmd FileType arduino nnoremap <buffer> <leader>ab :ArduinoChooseBoard<CR>
   autocmd FileType arduino nnoremap <buffer> <leader>ap :ArduinoChooseProgrammer<CR>
-  "Sparql
-  autocmd BufRead,BufNewFile *.rq map <F5> :!<space>sparql.bat<space>--data=royal92.nt<space>--query=%<CR>
-  "Py
-  augroup python_file
-    autocmd!
+"Sparql
+autocmd BufRead,BufNewFile *.rq map <F5> :!<space>sparql.bat<space>--data=royal92.nt<space>--query=%<CR>
+"Py
+augroup python_file
+  autocmd!
+  if IsWSL
+    " autocmd BufRead,BufNewFile *.py map <buffer> <F5> :!<space>python<space>%<CR>
+    autocmd FileType python nnoremap <buffer> <F5> :!<space>python<space>%<CR>
+  else
     autocmd FileType python nnoremap <F5> :AsyncRun -mode=term -pos=external python -u "%"<CR>
     autocmd FileType python nnoremap <F6> :AsyncRun -mode=term -pos=external flask --app "%" run --debug<CR>
-  augroup END
-  " if IsWSL
-  "   autocmd BufRead,BufNewFile *.py map <buffer> <F5> :!<space>python.exe<space>%<CR>
-  " elseif IsWin
-  "   autocmd FileType python map <buffer> <F5> :w<CR>:!python<space>%<CR>
-  " elseif IsLinux
-  "   autocmd FileType python map <buffer> <F5> :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
-  " endif
-  "ipynb
-  autocmd Filetype ipynb nmap <silent><Leader>b :VimpyterInsertPythonBlock<CR>
-  autocmd Filetype ipynb nmap <silent><Leader>j :VimpyterStartJupyter<CR>
-  autocmd Filetype ipynb nmap <silent><Leader>n :VimpyterStartNteract<CR>
+  endif
+augroup END
+" if IsWSL
+"   autocmd BufRead,BufNewFile *.py map <buffer> <F5> :!<space>python.exe<space>%<CR>
+" elseif IsWin
+"   autocmd FileType python map <buffer> <F5> :w<CR>:!python<space>%<CR>
+" elseif IsLinux
+"   autocmd FileType python map <buffer> <F5> :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
+" endif
+"ipynb
+autocmd Filetype ipynb nmap <silent><Leader>b :VimpyterInsertPythonBlock<CR>
+autocmd Filetype ipynb nmap <silent><Leader>j :VimpyterStartJupyter<CR>
+autocmd Filetype ipynb nmap <silent><Leader>n :VimpyterStartNteract<CR>
 "Sparql
 " autocmd BufRead,BufNewFile *.rq map <F5> :!<space>sparql.bat<space>--data=royal92.nt<space>--query=%<CR>
 "WIN work - copy to idrive - let $MVPATH=""
