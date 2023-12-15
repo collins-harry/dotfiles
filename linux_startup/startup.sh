@@ -163,7 +163,6 @@ else
     env CGO_ENABLED=0 go install -ldflags="-s -w" github.com/gokcehan/lf@latest
 fi
 
-
 echo -e "${GREEN}Installing docker${NC}"
 if type docker 1> /dev/null 2>&1; then
     echo "  Already installed, skipping"
@@ -186,6 +185,31 @@ else
 
     sudo docker run hello-world
 fi
+
+echo -e "${GREEN}Installing SQL Server${NC}"
+# Check if SQL Server is already installed
+if [[ "/opt/mssql/bin/sqlservr" ]]; then
+    echo "  Already installed, skipping"
+else
+    curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg
+    curl -fsSL https://packages.microsoft.com/config/ubuntu/22.04/mssql-server-2022.list | sudo tee /etc/apt/sources.list.d/mssql-server-2022.list
+    sudo apt-get update
+    sudo apt-get install -y mssql-server
+    sudo /opt/mssql/bin/mssql-conf setup
+    systemctl status mssql-server --no-pager
+fi
+
+echo -e "${GREEN}Installing sqlcmd${NC}"
+# Check if SQL Server is already installed
+if type sqlcmd 1> /dev/null 2>&1; then
+    echo "  Already installed, skipping"
+else
+    curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
+    sudo add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/22.04/prod.list)" -y
+    sudo apt-get update
+    sudo apt-get install mssql-tools unixodbc-dev
+fi
+
 
 echo -e "${GREEN}Setup complete${NC}"
 # for jupyter notebook -- conda install notebook
