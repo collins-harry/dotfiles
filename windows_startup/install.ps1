@@ -91,6 +91,8 @@ Install-ChocoPackage fzf
 Install-ChocoPackage nodejs-lts
 Install-ChocoPackage switcheroo
 Install-ChocoPackage chocolatey
+# Install-ChocoPackage sql-server-express
+Install-ChocoPackage sql-server-2022
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
 
@@ -281,6 +283,14 @@ if ($installedDistributions -contains "Ubuntu") {
   DISM /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
   Write-Host "  Install wsl"
   wsl --install
+}
+
+# check if dbatools is installed
+Write-Host "`r`nInstalling dbatools" -ForegroundColor Green
+if (Get-Module -ListAvailable -Name dbatools) {
+  Write-Host "  Already complete, skipping"
+} else {
+  Install-Module dbatools -Force
 }
 
 Set-MpPreference -DisableRealtimeMonitoring $false
