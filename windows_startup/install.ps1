@@ -122,6 +122,17 @@ if (Test-Path -Path "$HOME\.vimrc") {
   New-Item -ItemType File -Path "$HOME\dotfiles\.os_config_vim" -Value "let IsWSL=0`r`nlet IsLinux=0`r`nlet IsWin=1" -Force
 }
 
+
+Write-Host "Disable windows defender for WSL" -ForegroundColor Green
+if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\disable_defender.bat"){
+  Write-Host "  Already complete, skipping"
+} Else {
+  Write-Host "  Creating symlink for disable_defender in STARTUP folders"
+  New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\disable_defender.bat" -Target "$HOME\dotfiles\windows_startup\disable_defender.bat"
+  Write-Host "  Executing disable_defender in STARTUP folder"
+  Start-Process "$HOME\dotfiles\windows_startup\disable_defender.bat"
+}
+
 Write-Host "Installing symlink for windows terminal settings" -ForegroundColor Green
 if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState") 
 {
