@@ -39,7 +39,11 @@ if (Test-Path -Path "$env:ProgramData\Chocolatey"){
   $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
   Import-Module "C:\ProgramData\chocolatey\helpers\chocolateyProfile.psm1"
   Update-SessionEnvironment
+  Write-Host "Upgrading chocolatey" -ForegroundColor Green
+  choco upgrade chocolatey -y
 }
+
+
 
 #Write-Host "Update Help" -ForegroundColor Green
 #Update-Help
