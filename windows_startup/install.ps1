@@ -39,7 +39,11 @@ if (Test-Path -Path "$env:ProgramData\Chocolatey"){
   $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
   Import-Module "C:\ProgramData\chocolatey\helpers\chocolateyProfile.psm1"
   Update-SessionEnvironment
+  Write-Host "Upgrading chocolatey" -ForegroundColor Green
+  choco upgrade chocolatey -y
 }
+
+
 
 #Write-Host "Update Help" -ForegroundColor Green
 #Update-Help
@@ -123,6 +127,17 @@ function Install-NvimSymlinks {
   }
 }
 Install-NvimSymlinks
+
+
+Write-Host "Disable windows defender for WSL" -ForegroundColor Green
+if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\disable_defender.bat"){
+  Write-Host "  Already complete, skipping"
+} Else {
+  Write-Host "  Creating symlink for disable_defender in STARTUP folders"
+  New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\disable_defender.bat" -Target "$HOME\dotfiles\windows_startup\disable_defender.bat"
+  Write-Host "  Executing disable_defender in STARTUP folder"
+  Start-Process "$HOME\dotfiles\windows_startup\disable_defender.bat"
+}
 
 Write-Host "Installing symlink for windows terminal settings" -ForegroundColor Green
 if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState") 
