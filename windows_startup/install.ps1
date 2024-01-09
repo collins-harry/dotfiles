@@ -74,13 +74,12 @@ Install-ChocoPackage neovim
 Install-ChocoPackage ripgrep
 Install-ChocoPackage microsoft-windows-terminal
 Install-ChocoPackage hwinfo
-Install-ChocoPackage Minikube
+# Install-ChocoPackage Minikube
 Install-ChocoPackage fzf
-Install-ChocoPackage nodejs-lts
+# Install-ChocoPackage nodejs-lts
 Install-ChocoPackage switcheroo
 Install-ChocoPackage chocolatey
-# Install-ChocoPackage sql-server-express
-Install-ChocoPackage sql-server-2022
+# Install-ChocoPackage sql-server-2022
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
 
@@ -96,31 +95,34 @@ function Install-WingetPackage {
 }
 Write-Host "`r`nCollating installed winget packages" -ForegroundColor Green
 $installedWingetList = winget list
-Install-WingetPackage Microsoft.VisualStudioCode
-Install-WingetPackage Microsoft.SQLServerManagementStudio
-Install-WingetPackage Microsoft.AzureCLI
+# Install-WingetPackage Microsoft.VisualStudioCode
+# Install-WingetPackage Microsoft.SQLServerManagementStudio
+# Install-WingetPackage Microsoft.AzureCLI
 Install-WingetPackage AutoHotkey.AutoHotkey
-Install-WingetPackage ScooterSoftware.BeyondCompare4
-Install-WingetPackage Helm.Helm
+# Install-WingetPackage ScooterSoftware.BeyondCompare4
+# Install-WingetPackage Helm.Helm
 Install-WingetPackage gokcehan.lf
 Write-Host "  Refreshing Path"
 Update-SessionEnvironment
 
-Write-Host "`r`nInstalling nvim symlinks" -ForegroundColor Green
-if (Test-Path -Path "$HOME\.vimrc") {
-  Write-Host "  Already complete, skipping"
-} Else {
-  Write-Host "  Creating symlink for .vimrc in $HOME"
-  New-Item -ItemType SymbolicLink -Path "$HOME\.vimrc" -Target "$HOME\dotfiles\.vimrc" -Force
-  Write-Host "  Creating swap file directory in ~\tmp"
-  New-Item -Path "$HOME" -Name "tmp" -ItemType "directory"
-  Write-Host "  Creating init.vim file referencing .vimrc"
-  New-Item -ItemType File -Path "$env:LOCALAPPDATA\nvim\init.vim" -Value "source ~/.vimrc" -Force
-  Write-Host "  Creating symlink for nerdtree bookmarks in $HOME"
-  New-Item -ItemType SymbolicLink -Path "$HOME\.NERDTreeBookmarks" -Target "$HOME\dotfiles\.NERDTreeBookmarks" -Force
-  Write-Host "  Setting isWin to 1 in .os_config_vim"
-  New-Item -ItemType File -Path "$HOME\dotfiles\.os_config_vim" -Value "let IsWSL=0`r`nlet IsLinux=0`r`nlet IsWin=1" -Force
+function Install-NvimSymlinks {
+  Write-Host "`r`nInstalling nvim symlinks" -ForegroundColor Green
+  if (Test-Path -Path "$HOME\.vimrc") {
+    Write-Host "  Already complete, skipping"
+  } Else {
+    Write-Host "  Creating symlink for .vimrc in $HOME"
+    New-Item -ItemType SymbolicLink -Path "$HOME\.vimrc" -Target "$HOME\dotfiles\.vimrc" -Force
+    Write-Host "  Creating swap file directory in ~\tmp"
+    New-Item -Path "$HOME" -Name "tmp" -ItemType "directory"
+    Write-Host "  Creating init.vim file referencing .vimrc"
+    New-Item -ItemType File -Path "$env:LOCALAPPDATA\nvim\init.vim" -Value "source ~/.vimrc" -Force
+    Write-Host "  Creating symlink for nerdtree bookmarks in $HOME"
+    New-Item -ItemType SymbolicLink -Path "$HOME\.NERDTreeBookmarks" -Target "$HOME\dotfiles\.NERDTreeBookmarks" -Force
+    Write-Host "  Setting isWin to 1 in .os_config_vim"
+    New-Item -ItemType File -Path "$HOME\dotfiles\.os_config_vim" -Value "let IsWSL=0`r`nlet IsLinux=0`r`nlet IsWin=1" -Force
+  }
 }
+Install-NvimSymlinks
 
 Write-Host "Installing symlink for windows terminal settings" -ForegroundColor Green
 if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState") 
@@ -183,67 +185,71 @@ if (Test-Path -Path "$HOME\.vim\bundle\Vundle.vim") {
   nvim -c ":call mkdp#util#install()" +qall
 }
 
-Write-Host "Installing VisualStudio2022 (17) for c++ development" -ForegroundColor Green
-if (Test-Path -Path "$env:LOCALAPPDATA\Microsoft\VisualStudio") {
-  Write-Host "  Already complete, skipping"
-} ELSE {
-  Write-Host "  Downloading..."
-  Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vs_community.exe" -Outfile "~/vs_BuildTools.exe"
-  Write-Host "  Installing..."
-  Write-Host @"
-    Select
-      Workload: 
-        Desktop development with C++
-      Components:
-        C++ MFC for latest v143 build tools (x86 & x64)
-        C++ MFC for v141 build tools (x86 & x64)
-        C++ ATL for latest v143 build tools (x86 & x64)
-        C++ ATL for v141 build tools (x86 & x64)
-        Newest Win10 SDK (10.0.22000.0 at time of writing)
+function Install-VisualStudio {
+  Write-Host "Installing VisualStudio2022 (17) for c++ development" -ForegroundColor Green
+  if (Test-Path -Path "$env:LOCALAPPDATA\Microsoft\VisualStudio") {
+    Write-Host "  Already complete, skipping"
+  } ELSE {
+    Write-Host "  Downloading..."
+    Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vs_community.exe" -Outfile "~/vs_BuildTools.exe"
+    Write-Host "  Installing..."
+    Write-Host @"
+      Select
+        Workload: 
+          Desktop development with C++
+        Components:
+          C++ MFC for latest v143 build tools (x86 & x64)
+          C++ MFC for v141 build tools (x86 & x64)
+          C++ ATL for latest v143 build tools (x86 & x64)
+          C++ ATL for v141 build tools (x86 & x64)
+          Newest Win10 SDK (10.0.22000.0 at time of writing)
 "@ -ForegroundColor Magenta
-  Start-process -wait "~/vs_BuildTools.exe"
-  Write-Host "  Deleting installer.."
-  rm "~\vs_BuildTools.exe"
+    Start-process -wait "~/vs_BuildTools.exe"
+    Write-Host "  Deleting installer.."
+    rm "~\vs_BuildTools.exe"
+  }
 }
 
-Write-Host "Installing Qt, CMake & Ninja" -ForegroundColor Green
-if (Test-Path -Path "C:\Qt") {
-  Write-Host "  Already complete, skipping"
-} ELSE {
-  Write-Host "  Downloading..."
-  Write-Host "  https://www.qt.io/download-qt-installer"
-  Invoke-WebRequest -Uri "https://d13lb3tujbc8s0.cloudfront.net/onlineinstallers/qt-unified-windows-x64-4.6.1-online.exe" -Outfile "~/qt-unified-windows-x64.exe"
-  Write-Host "  Installing..."
-  Write-Host @"
-    Select
-      Qt Design Studio:
-        Qt Design Studio x.x.x
-      Qt:
-        Qt 6.5.2:
-          MSVC 2019 64-bit
-          Qt 5 Compatibility Module
-          Additional Libraries:
-            Qt Charts
-            Qt Network Authorization
-            Qt Positioning
-            Qt Serial Port
-            Qt WebChannel
-            Qt WebEngine
-            Qt WebSockets
-            Qt WebView
-        Developer and Designer Tools:
-          Qt Creator x.x.x
-          Qt Creator x.x.x CDB Debugger Support
-          Debugging Tools for Windows
-          Qt Creator x.x.x Debug Symbols
-          CMake x.x.x
-          Ninja x.x.x
-          OpenSSL x.x.x Toolkit:
-            OpenSSL 64-bit binaries
+function Install-QTCmakeNinja {
+  Write-Host "Installing Qt, CMake & Ninja" -ForegroundColor Green
+  if (Test-Path -Path "C:\Qt") {
+    Write-Host "  Already complete, skipping"
+  } ELSE {
+    Write-Host "  Downloading..."
+    Write-Host "  https://www.qt.io/download-qt-installer"
+    Invoke-WebRequest -Uri "https://d13lb3tujbc8s0.cloudfront.net/onlineinstallers/qt-unified-windows-x64-4.6.1-online.exe" -Outfile "~/qt-unified-windows-x64.exe"
+    Write-Host "  Installing..."
+    Write-Host @"
+      Select
+        Qt Design Studio:
+          Qt Design Studio x.x.x
+        Qt:
+          Qt 6.5.2:
+            MSVC 2019 64-bit
+            Qt 5 Compatibility Module
+            Additional Libraries:
+              Qt Charts
+              Qt Network Authorization
+              Qt Positioning
+              Qt Serial Port
+              Qt WebChannel
+              Qt WebEngine
+              Qt WebSockets
+              Qt WebView
+          Developer and Designer Tools:
+            Qt Creator x.x.x
+            Qt Creator x.x.x CDB Debugger Support
+            Debugging Tools for Windows
+            Qt Creator x.x.x Debug Symbols
+            CMake x.x.x
+            Ninja x.x.x
+            OpenSSL x.x.x Toolkit:
+              OpenSSL 64-bit binaries
 "@ -ForegroundColor Magenta
-  Start-process -wait "~/qt-unified-windows-x64.exe"
-  Write-Host "  Deleting installer.."
-  rm "~\qt-unified-windows-x64.exe"
+    Start-process -wait "~/qt-unified-windows-x64.exe"
+    Write-Host "  Deleting installer.."
+    rm "~\qt-unified-windows-x64.exe"
+  }
 }
 
 Write-Host "Installing Path variables" -ForegroundColor Green
@@ -273,12 +279,13 @@ if ([Environment]::GetEnvironmentVariable('CMAKE_PREFIX_PATH', 'User')) {
 #   wsl --install
 # }
 
-# check if dbatools is installed
-Write-Host "`r`nInstalling dbatools" -ForegroundColor Green
-if (Get-Module -ListAvailable -Name dbatools) {
-  Write-Host "  Already complete, skipping"
-} else {
-  Install-Module dbatools -Force
+function Install-dbatools {
+  Write-Host "`r`nInstalling dbatools" -ForegroundColor Green
+  if (Get-Module -ListAvailable -Name dbatools) {
+    Write-Host "  Already complete, skipping"
+  } else {
+    Install-Module dbatools -Force
+  }
 }
 
 Set-MpPreference -DisableRealtimeMonitoring $false
