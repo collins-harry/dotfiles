@@ -11,8 +11,6 @@ Install-Chocolatey
 #Install-Help
 Install-Miniconda
 
-Write-Host "`r`nCollating installed choco packages" -ForegroundColor Green
-$installedChocoList = choco list
 Install-ChocoPackage neovim
 Install-ChocoPackage ripgrep
 Install-ChocoPackage microsoft-windows-terminal
@@ -24,10 +22,7 @@ Install-ChocoPackage fzf
 Install-ChocoPackage chocolatey
 # Install-ChocoPackage sql-server-2022
 Write-Host "  Refreshing Path"
-Update-SessionEnvironment
 
-Write-Host "`r`nCollating installed winget packages" -ForegroundColor Green
-$installedWingetList = winget list
 Install-WingetPackage Microsoft.PowerToys
 # Install-WingetPackage Microsoft.VisualStudioCode
 # Install-WingetPackage Microsoft.SQLServerManagementStudio
@@ -36,8 +31,6 @@ Install-WingetPackage AutoHotkey.AutoHotkey
 # Install-WingetPackage ScooterSoftware.BeyondCompare4
 # Install-WingetPackage Helm.Helm
 Install-WingetPackage gokcehan.lf
-Write-Host "  Refreshing Path"
-Update-SessionEnvironment
 
 Install-NvimSymlinks
 #Install-WSLDefenderBypass
@@ -45,11 +38,9 @@ Install-WindowsTerminalSettings
 # Install-PowershellProfile
 Install-AHKShortcuts
 
-Write-Host "`r`nInstalling (n)vim plugin and mover2.py python requirements" -ForegroundColor Green
-$installedPythonList = pip list
-Install-PythonPackage pynvim
-Install-PythonPackage pyautogui
-Install-PythonPackage pynput
+Install-PythonPackage pynvim # for neovim
+Install-PythonPackage pyautogui # for mover.py
+Install-PythonPackage pynput # for mover.py
 
 Install-NVimPlugins
 #Install-VisualStudio
@@ -57,6 +48,7 @@ Install-NVimPlugins
 #Install-QTCmakeNinjaPaths
 #Install-WSL
 Install-dbatools
+Install-StartupWindowsTerminal
 
 
 Set-MpPreference -DisableRealtimeMonitoring $false

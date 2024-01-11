@@ -68,22 +68,32 @@ function Install-Miniconda {
 
 function Install-ChocoPackage {
   param( [string]$packageId )
+  if ($installedChocoList -eq $null) {
+    Write-Host "`r`nCollating installed choco packages" -ForegroundColor Green
+    $script:installedChocoList = choco list
+  }
   Write-Host "Installing $packageId" -ForegroundColor Green
   if ($installedChocoList | findstr "$packageId ") {
     Write-Host "  Already complete, skipping"
   } else {
     choco upgrade $packageId -y
+    Update-SessionEnvironment
   }
 }
 
 function Install-WingetPackage {
   param( [string]$packageId )
+  if ($installedWingetList -eq $null) {
+    Write-Host "`r`nCollating installed winget packages" -ForegroundColor Green
+    $script:installedWingetList = winget list
+  }
   $packageName = $packageId.Split(".")[1]
   Write-Host "Installing $packageName" -ForegroundColor Green
   if ($installedWingetList | findstr "$packageId ") {
     Write-Host "  Already complete, skipping"
   } else {
     winget install -e --id $packageId --accept-source-agreements --accept-package-agreements
+    Update-SessionEnvironment
   }
 }
 
@@ -119,20 +129,15 @@ function Install-WSLDefenderBypass {
 
 function Install-WindowsTerminalSettings {
   Write-Host "Installing symlink for windows terminal settings" -ForegroundColor Green
-  if (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState") 
-  {
-    if ((Get-ItemProperty "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json").LinkType) 
-    {
-      Write-Host "  Already complete, skipping"
-    } 
-    else 
-    {
-      Write-Host "  Creating symlink for terminal settings"
-      New-Item -ItemType SymbolicLink -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Target "$HOME\dotfiles\windows_startup\settings.json" -Force
-    }
-  } else 
-  {
+  if (-Not (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState") ) {
     Write-Host "  Windows Terminal not installed or not from choco" -ForegroundColor Red
+    return
+  } 
+  if ((Get-ItemProperty "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json").LinkType) {
+    Write-Host "  Already complete, skipping"
+  } else {
+    Write-Host "  Creating symlink for terminal settings"
+    New-Item -ItemType SymbolicLink -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" -Target "$HOME\dotfiles\windows_startup\settings.json" -Force
   }
 }
 
@@ -168,11 +173,16 @@ function Install-AHKShortcuts {
 
 function Install-PythonPackage {
   param( [string]$packageId )
+  if ($installedPythonList -eq $null) {
+    Write-Host "`r`nCollating installed pip (python) packages" -ForegroundColor Green
+    $script:installedPythonList = pip list
+  }
   Write-Host "Installing $packageId" -ForegroundColor Green
   if ($installedPythonList | findstr /I "$packageId ") {
     Write-Host "  Already complete, skipping"
   } else {
     echo y | pip install $packageId
+    Update-SessionEnvironment
   }
 }
 
@@ -214,6 +224,7 @@ function Install-VisualStudio {
     Start-process -wait "~/vs_BuildTools.exe"
     Write-Host "  Deleting installer.."
     rm "~\vs_BuildTools.exe"
+    Update-SessionEnvironment
   }
 }
 
@@ -256,6 +267,7 @@ function Install-QTCmakeNinja {
     Start-process -wait "~/qt-unified-windows-x64.exe"
     Write-Host "  Deleting installer.."
     rm "~\qt-unified-windows-x64.exe"
+    Update-SessionEnvironment
   }
 }
 
@@ -287,15 +299,28 @@ function Install-WSL {
     DISM /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
     Write-Host "  Install wsl"
     wsl --install
+    Update-SessionEnvironment
   }
 }
 
 function Install-dbatools {
-  Write-Host "`r`nInstalling dbatools" -ForegroundColor Green
+  Write-Host "Installing dbatools" -ForegroundColor Green
   if (Get-Module -ListAvailable -Name dbatools) {
     Write-Host "  Already complete, skipping"
   } else {
     Install-PackageProvider NuGet -Force;
     Install-Module dbatools -Force
+  }
+}
+
+function Install-StartupWindowsTerminal {
+  Write-Host "Create symlink for windowsterminal startup script in startup folder" -ForegroundColor Green
+  if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startWindowsTerminal.bat"){
+    Write-Host "  Already complete, skipping"
+  } Else {
+    Write-Host "  Creating symlink for startWindowsTerminal.bat in STARTUP folders"
+    New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startWindowsTerminal.bat" -Target "$HOME\dotfiles\windows_startup\startWindowsTerminal.bat"
+    Write-Host "  Executing Uncap script in STARTUP folder"
+    Start-Process "$HOME\dotfiles\windows_startup\uncap_script.bat"
   }
 }
