@@ -136,6 +136,20 @@ function Install-WindowsTerminalSettings {
   }
 }
 
+function Install-PowershellProfile {
+  Write-Host "Installing symlink for powershell profile" -ForegroundColor Green
+  if (Test-Path -Path $profile) {
+    Write-Host "  Already complete, skipping"
+  } else {
+    Write-Host "  Creating symlink for powershell profile"
+    $ProfileDirectory = Split-Path -Parent $profile # get the the folder path of the $profile file
+    $Folder = Get-Item $ProfileDirectory # replace with your folder path
+    $Folder.Attributes -= 'ReadOnly' # clear Read-only
+    New-Item -ItemType SymbolicLink -Path $profile -Target "$HOME\dotfiles\windows_startup\Microsoft.PowerShell_profile.ps1" -Force
+  }
+}
+
+
 function Install-AHKShortcuts {
   Write-Host "Installing symlink in STARTUP folder for autohotkey script" -ForegroundColor Green
   if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk") {

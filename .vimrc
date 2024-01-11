@@ -620,6 +620,10 @@ if IsWin
   set directory=$HOME/tmp//
   set backupdir=$HOME/tmp//
   set undodir=$HOME/tmp//
+  set shell=powershell
+  set shellcmdflag=-command
+  set shellquote=\\\
+  set shellxquote=
   " set backupdir=~/.vim/backup//
   " set directory=~/.vim/swap//
   " set undodir=~/.vim/undo//

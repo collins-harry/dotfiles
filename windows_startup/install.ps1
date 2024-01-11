@@ -20,7 +20,7 @@ Install-ChocoPackage hwinfo
 # Install-ChocoPackage Minikube
 Install-ChocoPackage fzf
 # Install-ChocoPackage nodejs-lts
-Install-ChocoPackage switcheroo
+# Install-ChocoPackage switcheroo
 Install-ChocoPackage chocolatey
 # Install-ChocoPackage sql-server-2022
 Write-Host "  Refreshing Path"
@@ -28,6 +28,7 @@ Update-SessionEnvironment
 
 Write-Host "`r`nCollating installed winget packages" -ForegroundColor Green
 $installedWingetList = winget list
+Install-WingetPackage Microsoft.PowerToys
 # Install-WingetPackage Microsoft.VisualStudioCode
 # Install-WingetPackage Microsoft.SQLServerManagementStudio
 # Install-WingetPackage Microsoft.AzureCLI
@@ -41,6 +42,7 @@ Update-SessionEnvironment
 Install-NvimSymlinks
 #Install-WSLDefenderBypass
 Install-WindowsTerminalSettings
+# Install-PowershellProfile
 Install-AHKShortcuts
 
 Write-Host "`r`nInstalling (n)vim plugin and mover2.py python requirements" -ForegroundColor Green
