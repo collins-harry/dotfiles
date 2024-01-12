@@ -25,19 +25,28 @@ source ~/dotfiles/.os_config_vim
 if IsWSL
   set t_u7=
   set t_ut=
+endif
+" elseif IsWin
+"   set shellslash
+"   if has('nvim')
+"     set rtp+=~/.config/nvim/bundle/Vundle.vim
+"     " let g:python3_host_prog='C:\Users\hcollins\miniconda3\python'
+"     let g:python3_host_prog='C:\Users\hcollins\AppData\Local\miniconda3\python'
+"   else 
+"     set rtp+=~/.vimfiles/bundle/Vundle.vim
+"     " set pythonthreehome=C:\Users\hcollins\miniconda3
+"     set pythonthreehome=C:\Users\hcollins\AppData\Local\miniconda3
+"     " set pythonthreedll=C:\Users\hcollins\miniconda3\python311.dll
+"     set pythonthreedll=C:\Users\hcollins\AppData\Local\miniconda3\python311.dll
+"   endif
+if IsWSL || IsLinux
   set rtp+=~/.vim/bundle/Vundle.vim
 elseif IsWin
-  set shellslash
   if has('nvim')
     set rtp+=~/.config/nvim/bundle/Vundle.vim
-    let g:python3_host_prog='C:\Users\Hcollins\anaconda3\python'
   else 
     set rtp+=~/.vimfiles/bundle/Vundle.vim
-    set pythonthreehome=C:\Users\Hcollins\anaconda3
-    set pythonthreedll=C:\Users\Hcollins\anaconda3\python38.dll
   endif
-elseif IsLinux
-  set rtp+=~/.vim/bundle/Vundle.vim
 endif
 " }}}
 " ===== INIT SETTINGS AND VUNDLE REQUIREMENTS {{{
@@ -620,10 +629,10 @@ if IsWin
   set directory=$HOME/tmp//
   set backupdir=$HOME/tmp//
   set undodir=$HOME/tmp//
-  set shell=powershell
-  set shellcmdflag=-command
-  set shellquote=\\\
-  set shellxquote=
+  " set shell=powershell
+  " set shellcmdflag=-command
+  " set shellquote=\\\
+  " set shellxquote=
   " set backupdir=~/.vim/backup//
   " set directory=~/.vim/swap//
   " set undodir=~/.vim/undo//
