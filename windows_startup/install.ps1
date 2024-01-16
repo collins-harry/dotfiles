@@ -21,7 +21,6 @@ Install-ChocoPackage fzf
 # Install-ChocoPackage switcheroo
 Install-ChocoPackage chocolatey
 # Install-ChocoPackage sql-server-2022
-Write-Host "  Refreshing Path"
 
 Install-WingetPackage Microsoft.PowerToys
 # Install-WingetPackage Microsoft.VisualStudioCode
