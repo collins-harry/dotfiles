@@ -1,7 +1,7 @@
 function Install-USKeyboard {
   Write-Host "Changing keyboard to en-US" -ForegroundColor Green
   $CurrentInputMethod = Get-WinDefaultInputMethodOverride
-# Check if the current input method equals "0409:00000409" (en-US)
+  # Check if the current input method equals "0409:00000409" (en-US)
   if ($CurrentInputMethod -eq "0409:00000409") {
     Write-Output "  Already complete, skipping"
   } else {
@@ -154,7 +154,6 @@ function Install-PowershellProfile {
   }
 }
 
-
 function Install-AHKShortcuts {
   Write-Host "Installing symlink in STARTUP folder for autohotkey script" -ForegroundColor Green
   if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk") {
@@ -162,7 +161,6 @@ function Install-AHKShortcuts {
   } else {
     New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk" -Target "$HOME\dotfiles\ahkscripts\startup.ahk" -Force
   }
-
   Write-Host "Install symlink in HOME for OneDrive" -ForegroundColor Green
   if (Test-Path -Path "$HOME\OneDrive") {
     Write-Host "  Already complete, skipping"
@@ -285,7 +283,6 @@ function Install-QTCmakeNinjaPaths {
     Update-SessionEnvironment
     [Environment]::SetEnvironmentVariable('CMAKE_GENERATOR', 'Ninja', 'User')   # For current user
     Update-SessionEnvironment
-    # [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\NewPath', 'Machine')   # For all users
   }
 }
 
@@ -341,7 +338,7 @@ function Schedule-VPNLogin {
 
 function Schedule-WorkStart {
   Write-Host "Schedule task to start WSL, disable defender and login to OKD on startup" -ForegroundColor Green
-  # Check if domain is HGM 
+  # Confirm domain is HGM (Hamilton)
   if (-Not ($Env:UserDomain -match "HGM") ) {
     Write-Host "  Domain is not HGM (Hamilton), skipping"
     return
@@ -352,5 +349,4 @@ function Schedule-WorkStart {
     Write-Host "  Creating connectToVPN task"
     schtasks /create /f /sc onstart /rl "HIGHEST" /tn "workStart" /tr "powershell -NoExit -ExecutionPolicy Bypass -file $HOME\dotfiles\windows_startup\workStart.ps1"
   }
-
 }
