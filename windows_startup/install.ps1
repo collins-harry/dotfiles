@@ -48,7 +48,9 @@ Install-NVimPlugins
 #Install-QTCmakeNinjaPaths
 #Install-WSL
 Install-dbatools
-Install-StartupWindowsTerminal
+# Install-StartupWindowsTerminal
+Schedule-VPNLogin
+Schedule-WorkStart
 
 
 Set-MpPreference -DisableRealtimeMonitoring $false

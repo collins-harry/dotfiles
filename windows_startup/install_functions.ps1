@@ -115,17 +115,17 @@ function Install-NvimSymlinks {
   }
 }
 
-function Install-WSLDefenderBypass {
-  Write-Host "Disable windows defender for WSL" -ForegroundColor Green
-  if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\disable_defender.bat"){
-    Write-Host "  Already complete, skipping"
-  } Else {
-    Write-Host "  Creating symlink for disable_defender in STARTUP folders"
-    New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\disable_defender.bat" -Target "$HOME\dotfiles\windows_startup\disable_defender.bat"
-    Write-Host "  Executing disable_defender in STARTUP folder"
-    Start-Process "$HOME\dotfiles\windows_startup\disable_defender.bat"
-  }
-}
+# function Install-WSLDefenderBypass {
+#   Write-Host "Disable windows defender for WSL" -ForegroundColor Green
+#   if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\disable_defender.bat"){
+#     Write-Host "  Already complete, skipping"
+#   } Else {
+#     Write-Host "  Creating symlink for disable_defender in STARTUP folders"
+#     New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\disable_defender.bat" -Target "$HOME\dotfiles\windows_startup\disable_defender.bat"
+#     Write-Host "  Executing disable_defender in STARTUP folder"
+#     Start-Process "$HOME\dotfiles\windows_startup\disable_defender.bat"
+#   }
+# }
 
 function Install-WindowsTerminalSettings {
   Write-Host "Installing symlink for windows terminal settings" -ForegroundColor Green
@@ -313,14 +313,44 @@ function Install-dbatools {
   }
 }
 
-function Install-StartupWindowsTerminal {
-  Write-Host "Create symlink for windowsterminal startup script in startup folder" -ForegroundColor Green
-  if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startWindowsTerminal.bat"){
+# function Install-StartupWindowsTerminal {
+#   Write-Host "Create symlink for windowsterminal startup script in startup folder" -ForegroundColor Green
+#   if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startWindowsTerminal.bat"){
+#     Write-Host "  Already complete, skipping"
+#   } Else {
+#     Write-Host "  Creating symlink for startWindowsTerminal.bat in STARTUP folders"
+#     New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startWindowsTerminal.bat" -Target "$HOME\dotfiles\windows_startup\startWindowsTerminal.bat"
+#     Write-Host "  Executing Uncap script in STARTUP folder"
+#     Start-Process "$HOME\dotfiles\windows_startup\uncap_script.bat"
+#   }
+# }
+
+function Schedule-VPNLogin {
+  Write-Host "Schedule task to connect to work VPN on login" -ForegroundColor Green
+  if (-Not ($Env:UserDomain -match "HGM") ) {
+    Write-Host "  Domain is not HGM (Hamilton), skipping"
+    return
+  }
+  if (schtasks /query /tn "connectToVPN" 2>$null){
     Write-Host "  Already complete, skipping"
   } Else {
-    Write-Host "  Creating symlink for startWindowsTerminal.bat in STARTUP folders"
-    New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startWindowsTerminal.bat" -Target "$HOME\dotfiles\windows_startup\startWindowsTerminal.bat"
-    Write-Host "  Executing Uncap script in STARTUP folder"
-    Start-Process "$HOME\dotfiles\windows_startup\uncap_script.bat"
+    Write-Host "  Creating connectToVPN task"
+    schtasks /create /f /sc onlogon /rl "HIGHEST" /tn "connectToVPN" /tr "powershell -executionpolicy bypass -file $HOME\dotfiles\windows_startup\connectToVPN.ps1"
   }
+}
+
+function Schedule-WorkStart {
+  Write-Host "Schedule task to start WSL, disable defender and login to OKD on startup" -ForegroundColor Green
+  # Check if domain is HGM 
+  if (-Not ($Env:UserDomain -match "HGM") ) {
+    Write-Host "  Domain is not HGM (Hamilton), skipping"
+    return
+  }
+  if (schtasks /query /tn "workStart" 2>$null){
+    Write-Host "  Already complete, skipping"
+  } Else {
+    Write-Host "  Creating connectToVPN task"
+    schtasks /create /f /sc onstart /rl "HIGHEST" /tn "workStart" /tr "powershell -NoExit -ExecutionPolicy Bypass -file $HOME\dotfiles\windows_startup\workStart.ps1"
+  }
+
 }
