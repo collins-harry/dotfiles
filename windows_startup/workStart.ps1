@@ -6,4 +6,6 @@ echo $okdLoginCommand
 # wt -p Ubuntu bash -c $okdLoginCommand
 # wt ; wt -p "Ubuntu" ls
 . "$HOME\dotfiles\windows_startup\startWindowsTerminal.ps1"
+# wait 10 seconds for terminal to start
+Start-Sleep -s 10
 . "$HOME\dotfiles\windows_startup\disable_defender.ps1"
