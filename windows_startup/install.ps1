@@ -21,6 +21,7 @@ Install-ChocoPackage fzf
 # Install-ChocoPackage switcheroo
 Install-ChocoPackage chocolatey
 # Install-ChocoPackage sql-server-2022
+Install-ChocoPackage jabra-direct
 
 Install-WingetPackage Microsoft.PowerToys
 # Install-WingetPackage Microsoft.VisualStudioCode
@@ -30,6 +31,7 @@ Install-WingetPackage AutoHotkey.AutoHotkey
 # Install-WingetPackage ScooterSoftware.BeyondCompare4
 # Install-WingetPackage Helm.Helm
 Install-WingetPackage gokcehan.lf
+# Install-WingetPackage Postman.Postman 
 
 Install-NvimSymlinks
 #Install-WSLDefenderBypass

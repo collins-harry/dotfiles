@@ -76,7 +76,7 @@ function Install-ChocoPackage {
   if ($installedChocoList | findstr "$packageId ") {
     Write-Host "  Already complete, skipping"
   } else {
-    choco upgrade $packageId -y
+    choco upgrade $packageId -y --ignore-checksums
     Update-SessionEnvironment
   }
 }
@@ -322,6 +322,7 @@ function Install-dbatools {
 #   }
 # }
 
+# https://learn.microsoft.com/en-us/powershell/module/scheduledtasks/new-scheduledtasksettingsset?view=windowsserver2022-ps&viewFallbackFrom=win10-ps
 function Schedule-VPNLogin {
   Write-Host "Schedule task to connect to work VPN on login" -ForegroundColor Green
   if (-Not ($Env:UserDomain -match "HGM") ) {
@@ -332,7 +333,7 @@ function Schedule-VPNLogin {
     Write-Host "  Already complete, skipping"
   } Else {
     Write-Host "  Creating connectToVPN task"
-    schtasks /create /f /sc onlogon /rl "HIGHEST" /tn "connectToVPN" /tr "powershell -executionpolicy bypass -file $HOME\dotfiles\windows_startup\connectToVPN.ps1"
+    schtasks /create /f /sc onlogon /rl "HIGHEST" /tn "connectToVPN" /it /tr "powershell -executionpolicy bypass -noexit -file $HOME\dotfiles\windows_startup\connectToVPN.ps1"
   }
 }
 
@@ -347,6 +348,6 @@ function Schedule-WorkStart {
     Write-Host "  Already complete, skipping"
   } Else {
     Write-Host "  Creating connectToVPN task"
-    schtasks /create /f /sc onstart /rl "HIGHEST" /tn "workStart" /tr "powershell -NoExit -ExecutionPolicy Bypass -file $HOME\dotfiles\windows_startup\workStart.ps1"
+    schtasks /create /f /sc onstart /rl "HIGHEST" /tn "workStart" /it /ru user /tr "powershell -NoExit -ExecutionPolicy Bypass -file $HOME\dotfiles\windows_startup\workStart.ps1"
   }
 }
