@@ -589,15 +589,15 @@ augroup python_file
     " autocmd BufRead,BufNewFile *.py map <buffer> <F5> :!<space>python<space>%<CR>
     autocmd FileType python nnoremap <buffer> <F5> :!<space>python<space>%<CR>
   else
-    autocmd FileType python nnoremap <F5> :AsyncRun -mode=term -pos=external python -u "%"<CR>
-    autocmd FileType python nnoremap <F6> :AsyncRun -mode=term -pos=external flask --app "%" run --debug<CR>
+    autocmd FileType python nnoremap <buffer> <F5> :AsyncRun -mode=term -pos=external python -u "%"<CR>
+    autocmd FileType python nnoremap <buffer> <F6> :AsyncRun -mode=term -pos=external flask --app "%" run --debug<CR>
   endif
 augroup END
 
 if IsWin
   augroup powershell_file
     autocmd!
-    autocmd FileType ps1 nnoremap <F5> :AsyncRun -mode=term -pos=external powershell -File "%:p"<CR>
+    autocmd FileType ps1 nnoremap <buffer> <F5> :AsyncRun -mode=term -pos=external powershell -File "%:p"<CR>
   augroup END
 endif
 " elseif IsLinux
