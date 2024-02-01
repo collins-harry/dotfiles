@@ -15,7 +15,7 @@ function Install-USKeyboard {
 # Set-WinUserLanguageList $LanguageList
 
 function Install-EscCapLockSwap {
-  Write-Host "Remapping ESC and Capslock keys..." -ForegroundColor Green
+  Write-Host "Remapping ESC and Capslock keys" -ForegroundColor Green
   if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\uncap_script.bat"){
     Write-Host "  Already complete, skipping"
   } Else {
@@ -27,7 +27,7 @@ function Install-EscCapLockSwap {
 }
 
 function Install-Chocolatey {
-  Write-Host "Installing Chocolatey..." -ForegroundColor Green
+  Write-Host "Installing Chocolatey" -ForegroundColor Green
   if (Test-Path -Path "$env:ProgramData\Chocolatey"){
     Write-Host "  Already complete, skipping"
     Write-Host "  Importing refreshenv/Update-SessionEnvironment"
@@ -50,16 +50,16 @@ function Install-Help {
 }
 
 function Install-Miniconda {
-  Write-Host "Installing Miniconda..." -ForegroundColor Green
+  Write-Host "Installing Miniconda" -ForegroundColor Green
   if ((Test-Path -Path "$HOME\miniconda3") -or (Test-Path -Path "$env:LOCALAPPDATA\miniconda3")){
     Write-Host "  Already complete, skipping"
   } Else {
     Write-Host "  Make sure to install locally not globally" -ForegroundColor Magenta
-    Write-Host "  Downloading.."
+    Write-Host "  Downloading installer"
     Invoke-WebRequest -Uri "https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe" -Outfile "$HOME/Miniconda3_installer.exe"
-    Write-Host "  Installing, please click through installer..."
+    Write-Host "  Installing, please click through installer" -ForwegroundColor Magenta
     Start-process -wait "$HOME/Miniconda3_installer.exe"
-    Write-Host "  Deleting installer.."
+    Write-Host "  Deleting installer"
     rm "$HOME/Miniconda3_installer.exe"
     Write-Host "  Refreshing Path"
     Update-SessionEnvironment
@@ -189,11 +189,11 @@ function Install-NVimPlugins {
   if (Test-Path -Path "$HOME\.vim\bundle\Vundle.vim") {
     Write-Host "  Already complete, skipping"
   } Else {
-    Write-Host "  Downloading Vundle (plugin installer).."
+    Write-Host "  Downloading Vundle (plugin installer)"
     git clone "https://github.com/VundleVim/Vundle.vim.git" "$HOME/.config/nvim/bundle/Vundle.vim"
-    Write-Host "  Installing Vundle plugins.."
+    Write-Host "  Installing Vundle plugins"
     nvim +PluginInstall +qall
-    Write-Host "  ReInstalling Vundle plugins.. (often some fail on first pass)"
+    Write-Host "  ReInstalling Vundle plugins (often some fail on first pass)"
     nvim +PluginInstall +qall
     Write-Host "  Installing Markdown viewer <c-p><c-p>"
     nvim -c ":call mkdp#util#install()" +qall
@@ -205,9 +205,9 @@ function Install-VisualStudio {
   if (Test-Path -Path "$env:LOCALAPPDATA\Microsoft\VisualStudio") {
     Write-Host "  Already complete, skipping"
   } ELSE {
-    Write-Host "  Downloading..."
+    Write-Host "  Downloading installer"
     Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vs_community.exe" -Outfile "~/vs_BuildTools.exe"
-    Write-Host "  Installing..."
+    Write-Host "  Installing"
     Write-Host @"
       Select
         Workload: 
@@ -220,7 +220,7 @@ function Install-VisualStudio {
           Newest Win10 SDK (10.0.22000.0 at time of writing)
 "@ -ForegroundColor Magenta
     Start-process -wait "~/vs_BuildTools.exe"
-    Write-Host "  Deleting installer.."
+    Write-Host "  Deleting installer"
     rm "~\vs_BuildTools.exe"
     Update-SessionEnvironment
   }
@@ -231,10 +231,10 @@ function Install-QTCmakeNinja {
   if (Test-Path -Path "C:\Qt") {
     Write-Host "  Already complete, skipping"
   } ELSE {
-    Write-Host "  Downloading..."
+    Write-Host "  Downloading"
     Write-Host "  https://www.qt.io/download-qt-installer"
     Invoke-WebRequest -Uri "https://d13lb3tujbc8s0.cloudfront.net/onlineinstallers/qt-unified-windows-x64-4.6.1-online.exe" -Outfile "~/qt-unified-windows-x64.exe"
-    Write-Host "  Installing..."
+    Write-Host "  Installing"
     Write-Host @"
       Select
         Qt Design Studio:
@@ -263,7 +263,7 @@ function Install-QTCmakeNinja {
               OpenSSL 64-bit binaries
 "@ -ForegroundColor Magenta
     Start-process -wait "~/qt-unified-windows-x64.exe"
-    Write-Host "  Deleting installer.."
+    Write-Host "  Deleting installer"
     rm "~\qt-unified-windows-x64.exe"
     Update-SessionEnvironment
   }
@@ -351,3 +351,21 @@ function Schedule-WorkStart {
     schtasks /create /f /sc onstart /rl "HIGHEST" /tn "workStart" /it /ru user /tr "powershell -NoExit -ExecutionPolicy Bypass -file $HOME\dotfiles\windows_startup\workStart.ps1"
   }
 }
+
+function Install-Snagit {
+  Write-Host "Installing Snagit" -ForegroundColor Green
+  if ($false) {
+    Write-Host "  Already complete, skipping"
+  } Else {
+    Write-Host "  Downloading installer"
+    Invoke-WebRequest -Uri "https://download.techsmith.com/snagit/releases/2214/snagit.exe" -Outfile "$HOME/snagit_installer.exe"
+    Write-Host "  Opening license key page in browser, Log in and copy activation key" -ForegroundColor Magenta
+    Start-process "https://manage.techsmith.com/product-keys"
+    Write-Host "  Installing, please click through installer" -ForegroundColor Magenta
+    Start-process -wait "$HOME/snagit_installer.exe"
+    Write-Host "  Deleting installer"
+    rm "$HOME/snagit_installer.exe"
+    Update-SessionEnvironment
+  }
+}
+
