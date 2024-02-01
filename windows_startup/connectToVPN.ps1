@@ -2,7 +2,7 @@
 $email = Get-Email
 $access = Get-Access
 
-Write-Output "Connecting to Work VPN" -ForegroundColor Green
+Write-Host "Connecting to Work VPN" -ForegroundColor Green
 
 function Connect-VPN {
   param(
@@ -22,19 +22,19 @@ While ($True) {
   # (the names of the wifi networks at work)
   $wifiName = (netsh wlan show interfaces | findstr "SSID")
   if ($wifiName -match "Purple" -or $wifiName -match "Teal" -or $wifiName -match "Grey") {
-    Write-Output "  Already complete, skipping"
+    Write-Host "  Already complete, skipping"
     break
   }
-  Write-Output "  Connecting to VPN"
+  Write-Host "  Connecting to VPN"
   $result = Connect-VPN "Hamilton UK VPN" $email $access
   if ($result | findstr "Command completed successfully") {
-    Write-Output "    Connected to VPN succesfully"
-    Write-Output "    Result: $result"
+    Write-Host "    Connected to VPN succesfully"
+    Write-Host "    Result: $result"
     break
   }
   else {
-    Write-Output "    Connection failed, trying again in 5 seconds"
-    Write-Output "    Error: $result"
+    Write-Host "    Connection failed, trying again in 5 seconds"
+    Write-Host "    Error: $result"
     Start-Sleep -Seconds 5 # wait for 5 seconds before the next attempt
   }
 }
