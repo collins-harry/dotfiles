@@ -354,13 +354,13 @@ function Schedule-WorkStart {
 
 function Install-Snagit {
   Write-Host "Installing Snagit" -ForegroundColor Green
-  if ($false) {
+  if (Get-ItemProperty HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\* | Select-Object DisplayName | Select-String -Pattern "Snagit") {
     Write-Host "  Already complete, skipping"
   } Else {
-    Write-Host "  Downloading installer"
-    Invoke-WebRequest -Uri "https://download.techsmith.com/snagit/releases/2214/snagit.exe" -Outfile "$HOME/snagit_installer.exe"
     Write-Host "  Opening license key page in browser, Log in and copy activation key" -ForegroundColor Magenta
     Start-process "https://manage.techsmith.com/product-keys"
+    Write-Host "  Downloading installer"
+    Invoke-WebRequest -Uri "https://download.techsmith.com/snagit/releases/2214/snagit.exe" -Outfile "$HOME/snagit_installer.exe"
     Write-Host "  Installing, please click through installer" -ForegroundColor Magenta
     Start-process -wait "$HOME/snagit_installer.exe"
     Write-Host "  Deleting installer"

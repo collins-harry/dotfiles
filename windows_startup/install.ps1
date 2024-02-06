@@ -49,7 +49,7 @@ Install-NVimPlugins
 #Install-QTCmakeNinjaPaths
 #Install-WSL
 Install-dbatools
-# Install-Snagit
+Install-Snagit
 # Install-StartupWindowsTerminal
 Schedule-VPNLogin
 Schedule-WorkStart
