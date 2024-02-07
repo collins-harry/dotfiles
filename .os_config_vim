@@ -1,3 +1,3 @@
-let IsWSL=1
+let IsWSL=0
 let IsLinux=0
-let IsWin=0
+let IsWin=1
