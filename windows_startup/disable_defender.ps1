@@ -32,5 +32,5 @@
 #    # Exit from the current, unelevated, process
 #    exit
 #    }
-
+Write-Host "Disabling firewall for WSL" -ForegroundColor Green
 Set-NetFirewallProfile -Profile Public -DisabledInterfaceAliases "vEthernet (WSL)"
