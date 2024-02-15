@@ -154,7 +154,7 @@ ln -svf hcollins/OneDrive\ -\ Intel\ Corporation/ onedrive
     git config --global user.email "hcollins345@gmail.com" 
     git config --global user.name "hcollins345" 
     ssh-keygen -t ed25519 -C "hcollins345@gmail.com"
-    clip.exe < ~/.ssh/id_ed25519.pub
+    clip.exe < ~/.ssh/id_ed25519.pub or Get-Content ~/.ssh/id_ed25519.pub | Set-Clipboard
     ```
     1. Paste clipboard into https://github.com/settings/ssh/new
 7. Clone dotfiles repo
@@ -307,7 +307,7 @@ Windows (GIT BASH/ Windows terminal)
     git config --global user.email "hcollins345@gmail.com" 
     git config --global user.name "hcollins345" 
     ssh-keygen -t ed25519 -C "hcollins345@gmail.com"
-    clip.exe < ~/.ssh/id_ed25519.pub
+    clip.exe < ~/.ssh/id_ed25519.pub Get-Content ~/.ssh/id_ed25519.pub | Set-Clipboard
     ```
     1. Paste clipboard into https://github.com/settings/ssh/new
 3. Clone dotfiles repo
