@@ -180,7 +180,7 @@ fi
 # Create prompt component for k8 namespace
 
 if [ "~/.kube/config" ]; then
-    PromptK8Namespace='\[\e[38;5;244m\]($(cat ~/.kube/config 2>/dev/null| grep -o "^current-context: [^/]*" | cut -d" " -f2))\[\e[0;0m\]'
+    PromptK8Namespace='\[\e[38;5;244m\]($(kubectl config view --minify -o jsonpath="{..namespace}" 2>/dev/null))\[\e[0;0m\]'
 else
     PromptK8Namespace=''
 fi
