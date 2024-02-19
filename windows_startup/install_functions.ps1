@@ -69,7 +69,7 @@ function Install-Miniconda {
 function Install-ChocoPackage {
   param( [string]$packageId )
   if ($installedChocoList -eq $null) {
-    Write-Host "`r`nCollating installed choco packages" -ForegroundColor Green
+    Write-Host "Collating installed choco packages" -ForegroundColor Green
     $script:installedChocoList = choco list
   }
   Write-Host "Installing $packageId" -ForegroundColor Green
@@ -84,7 +84,7 @@ function Install-ChocoPackage {
 function Install-WingetPackage {
   param( [string]$packageId )
   if ($installedWingetList -eq $null) {
-    Write-Host "`r`nCollating installed winget packages" -ForegroundColor Green
+    Write-Host "Collating installed winget packages" -ForegroundColor Green
     $script:installedWingetList = winget list
   }
   $packageName = $packageId.Split(".")[1]
@@ -98,7 +98,7 @@ function Install-WingetPackage {
 }
 
 function Install-NvimSymlinks {
-  Write-Host "`r`nInstalling nvim symlinks" -ForegroundColor Green
+  Write-Host "Installing nvim symlinks" -ForegroundColor Green
   if (Test-Path -Path "$HOME\.vimrc") {
     Write-Host "  Already complete, skipping"
   } Else {
@@ -172,7 +172,7 @@ function Install-AHKShortcuts {
 function Install-PythonPackage {
   param( [string]$packageId )
   if ($installedPythonList -eq $null) {
-    Write-Host "`r`nCollating installed pip (python) packages" -ForegroundColor Green
+    Write-Host "Collating installed pip (python) packages" -ForegroundColor Green
     $script:installedPythonList = pip list
   }
   Write-Host "Installing $packageId" -ForegroundColor Green
@@ -184,8 +184,8 @@ function Install-PythonPackage {
   }
 }
 
-function Install-NVimPlugins {
-  Write-Host "`r`nInstalling (n)vim plugins" -ForegroundColor Green
+function Install-NvimPlugins {
+  Write-Host "Installing (n)vim plugins" -ForegroundColor Green
   if (Test-Path -Path "$HOME\.vim\bundle\Vundle.vim") {
     Write-Host "  Already complete, skipping"
   } Else {
