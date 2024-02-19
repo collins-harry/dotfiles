@@ -11,45 +11,54 @@ Install-Chocolatey
 #Install-Help
 Install-Miniconda
 
-Install-ChocoPackage neovim
-Install-ChocoPackage ripgrep
-Install-ChocoPackage microsoft-windows-terminal
-Install-ChocoPackage hwinfo
-# Install-ChocoPackage Minikube
-Install-ChocoPackage fzf
-# Install-ChocoPackage nodejs-lts
-# Install-ChocoPackage switcheroo
 Install-ChocoPackage chocolatey
-# Install-ChocoPackage sql-server-2022
-Install-ChocoPackage jabra-direct
+
+Install-PythonPackage pynvim # for neovim
+Install-ChocoPackage neovim
+Install-NvimSymlinks
+Install-NvimPlugins
+
+Install-WingetPackage Microsoft.PowerShell
+Install-ChocoPackage microsoft-windows-terminal
+Install-WindowsTerminalSettings
+
+Install-ChocoPackage ripgrep
+Install-ChocoPackage fzf
 
 Install-WingetPackage Microsoft.PowerToys
+
+Install-WingetPackage AutoHotkey.AutoHotkey
+Install-AHKShortcuts
+
+Install-WingetPackage gokcehan.lf
+
+Install-Snagit
+
+# Install-ChocoPackage Minikube
+# Install-ChocoPackage nodejs-lts
+# Install-ChocoPackage switcheroo
+# Install-ChocoPackage sql-server-2022
+Install-ChocoPackage hwinfo
+Install-ChocoPackage jabra-direct
+
 # Install-WingetPackage Microsoft.VisualStudioCode
 # Install-WingetPackage Microsoft.SQLServerManagementStudio
 # Install-WingetPackage Microsoft.AzureCLI
-Install-WingetPackage AutoHotkey.AutoHotkey
 # Install-WingetPackage ScooterSoftware.BeyondCompare4
 # Install-WingetPackage Helm.Helm
-Install-WingetPackage gokcehan.lf
 # Install-WingetPackage Postman.Postman 
 
-Install-NvimSymlinks
 #Install-WSLDefenderBypass
-Install-WindowsTerminalSettings
 # Install-PowershellProfile
-Install-AHKShortcuts
 
-Install-PythonPackage pynvim # for neovim
 Install-PythonPackage pyautogui # for mover.py
 Install-PythonPackage pynput # for mover.py
 
-Install-NVimPlugins
 #Install-VisualStudio
 #Install-QTCmakeNinja
 #Install-QTCmakeNinjaPaths
 #Install-WSL
 Install-dbatools
-Install-Snagit
 # Install-StartupWindowsTerminal
 Schedule-VPNLogin
 Schedule-WorkStart
