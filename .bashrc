@@ -98,6 +98,8 @@ shopt -s histappend
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=1000
 HISTFILESIZE=2000
+# Add date and time of commands to history output
+HISTTIMEFORMAT="%F %T "
 
 
 # check the window size after each command and, if necessary,
@@ -175,6 +177,13 @@ if [ "~/.nvm" ]; then
 else
     PromptNodeVersion=''
 fi
+# Create prompt component for k8 namespace
+
+if [ "~/.kube/config" ]; then
+    PromptK8Namespace='\[\e[38;5;244m\]($(kubectl config view --minify -o jsonpath="{..namespace}" 2>/dev/null))\[\e[0;0m\]'
+else
+    PromptK8Namespace=''
+fi
 # Create prompt components for user, path and git info
 PromptUser='\[\e[1;32m\]\u@\h'
 PromptCWD='\[\e[38;5;81m\]\w'
@@ -183,7 +192,7 @@ PromptEnd='\[\e[1;32m\]\n\[\e[1;32m\]└─ λ ~ \[\e[0m\]'
 # Create mini prompt
 MINIPS1='\[\e[1;32m\]λ - \[\e[0m\]'
 # Create full prompt
-FULLPS1="$PromptRangerLvl$PromptLFLvl$PromptCondaEnv$PromptNodeVersion$PromptUser $PromptCWD $PromptGit$PromptEnd"
+FULLPS1="$PromptRangerLvl$PromptK8Namespace$PromptLFLvl$PromptCondaEnv$PromptNodeVersion$PromptUser $PromptCWD$PromptGit$PromptEnd"
 PS1="$FULLPS1"
 # Function to toggle PS1 between full and mini prompt
 function tps() {

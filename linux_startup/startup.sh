@@ -86,6 +86,10 @@ else
     sudo apt install rabbitmq-server -y
 fi
 
+echo -e "${GREEN}Installing os_configuration for vimrc${NC}"   
+echo -e "let IsWSL=1\nlet IsLinux=0\nlet IsWin=0" > ~/dotfiles/.os_config_vim
+
+
 echo -e "${GREEN}Installing symlinks${NC}"
 if [[ -f ~/.vimrc ]]; then
     echo '  Already installed, skipping'
