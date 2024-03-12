@@ -18,13 +18,17 @@ function Connect-VPN {
 
 
 While ($True) {
-  # Check if wifi is connected to "Purple", "Teal" or "Grey" 
-  # (the names of the wifi networks at work)
-  $wifiName = (netsh wlan show interfaces | findstr "SSID")
-  if ($wifiName -match "Purple" -or $wifiName -match "Teal" -or $wifiName -match "Grey") {
-    Write-Host "  Already complete, skipping"
+  if (Get-NetIpConfiguration | findstr "hamiltongroupuk.com") {
+    Write-Host "  Already connected to Work VPN/WIFI/LAN, skipping"
     break
   }
+  # Check if wifi is connected to "Purple", "Teal" or "Grey" 
+  # (the names of the wifi networks at work)
+  # $wifiName = (netsh wlan show interfaces | findstr "SSID")
+  # if ($wifiName -match "Purple" -or $wifiName -match "Teal" -or $wifiName -match "Grey") {
+  #   Write-Host "  Already complete, skipping"
+  #   break
+  # }
   Write-Host "  Connecting to VPN"
   $result = Connect-VPN "Hamilton UK VPN" $email $access
   if ($result | findstr "Command completed successfully") {
