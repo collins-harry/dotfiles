@@ -161,7 +161,7 @@ function Install-AHKShortcuts {
   } else {
     New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk" -Target "$HOME\dotfiles\ahkscripts\startup.ahk" -Force
   }
-  Write-Host "Install symlink in HOME for OneDrive" -ForegroundColor Green
+  Write-Host "Installing symlink in HOME for OneDrive" -ForegroundColor Green
   if (Test-Path -Path "$HOME\OneDrive") {
     Write-Host "  Already complete, skipping"
   } else {

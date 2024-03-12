@@ -2,7 +2,6 @@ Write-Host "Starting Installation Script" -ForegroundColor Green
 Write-Host "Setting Execution policy to bypass for this script" -ForegroundColor Green
 Set-ExecutionPolicy Bypass -Scope Process -Force;
 Set-MpPreference -DisableRealtimeMonitoring $true
-
 . "./install_functions.ps1"
 
 Install-USKeyboard
@@ -10,50 +9,37 @@ Install-EscCapLockSwap
 Install-Chocolatey
 #Install-Help
 Install-Miniconda
-
 Install-ChocoPackage chocolatey
-
 Install-PythonPackage pynvim # for neovim
 Install-ChocoPackage neovim
 Install-NvimSymlinks
 Install-NvimPlugins
-
 Install-WingetPackage Microsoft.PowerShell
 Install-ChocoPackage microsoft-windows-terminal
 Install-WindowsTerminalSettings
-
 Install-ChocoPackage ripgrep
 Install-ChocoPackage fzf
-
 Install-WingetPackage Microsoft.PowerToys
-
 Install-WingetPackage AutoHotkey.AutoHotkey
 Install-AHKShortcuts
-
 Install-WingetPackage gokcehan.lf
-
 Install-Snagit
-
+Install-PythonPackage pyautogui # for mover.py
+Install-PythonPackage pynput # for mover.py
 # Install-ChocoPackage Minikube
 # Install-ChocoPackage nodejs-lts
 # Install-ChocoPackage switcheroo
 # Install-ChocoPackage sql-server-2022
 Install-ChocoPackage hwinfo
 Install-ChocoPackage jabra-direct
-
 # Install-WingetPackage Microsoft.VisualStudioCode
 # Install-WingetPackage Microsoft.SQLServerManagementStudio
 # Install-WingetPackage Microsoft.AzureCLI
 # Install-WingetPackage ScooterSoftware.BeyondCompare4
 # Install-WingetPackage Helm.Helm
 # Install-WingetPackage Postman.Postman 
-
 #Install-WSLDefenderBypass
 # Install-PowershellProfile
-
-Install-PythonPackage pyautogui # for mover.py
-Install-PythonPackage pynput # for mover.py
-
 #Install-VisualStudio
 #Install-QTCmakeNinja
 #Install-QTCmakeNinjaPaths
@@ -63,9 +49,7 @@ Install-dbatools
 Schedule-VPNLogin
 Schedule-WorkStart
 
-
 Set-MpPreference -DisableRealtimeMonitoring $false
-
 exit
 
 Write-Host "  Installing YCM.."
