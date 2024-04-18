@@ -31,6 +31,7 @@ Install-PythonPackage pynput # for mover.py
 # Install-ChocoPackage switcheroo
 # Install-ChocoPackage sql-server-2022
 Install-ChocoPackage hwinfo
+Install-ChocoPackage jq
 Install-ChocoPackage jabra-direct
 # Install-WingetPackage Microsoft.VisualStudioCode
 # Install-WingetPackage Microsoft.SQLServerManagementStudio
