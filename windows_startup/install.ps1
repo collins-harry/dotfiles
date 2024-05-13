@@ -39,6 +39,15 @@ Install-ChocoPackage jabra-direct
 # Install-WingetPackage ScooterSoftware.BeyondCompare4
 # Install-WingetPackage Helm.Helm
 # Install-WingetPackage Postman.Postman 
+Install-WingetPackage GitHub.cli
+  # gh auth login
+  # gh extension install github/gh-copilot
+  # gh extension upgrade gh-copilot
+  # gh copilot SUBCOMMAND
+  # Creating ghcs, ghce aliases
+    # $GH_COPILOT_PROFILE = Join-Path -Path $(Split-Path -Path $PROFILE -Parent) -ChildPath "gh-copilot.ps1"
+    # gh copilot alias -- pwsh | Out-File ( New-Item -Path $GH_COPILOT_PROFILE -Force )
+    # echo ". `"$GH_COPILOT_PROFILE`"" >> $PROFILE
 #Install-WSLDefenderBypass
 # Install-PowershellProfile
 #Install-VisualStudio
