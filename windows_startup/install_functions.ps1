@@ -66,6 +66,17 @@ function Install-Miniconda {
   }
 }
 
+function Install-PowershellModule {
+  param( [string]$ModuleName )
+  Write-Host "Installing $ModuleName" -ForegroundColor Green
+  if (Get-Module -ListAvailable -Name $ModuleName -ErrorAction SilentlyContinue) {
+    Write-Host "  Already complete, skipping"
+  } else {
+    Install-Module -Name $ModuleName -Force
+    Update-SessionEnvironment
+  }
+}
+
 function Install-ChocoPackage {
   param( [string]$packageId )
   if ($installedChocoList -eq $null) {

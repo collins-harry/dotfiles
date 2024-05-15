@@ -33,6 +33,7 @@ Install-PythonPackage pynput # for mover.py
 Install-ChocoPackage hwinfo
 Install-ChocoPackage jq
 Install-ChocoPackage jabra-direct
+Install-PowershellModule Selenium
 # Install-WingetPackage Microsoft.VisualStudioCode
 # Install-WingetPackage Microsoft.SQLServerManagementStudio
 # Install-WingetPackage Microsoft.AzureCLI
