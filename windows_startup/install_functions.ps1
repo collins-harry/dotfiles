@@ -63,6 +63,10 @@ function Install-Miniconda {
     rm "$HOME/Miniconda3_installer.exe"
     Write-Host "  Refreshing Path"
     Update-SessionEnvironment
+    Write-Host "  Installing py39 environment"
+    conda create -n py39 python=3.9 -y
+    Write-Host "  Activating py39 environment"
+    conda activate py39
   }
 }
 
@@ -93,7 +97,10 @@ function Install-ChocoPackage {
 }
 
 function Install-WingetPackage {
-  param( [string]$packageId )
+  param( 
+    [string]$packageId,
+    [string]$cli_path
+  )
   if ($installedWingetList -eq $null) {
     Write-Host "Collating installed winget packages" -ForegroundColor Green
     $script:installedWingetList = winget list
@@ -102,10 +109,31 @@ function Install-WingetPackage {
   Write-Host "Installing $packageName" -ForegroundColor Green
   if ($installedWingetList | findstr "$packageId ") {
     Write-Host "  Already complete, skipping"
-  } else {
-    winget install -e --id $packageId --accept-source-agreements --accept-package-agreements
-    Update-SessionEnvironment
+    return
   }
+  winget install -e --id $packageId --accept-source-agreements --accept-package-agreements
+  Update-SessionEnvironment
+  # check if cli_path passed into function
+  if( [string]::IsNullOrEmpty($cli_path) ) {
+    Write-Host "  No cli_path provided, skipping adding to PATH"
+    return
+  }
+  # check cli_path exists
+  if (-not (Test-Path $cli_path)){
+    Throw "'$cli_path' is not a valid path."
+  } 
+  # check if cli_path is already in PATH
+  $regexAddPath = [regex]::Escape($cli_path)
+  $arrPath = $env:Path -split ';' | Where-Object {$_ -Match "^$regexAddPath\\?"}
+  if (-not ($arrPath.Count -eq 0)) {
+    Write-Host "  cli_path already in PATH variable, skipping PATH addition"
+    return
+  }
+  # Adding cli_path to PATH
+  $new_PATH = "$((Get-ItemProperty -path HKCU:\\Environment\\ -Name Path).Path)$cli_path;"
+  Set-ItemProperty -Path HKCU:Environment -Name Path -Value $new_PATH
+  Write-Host "  cli_path added to PATH"
+  Update-SessionEnvironment
 }
 
 function Install-NvimSymlinks {

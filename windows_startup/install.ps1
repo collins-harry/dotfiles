@@ -34,10 +34,11 @@ Install-ChocoPackage hwinfo
 Install-ChocoPackage jq
 Install-ChocoPackage jabra-direct
 Install-PowershellModule Selenium
+Install-ChocoPackage selenium-edge-driver
 # Install-WingetPackage Microsoft.VisualStudioCode
 # Install-WingetPackage Microsoft.SQLServerManagementStudio
 # Install-WingetPackage Microsoft.AzureCLI
-# Install-WingetPackage ScooterSoftware.BeyondCompare4
+Install-WingetPackage ScooterSoftware.BeyondCompare4 'C:\Program Files\Beyond Compare 4'
 # Install-WingetPackage Helm.Helm
 # Install-WingetPackage Postman.Postman 
 Install-WingetPackage GitHub.cli
