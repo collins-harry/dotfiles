@@ -289,6 +289,8 @@ nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 nmap ga: :'{,'}EasyAlign*:>l1<cr>
 xmap ga: :EasyAlign*:>l1<cr>
+nmap ga, :'{,'}EasyAlign*,>l1<cr>
+xmap ga, :EasyAlign*,>l1<cr>
 
 
 " Map ,co to open Copilot panel
