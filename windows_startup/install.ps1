@@ -2,7 +2,6 @@ Write-Host "Starting Installation Script" -ForegroundColor Green
 Write-Host "Setting Execution policy to bypass for this script" -ForegroundColor Green
 Set-ExecutionPolicy Bypass -Scope Process -Force;
 Set-MpPreference -DisableRealtimeMonitoring $true
-
 . "./install_functions.ps1"
 
 Install-USKeyboard
@@ -10,53 +9,59 @@ Install-EscCapLockSwap
 Install-Chocolatey
 #Install-Help
 Install-Miniconda
-
+Install-ChocoPackage chocolatey
+Install-PythonPackage pynvim # for neovim
 Install-ChocoPackage neovim
-Install-ChocoPackage ripgrep
+Install-NvimSymlinks
+Install-NvimPlugins
+Install-WingetPackage Microsoft.PowerShell
 Install-ChocoPackage microsoft-windows-terminal
-Install-ChocoPackage hwinfo
-# Install-ChocoPackage Minikube
+Install-WindowsTerminalSettings
+Install-ChocoPackage ripgrep
 Install-ChocoPackage fzf
+Install-WingetPackage Microsoft.PowerToys
+Install-WingetPackage AutoHotkey.AutoHotkey
+Install-AHKShortcuts
+Install-WingetPackage gokcehan.lf
+Install-Snagit
+Install-PythonPackage pyautogui # for mover.py
+Install-PythonPackage pynput # for mover.py
+# Install-ChocoPackage Minikube
 # Install-ChocoPackage nodejs-lts
 # Install-ChocoPackage switcheroo
-Install-ChocoPackage chocolatey
 # Install-ChocoPackage sql-server-2022
+Install-ChocoPackage hwinfo
+Install-ChocoPackage jq
 Install-ChocoPackage jabra-direct
-
-Install-WingetPackage Microsoft.PowerToys
+Install-PowershellModule Selenium
+Install-ChocoPackage selenium-edge-driver
 # Install-WingetPackage Microsoft.VisualStudioCode
 # Install-WingetPackage Microsoft.SQLServerManagementStudio
 # Install-WingetPackage Microsoft.AzureCLI
-Install-WingetPackage AutoHotkey.AutoHotkey
-# Install-WingetPackage ScooterSoftware.BeyondCompare4
+Install-WingetPackage ScooterSoftware.BeyondCompare4 'C:\Program Files\Beyond Compare 4'
 # Install-WingetPackage Helm.Helm
-Install-WingetPackage gokcehan.lf
 # Install-WingetPackage Postman.Postman 
-
-Install-NvimSymlinks
+Install-WingetPackage GitHub.cli
+  # gh auth login
+  # gh extension install github/gh-copilot
+  # gh extension upgrade gh-copilot
+  # gh copilot SUBCOMMAND
+  # Creating ghcs, ghce aliases
+    # $GH_COPILOT_PROFILE = Join-Path -Path $(Split-Path -Path $PROFILE -Parent) -ChildPath "gh-copilot.ps1"
+    # gh copilot alias -- pwsh | Out-File ( New-Item -Path $GH_COPILOT_PROFILE -Force )
+    # echo ". `"$GH_COPILOT_PROFILE`"" >> $PROFILE
 #Install-WSLDefenderBypass
-Install-WindowsTerminalSettings
 # Install-PowershellProfile
-Install-AHKShortcuts
-
-Install-PythonPackage pynvim # for neovim
-Install-PythonPackage pyautogui # for mover.py
-Install-PythonPackage pynput # for mover.py
-
-Install-NVimPlugins
 #Install-VisualStudio
 #Install-QTCmakeNinja
 #Install-QTCmakeNinjaPaths
 #Install-WSL
 Install-dbatools
-Install-Snagit
 # Install-StartupWindowsTerminal
 Schedule-VPNLogin
 Schedule-WorkStart
 
-
 Set-MpPreference -DisableRealtimeMonitoring $false
-
 exit
 
 Write-Host "  Installing YCM.."

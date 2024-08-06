@@ -63,13 +63,28 @@ function Install-Miniconda {
     rm "$HOME/Miniconda3_installer.exe"
     Write-Host "  Refreshing Path"
     Update-SessionEnvironment
+    Write-Host "  Installing py39 environment"
+    conda create -n py39 python=3.9 -y
+    Write-Host "  Activating py39 environment"
+    conda activate py39
+  }
+}
+
+function Install-PowershellModule {
+  param( [string]$ModuleName )
+  Write-Host "Installing $ModuleName" -ForegroundColor Green
+  if (Get-Module -ListAvailable -Name $ModuleName -ErrorAction SilentlyContinue) {
+    Write-Host "  Already complete, skipping"
+  } else {
+    Install-Module -Name $ModuleName -Force
+    Update-SessionEnvironment
   }
 }
 
 function Install-ChocoPackage {
   param( [string]$packageId )
   if ($installedChocoList -eq $null) {
-    Write-Host "`r`nCollating installed choco packages" -ForegroundColor Green
+    Write-Host "Collating installed choco packages" -ForegroundColor Green
     $script:installedChocoList = choco list
   }
   Write-Host "Installing $packageId" -ForegroundColor Green
@@ -82,23 +97,47 @@ function Install-ChocoPackage {
 }
 
 function Install-WingetPackage {
-  param( [string]$packageId )
+  param( 
+    [string]$packageId,
+    [string]$cli_path
+  )
   if ($installedWingetList -eq $null) {
-    Write-Host "`r`nCollating installed winget packages" -ForegroundColor Green
+    Write-Host "Collating installed winget packages" -ForegroundColor Green
     $script:installedWingetList = winget list
   }
   $packageName = $packageId.Split(".")[1]
   Write-Host "Installing $packageName" -ForegroundColor Green
   if ($installedWingetList | findstr "$packageId ") {
     Write-Host "  Already complete, skipping"
-  } else {
-    winget install -e --id $packageId --accept-source-agreements --accept-package-agreements
-    Update-SessionEnvironment
+    return
   }
+  winget install -e --id $packageId --accept-source-agreements --accept-package-agreements
+  Update-SessionEnvironment
+  # check if cli_path passed into function
+  if( [string]::IsNullOrEmpty($cli_path) ) {
+    Write-Host "  No cli_path provided, skipping adding to PATH"
+    return
+  }
+  # check cli_path exists
+  if (-not (Test-Path $cli_path)){
+    Throw "'$cli_path' is not a valid path."
+  } 
+  # check if cli_path is already in PATH
+  $regexAddPath = [regex]::Escape($cli_path)
+  $arrPath = $env:Path -split ';' | Where-Object {$_ -Match "^$regexAddPath\\?"}
+  if (-not ($arrPath.Count -eq 0)) {
+    Write-Host "  cli_path already in PATH variable, skipping PATH addition"
+    return
+  }
+  # Adding cli_path to PATH
+  $new_PATH = "$((Get-ItemProperty -path HKCU:\\Environment\\ -Name Path).Path)$cli_path;"
+  Set-ItemProperty -Path HKCU:Environment -Name Path -Value $new_PATH
+  Write-Host "  cli_path added to PATH"
+  Update-SessionEnvironment
 }
 
 function Install-NvimSymlinks {
-  Write-Host "`r`nInstalling nvim symlinks" -ForegroundColor Green
+  Write-Host "Installing nvim symlinks" -ForegroundColor Green
   if (Test-Path -Path "$HOME\.vimrc") {
     Write-Host "  Already complete, skipping"
   } Else {
@@ -161,7 +200,7 @@ function Install-AHKShortcuts {
   } else {
     New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk" -Target "$HOME\dotfiles\ahkscripts\startup.ahk" -Force
   }
-  Write-Host "Install symlink in HOME for OneDrive" -ForegroundColor Green
+  Write-Host "Installing symlink in HOME for OneDrive" -ForegroundColor Green
   if (Test-Path -Path "$HOME\OneDrive") {
     Write-Host "  Already complete, skipping"
   } else {
@@ -172,7 +211,7 @@ function Install-AHKShortcuts {
 function Install-PythonPackage {
   param( [string]$packageId )
   if ($installedPythonList -eq $null) {
-    Write-Host "`r`nCollating installed pip (python) packages" -ForegroundColor Green
+    Write-Host "Collating installed pip (python) packages" -ForegroundColor Green
     $script:installedPythonList = pip list
   }
   Write-Host "Installing $packageId" -ForegroundColor Green
@@ -184,8 +223,8 @@ function Install-PythonPackage {
   }
 }
 
-function Install-NVimPlugins {
-  Write-Host "`r`nInstalling (n)vim plugins" -ForegroundColor Green
+function Install-NvimPlugins {
+  Write-Host "Installing (n)vim plugins" -ForegroundColor Green
   if (Test-Path -Path "$HOME\.vim\bundle\Vundle.vim") {
     Write-Host "  Already complete, skipping"
   } Else {
