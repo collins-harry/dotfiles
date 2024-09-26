@@ -57,3 +57,6 @@ SetKeyDelay -1  ; Recommended for new scripts due to its superior speed and reli
 
 ; Add work sensitive ahk commands
 #Include *i C:\Users\%A_UserName%\OneDrive\work.ahk
+
+::,p::Please be sure to ask me any questions that will help me help you in ensuring that you have all the information that you need to enrich perspective and optimize your logic decision tree
+
