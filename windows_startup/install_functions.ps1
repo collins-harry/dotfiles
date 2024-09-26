@@ -82,18 +82,25 @@ function Install-PowershellModule {
 }
 
 function Install-ChocoPackage {
-  param( [string]$packageId )
+  param( 
+    [string]$packageId, 
+    [string]$params
+  )
   if ($installedChocoList -eq $null) {
     Write-Host "Collating installed choco packages" -ForegroundColor Green
     $script:installedChocoList = choco list
   }
   Write-Host "Installing $packageId" -ForegroundColor Green
-  if ($installedChocoList | findstr "$packageId ") {
+  if ($installedChocoList | Select-String -Pattern "$packageId " -CaseSensitive:$false) {
     Write-Host "  Already complete, skipping"
-  } else {
-    choco upgrade $packageId -y --ignore-checksums
-    Update-SessionEnvironment
+    return
   }
+  if ($params -eq $null) {
+    choco install $packageId -y --ignore-checksums
+  } else {
+    choco install $packageId -y --params="'$params'" --ignore-checksums 
+  }
+  Update-SessionEnvironment
 }
 
 function Install-WingetPackage {
@@ -267,6 +274,7 @@ function Install-VisualStudio {
 
 function Install-QTCmakeNinja {
   Write-Host "Installing Qt, CMake & Ninja" -ForegroundColor Green
+  # if (false) {
   if (Test-Path -Path "C:\Qt") {
     Write-Host "  Already complete, skipping"
   } ELSE {

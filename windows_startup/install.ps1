@@ -26,6 +26,7 @@ Install-WingetPackage gokcehan.lf
 Install-Snagit
 Install-PythonPackage pyautogui # for mover.py
 Install-PythonPackage pynput # for mover.py
+Install-ChocoPackage r.project -params "/AddToPath" # RMarkdown (need to setup rest of install)
 # Install-ChocoPackage Minikube
 # Install-ChocoPackage nodejs-lts
 # Install-ChocoPackage switcheroo
@@ -38,10 +39,11 @@ Install-ChocoPackage selenium-edge-driver
 # Install-WingetPackage Microsoft.VisualStudioCode
 # Install-WingetPackage Microsoft.SQLServerManagementStudio
 # Install-WingetPackage Microsoft.AzureCLI
-Install-WingetPackage ScooterSoftware.BeyondCompare4 'C:\Program Files\Beyond Compare 4'
+Install-WingetPackage ScooterSoftware.BeyondCompare4 -cli_path 'C:\Program Files\Beyond Compare 4'
 # Install-WingetPackage Helm.Helm
 # Install-WingetPackage Postman.Postman 
 Install-WingetPackage GitHub.cli
+
   # gh auth login
   # gh extension install github/gh-copilot
   # gh extension upgrade gh-copilot
@@ -52,9 +54,13 @@ Install-WingetPackage GitHub.cli
     # echo ". `"$GH_COPILOT_PROFILE`"" >> $PROFILE
 #Install-WSLDefenderBypass
 # Install-PowershellProfile
+
+### C++ Install
 #Install-VisualStudio
-#Install-QTCmakeNinja
+Install-QTCmakeNinja
 #Install-QTCmakeNinjaPaths
+###/C++ Install
+
 #Install-WSL
 Install-dbatools
 # Install-StartupWindowsTerminal
