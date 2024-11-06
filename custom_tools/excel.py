@@ -1,40 +1,64 @@
+from pathlib import Path
+import glob
+import os
+import re
+import copy
+import subprocess
+import string
+import xlsxwriter
+import ctypes
 
-        excel_sheets = {
-            "name": self.final_file,
-            "sheets": [
-                {
-                    "worksheet_title": "ALL",
-                    "heading note": "Contact Harry Collins,  if you have any questions",
-                    "headings": all_headings,
-                    "values": values,
-                    # "tab_color": "red",
-                },
-                {
-                    "worksheet_title": "",
-                    "heading note": "Contact Harry Collins,if you have any questions",
-                    "headings": [
-                        ""
-                        ],
-                    "merge_headers": [
-                        {"level":1, "cell_range":["E","I"], "text":"Name", "format":"dark_blue_center"},
-                    ],
-                    "values": df[[
-                        "",
-                        ]].values.tolist(),
-                    "conditional_formatting": [ 
-                        {"range": "A1:X9999", "type": "cell", "criteria": "==", "value": '"FALSE"', "format": "conditional_red"},
-                        {"range": "A1:X9999", "type": "cell", "criteria": "==", "value": '"TRUE"',  "format": "conditional_green"},
-                    ],
-                    "right_borders": ["A","D","H","K","N"],
-                    "tab_color": "red",
-                    "final_row_color": "light_green",
-                    "set_column_width": True,
-                    "freeze_headers": True,
-                },
-                ]
-            }
+def main():
+    stats = [
+        ["Percentage of programs that match", f"{output['engines_match'].sum() / len(output) * 100}%"],
+    ]
 
-class excel():
+    output = output.replace({True: 'TRUE', False: 'FALSE'})
+    # output = output.replace([np.nan], [None])
+        
+    excel_sheets = {
+        "name": "output/compare.xlsx",
+        "sheets": [
+            {
+                "worksheet_title": "Statistics",
+                "headings": ["Statistic", "Value"],
+                "values": stats,
+                "tab_color": "pastel_green",
+            },
+            {
+                "worksheet_title": "ALL",
+                "heading note": "Contact Harry Collins,  if you have any questions",
+                "headings": output.columns.tolist(),
+                "values": output.values.tolist(),
+                # "values": df[[
+                #     "",
+                #     ]].values.tolist(),
+                "merge_headers": [
+                    {"level":1, "cell_range":["F","G"], "text":"EventSetDetails", "format":"dark_blue_center"},
+                    {"level":1, "cell_range":["H","I"], "text":"EventSetTypeDetails", "format":"dark_blue_center"},
+                    {"level":1, "cell_range":["J","M"], "text":"LayerDetails", "format":"dark_blue_center"},
+                    {"level":1, "cell_range":["N","S"], "text":"LayerPerfCosts", "format":"dark_blue_center"},
+                ],
+                "conditional_formatting": [ 
+                    {"range": "A1:X9999", "type": "cell", "criteria": "==", "value": '"FALSE"', "format": "conditional_red"},
+                    {"range": "A1:X9999", "type": "cell", "criteria": "==", "value": '"TRUE"',  "format": "conditional_green"},
+                    {"range": "A1:X9999", "type": "cell", "criteria": "==", "value": '"WARNING"',  "format": "conditional_yellow"},
+                ],
+                "right_borders": ["A", "E", "G", "I", "M", "S"],
+                # "final_row_color": "light_green",
+                "set_column_width": True,
+                "tab_color": "pastel_purple",
+                "freeze_headers": True,
+                "freeze_first_column": True,
+            },
+            ]
+        }
+
+    excel = Excel()
+    excel.print_to_excel(excel_sheets)
+    excel.open_excel()
+
+class Excel():
 
     def __init__(self):
         pass
@@ -42,13 +66,13 @@ class excel():
     def print_to_excel(self, tables):
         self.output_path = tables["name"]
         print(self.output_path)
-        """ Version 3 """
+        """ Version 4 """
         print("*Printing to Excel*")
         try:
             self.output_path = self._delete_old_output_file()
         except Exception as e:
-            trigger_exception( f"EXCEPTION: Could not remove old file ({self.output_path}) as it is open in another application (probably Excel).\n\nTry closing the file and running again", e=e)
-        with xlsxwriter.Workbook(self.output_path) as workbook:
+            self._trigger_exception( f"EXCEPTION: Could not remove old file ({self.output_path}) as it is open in another application (probably Excel).\n\nTry closing the file and running again", e=e)
+        with xlsxwriter.Workbook(self.output_path, {'nan_inf_to_errors': True}) as workbook:
             formats = self._add_styles_to_workbook(workbook)
             for table in tables["sheets"]:
                 worksheet = workbook.add_worksheet(table["worksheet_title"])
@@ -83,9 +107,12 @@ class excel():
                     worksheet.set_tab_color(self.style_lookup[tab_color]["bg_color"])
                 if table.get("set_column_width", True):
                     self._set_column_width(worksheet, table["headings"], table["values"])
-                if table.get("freeze_headers", False):
-                    worksheet.freeze_panes(startrow, 0)
-                self._set_conditional_formatting(worksheet, table["conditional_formatting"], formats)
+                if table.get("freeze_headers", False) or table.get("freeze_first_column", False):
+                    freeze_row = startrow if table.get("freeze_headers", False) else 0
+                    freeze_column = 1 if table.get("freeze_first_column", False) else 0
+                    worksheet.freeze_panes(freeze_row, freeze_column)
+                if table.get("conditional_formatting"):
+                    self._set_conditional_formatting(worksheet, table["conditional_formatting"], formats)
 
     def _convert_letters_to_indices(self, columns):
         return [string.ascii_uppercase.index(column_letter) for column_letter in columns]
@@ -181,6 +208,22 @@ class excel():
             "percentage": {'num_format': '0.00%'},
         }
         return {name: workbook.add_format(style) for name, style in self.style_lookup.items()}
+
+    def _trigger_exception(self, message, title="EXCEPTION", uType=0):
+        print(message)
+        uTypes = {
+                0: 0,
+                "MB_ICONEXCLAMATION": 0x30,
+                "MB_ICONWARNING": 0x30,
+                "MB_ICONINFORMATION": 0x40,
+                "MB_ICONASTERISK": 0x40,
+                "MB_ICONQUESTION": 0x20,
+                "MB_ICONSTOP": 0x10,
+                "MB_ICONERROR": 0x10,
+                "MB_ICONHAND": 0x10,
+                }
+        ctypes.windll.user32.MessageBoxW(0, message, title, uTypes[uType])
+
 
     def open_excel(self):
         file_path = self.output_path
