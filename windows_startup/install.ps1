@@ -39,7 +39,9 @@ Install-ChocoPackage selenium-edge-driver
 # Install-WingetPackage Microsoft.VisualStudioCode
 # Install-WingetPackage Microsoft.SQLServerManagementStudio
 # Install-WingetPackage Microsoft.AzureCLI
-Install-WingetPackage ScooterSoftware.BeyondCompare4 -cli_path 'C:\Program Files\Beyond Compare 4'
+# Install-WingetPackage ScooterSoftware.BeyondCompare4 -cli_path 'C:\Program Files\Beyond Compare 4'
+Install-ChocoPackage beyondcompare
+Install-ChocoPackage winrar
 # Install-WingetPackage Helm.Helm
 # Install-WingetPackage Postman.Postman 
 Install-WingetPackage GitHub.cli
