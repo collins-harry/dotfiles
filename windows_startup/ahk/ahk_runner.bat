@@ -7,9 +7,9 @@
 :: in the shortcut box
 
 :: Run as admin
-Powershell -Command "& Start-Process \"%USERPROFILE%\dotfiles\windows_startup\uncap.exe\" -ArgumentList @(\"0x1B:0x14\", \"0x14:0x1B\") -Verb RunAs"
+Powershell -Command "& Start-Process \"%USERPROFILE%\dotfiles\windows_startup\ahk\startup.ahk\" -ArgumentList @(\"0x1B:0x14\", \"0x14:0x1B\") -Verb RunAs"
 
 :: Run as normal user
-%USERPROFILE%\dotfiles\windows_startup\uncap.exe 0x1B:0x14 0x14:0x1B
+%USERPROFILE%\dotfiles\windows_startup\ahk\startup.ahk 0x1B:0x14 0x14:0x1B
 
 PAUSE

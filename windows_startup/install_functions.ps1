@@ -16,13 +16,15 @@ function Install-USKeyboard {
 
 function Install-EscCapLockSwap {
   Write-Host "Remapping ESC and Capslock keys" -ForegroundColor Green
-  if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\uncap_script.bat"){
+  $uncap_symbolic_path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\uncap_runner.bat"
+  $uncap_real_path = "$HOME\dotfiles\windows_startup\uncap\uncap_runner.bat"
+  if (Test-Path -Path $uncap_symbolic_path){
     Write-Host "  Already complete, skipping"
   } Else {
     Write-Host "  Creating symlink for uncap_script in STARTUP folders"
-    New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\uncap_script.bat" -Target "$HOME\dotfiles\windows_startup\uncap_script.bat"
+    New-Item -ItemType SymbolicLink -Path $uncap_symbolic_path -Target $uncap_real_path
     Write-Host "  Executing Uncap script in STARTUP folder"
-    Start-Process "$HOME\dotfiles\windows_startup\uncap_script.bat"
+    Start-Process $uncap_symbolic_path
   }
 }
 
@@ -108,7 +110,7 @@ function Install-WingetPackage {
     [string]$packageId,
     [string]$cli_path
   )
-  if ($installedWingetList -eq $null) {
+  if ($null -eq $installedWingetList) {
     Write-Host "Collating installed winget packages" -ForegroundColor Green
     $script:installedWingetList = winget list
   }
@@ -201,23 +203,28 @@ function Install-PowershellProfile {
 }
 
 function Install-AHKShortcuts {
-  Write-Host "Installing symlink in STARTUP folder for autohotkey script" -ForegroundColor Green
-  if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk") {
-    Write-Host "  Already complete, skipping"
-  } else {
-    New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startup.ahk" -Target "$HOME\dotfiles\ahkscripts\startup.ahk" -Force
-  }
   Write-Host "Installing symlink in HOME for OneDrive" -ForegroundColor Green
-  if (Test-Path -Path "$HOME\OneDrive") {
+  $onedrive_symbolic_path = "$HOME\OneDrive"
+  $onedrive_real_path = "$env:OneDrive"
+  if (Test-Path -Path $onedrive_symbolic_path) {
     Write-Host "  Already complete, skipping"
   } else {
-    New-Item -ItemType SymbolicLink -Path "$HOME\OneDrive" -Target "$env:OneDrive"
+    New-Item -ItemType SymbolicLink -Path $onedrive_symbolic_path -Target $onedrive_real_path
+  }
+  $ahk_symbolic_path = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\ahk_runner.bat"
+  $ahk_real_path = "$HOME\dotfiles\windows_startup\ahk\ahk_runner.bat"
+  Write-Host "Installing symlink in STARTUP folder for autohotkey script" -ForegroundColor Green
+  if (Test-Path -Path $ahk_symbolic_path) {
+    Write-Host "  Already complete, skipping"
+  } else {
+    New-Item -ItemType SymbolicLink -Path $ahk_symbolic_path -Target $ahk_real_path -Force
+    Start-Process $ahk_symbolic_path
   }
 }
 
 function Install-PythonPackage {
   param( [string]$packageId )
-  if ($installedPythonList -eq $null) {
+  if ($null -eq $installedPythonList) {
     Write-Host "Collating installed pip (python) packages" -ForegroundColor Green
     $script:installedPythonList = pip list
   }
@@ -225,7 +232,7 @@ function Install-PythonPackage {
   if ($installedPythonList | findstr /I "$packageId ") {
     Write-Host "  Already complete, skipping"
   } else {
-    echo y | pip install $packageId
+    Write-Output y | pip install $packageId
     Update-SessionEnvironment
   }
 }
@@ -267,7 +274,7 @@ function Install-VisualStudio {
 "@ -ForegroundColor Magenta
     Start-process -wait "~/vs_BuildTools.exe"
     Write-Host "  Deleting installer"
-    rm "~\vs_BuildTools.exe"
+    Remove-Item "~\vs_BuildTools.exe"
     Update-SessionEnvironment
   }
 }
@@ -311,7 +318,7 @@ function Install-QTCmakeNinja {
 "@ -ForegroundColor Magenta
     Start-process -wait "~/qt-unified-windows-x64.exe"
     Write-Host "  Deleting installer"
-    rm "~\qt-unified-windows-x64.exe"
+    Remove-Item "~\qt-unified-windows-x64.exe"
     Update-SessionEnvironment
   }
 }
@@ -411,7 +418,7 @@ function Install-Snagit {
     Write-Host "  Installing, please click through installer" -ForegroundColor Magenta
     Start-process -wait "$HOME/snagit_installer.exe"
     Write-Host "  Deleting installer"
-    rm "$HOME/snagit_installer.exe"
+    Remove-Item "$HOME/snagit_installer.exe"
     Update-SessionEnvironment
   }
 }
