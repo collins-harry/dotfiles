@@ -34,8 +34,13 @@ Install-ChocoPackage r.project -params "/AddToPath" # RMarkdown (need to setup r
 Install-ChocoPackage hwinfo
 Install-ChocoPackage jq
 Install-ChocoPackage jabra-direct
-Install-PowershellModule Selenium
-Install-ChocoPackage selenium-edge-driver
+
+##### Install Web Scraping Tools
+  Install-PowershellModule Selenium
+  Install-WingetPackage Microsoft.EdgeWebDriver
+  Install-ChocoPackage selenium-edge-driver
+##### /Install Web Scraping Tools
+
 # Install-WingetPackage Microsoft.VisualStudioCode
 # Install-WingetPackage Microsoft.SQLServerManagementStudio
 # Install-WingetPackage Microsoft.AzureCLI
