@@ -163,18 +163,6 @@ function Install-NvimSymlinks {
   }
 }
 
-# function Install-WSLDefenderBypass {
-#   Write-Host "Disable windows defender for WSL" -ForegroundColor Green
-#   if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\disable_defender.bat"){
-#     Write-Host "  Already complete, skipping"
-#   } Else {
-#     Write-Host "  Creating symlink for disable_defender in STARTUP folders"
-#     New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\disable_defender.bat" -Target "$HOME\dotfiles\windows_startup\disable_defender.bat"
-#     Write-Host "  Executing disable_defender in STARTUP folder"
-#     Start-Process "$HOME\dotfiles\windows_startup\disable_defender.bat"
-#   }
-# }
-
 function Install-WindowsTerminalSettings {
   Write-Host "Installing symlink for windows terminal settings" -ForegroundColor Green
   if (-Not (Test-Path -Path "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState") ) {
@@ -192,7 +180,9 @@ function Install-WindowsTerminalSettings {
 function Install-PowershellProfile {
   Write-Host "Installing symlink for powershell profile" -ForegroundColor Green
   if (Test-Path -Path $profile) {
-    Write-Host "  Already complete, skipping"
+    Write-Host " 
+
+Already complete, skipping"
   } else {
     Write-Host "  Creating symlink for powershell profile"
     $ProfileDirectory = Split-Path -Parent $profile # get the the folder path of the $profile file
@@ -361,33 +351,6 @@ function Install-dbatools {
   } else {
     Install-PackageProvider NuGet -Force;
     Install-Module dbatools -Force
-  }
-}
-
-# function Install-StartupWindowsTerminal {
-#   Write-Host "Create symlink for windowsterminal startup script in startup folder" -ForegroundColor Green
-#   if (Test-Path -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startWindowsTerminal.bat"){
-#     Write-Host "  Already complete, skipping"
-#   } Else {
-#     Write-Host "  Creating symlink for startWindowsTerminal.bat in STARTUP folders"
-#     New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\startWindowsTerminal.bat" -Target "$HOME\dotfiles\windows_startup\startWindowsTerminal.bat"
-#     Write-Host "  Executing Uncap script in STARTUP folder"
-#     Start-Process "$HOME\dotfiles\windows_startup\uncap_script.bat"
-#   }
-# }
-
-# https://learn.microsoft.com/en-us/powershell/module/scheduledtasks/new-scheduledtasksettingsset?view=windowsserver2022-ps&viewFallbackFrom=win10-ps
-function Schedule-VPNLogin {
-  Write-Host "Schedule task to connect to work VPN on login" -ForegroundColor Green
-  if (-Not ($Env:UserDomain -match "HGM") ) {
-    Write-Host "  Domain is not HGM (Hamilton), skipping"
-    return
-  }
-  if (schtasks /query /tn "connectToVPN" 2>$null){
-    Write-Host "  Already complete, skipping"
-  } Else {
-    Write-Host "  Creating connectToVPN task"
-    schtasks /create /f /sc onlogon /rl "HIGHEST" /tn "connectToVPN" /it /tr "powershell -executionpolicy bypass -noexit -file $HOME\dotfiles\windows_startup\connectToVPN.ps1"
   }
 }
 

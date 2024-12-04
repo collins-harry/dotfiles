@@ -1,8 +1,18 @@
+param(
+    [bool]$WSL = $false,
+    [bool]$Data_Basing = $false,
+    [bool]$Web_Development = $false,
+    [bool]$Web_Scraping = $false,
+    [bool]$C_plus_plus = $false,
+    [bool]$Hamilton = $false
+)
+
 Write-Host "Starting Installation Script" -ForegroundColor Green
 Write-Host "Setting Execution policy to bypass for this script" -ForegroundColor Green
 Set-ExecutionPolicy Bypass -Scope Process -Force;
 Set-MpPreference -DisableRealtimeMonitoring $true
 . "./install_functions.ps1"
+
 
 Install-USKeyboard
 Install-EscCapLockSwap
@@ -27,29 +37,50 @@ Install-Snagit
 Install-PythonPackage pyautogui # for mover.py
 Install-PythonPackage pynput # for mover.py
 Install-ChocoPackage r.project -params "/AddToPath" # RMarkdown (need to setup rest of install)
-# Install-ChocoPackage Minikube
-# Install-ChocoPackage nodejs-lts
-# Install-ChocoPackage switcheroo
-# Install-ChocoPackage sql-server-2022
+Install-ChocoPackage switcheroo
 Install-ChocoPackage hwinfo
 Install-ChocoPackage jq
 Install-ChocoPackage jabra-direct
 
-##### Install Web Scraping Tools
-  Install-PowershellModule Selenium
-  Install-WingetPackage Microsoft.EdgeWebDriver
-  Install-ChocoPackage selenium-edge-driver
-##### /Install Web Scraping Tools
-
-# Install-WingetPackage Microsoft.VisualStudioCode
-# Install-WingetPackage Microsoft.SQLServerManagementStudio
-# Install-WingetPackage Microsoft.AzureCLI
+Install-WingetPackage Microsoft.VisualStudioCode
 # Install-WingetPackage ScooterSoftware.BeyondCompare4 -cli_path 'C:\Program Files\Beyond Compare 4'
 Install-ChocoPackage beyondcompare
 Install-ChocoPackage winrar
-# Install-WingetPackage Helm.Helm
-# Install-WingetPackage Postman.Postman 
+Install-WingetPackage Postman.Postman 
 Install-WingetPackage GitHub.cli
+
+if ($WSL) {
+    Install-WSL }
+if ($Data_Basing) {
+    Install-dbatools
+    Install-ChocoPackage sql-server-2022
+    Install-WingetPackage Microsoft.SQLServerManagementStudio }
+if ($Web_Development) {
+    Install-ChocoPackage nodejs-lts
+    Install-WingetPackage Yarn.Yarn }
+if ($Web_Scraping) {
+    Install-PowershellModule Selenium
+    Install-WingetPackage Microsoft.EdgeWebDriver
+    Install-ChocoPackage selenium-edge-driver }
+if ($C_plus_plus) {
+    Install-VisualStudio
+    Install-QTCmakeNinja
+    Install-QTCmakeNinjaPaths }
+if ($Hamilton) {
+    Schedule-WorkStart
+    Install-WingetPackage Microsoft.AzureCLI }
+
+#### Archive
+  # Install-WingetPackage Helm.Helm
+  # Install-ChocoPackage Minikube
+#### /Archive
+
+
+
+
+
+
+
 
   # gh auth login
   # gh extension install github/gh-copilot
@@ -59,21 +90,7 @@ Install-WingetPackage GitHub.cli
     # $GH_COPILOT_PROFILE = Join-Path -Path $(Split-Path -Path $PROFILE -Parent) -ChildPath "gh-copilot.ps1"
     # gh copilot alias -- pwsh | Out-File ( New-Item -Path $GH_COPILOT_PROFILE -Force )
     # echo ". `"$GH_COPILOT_PROFILE`"" >> $PROFILE
-#Install-WSLDefenderBypass
 # Install-PowershellProfile
-
-### C++ Install
-#Install-VisualStudio
-Install-QTCmakeNinja
-#Install-QTCmakeNinjaPaths
-###/C++ Install
-
-#Install-WSL
-Install-dbatools
-# Install-StartupWindowsTerminal
-Schedule-VPNLogin
-Schedule-WorkStart
-
 Set-MpPreference -DisableRealtimeMonitoring $false
 exit
 
