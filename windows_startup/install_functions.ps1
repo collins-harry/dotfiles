@@ -354,7 +354,7 @@ function Install-dbatools {
   }
 }
 
-function Schedule-WorkStart {
+function Register-WorkStart {
   Write-Host "Schedule task to start WSL, disable defender and login to OKD on startup" -ForegroundColor Green
   # Confirm domain is HGM (Hamilton)
   if (-Not ($Env:UserDomain -match "HGM") ) {

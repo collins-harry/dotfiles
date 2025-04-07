@@ -15,7 +15,13 @@ Set-MpPreference -DisableRealtimeMonitoring $true
 
 
 Install-USKeyboard
-Install-EscCapLockSwap
+if ($Hamilton) {
+    Register-WorkStart
+    Install-WingetPackage Microsoft.AzureCLI
+}
+else {
+    Install-EscCapLockSwap
+}
 Install-Chocolatey
 #Install-Help
 Install-Miniconda
@@ -42,6 +48,8 @@ Install-ChocoPackage hwinfo
 Install-ChocoPackage jq
 Install-ChocoPackage jabra-direct
 
+Install-Module Selenium # for extract_token.ps1
+
 Install-WingetPackage Microsoft.VisualStudioCode
 # Install-WingetPackage ScooterSoftware.BeyondCompare4 -cli_path 'C:\Program Files\Beyond Compare 4'
 Install-ChocoPackage beyondcompare
@@ -66,9 +74,6 @@ if ($C_plus_plus) {
     Install-VisualStudio
     Install-QTCmakeNinja
     Install-QTCmakeNinjaPaths }
-if ($Hamilton) {
-    Schedule-WorkStart
-    Install-WingetPackage Microsoft.AzureCLI }
 
 #### Archive
   # Install-WingetPackage Helm.Helm
